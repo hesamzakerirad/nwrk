@@ -4,6 +4,16 @@ All notable changes to this project are listed here. The format follows [Keep a 
 
 Every release has a hand-written entry. The release workflow publishes the matching section as the GitHub release notes.
 
+## [0.2.0] - 2026-11-17
+
+### Added
+
+- Platform inspection: interfaces, routes, DNS configuration and proxies.
+- Region presets, a config file and layered settings.
+- Local checks, `doctor` rules and a layered verdict.
+- `nw doctor`, `nw network` and `nw config`.
+- Documentation for regions, platform support and privacy.
+
 ## [0.1.0] - 2026-11-17
 
 ### Added
