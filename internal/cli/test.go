@@ -4,6 +4,7 @@ import (
 	"context"
 	"crypto/x509"
 	"fmt"
+	"net/netip"
 	"strings"
 
 	"github.com/spf13/cobra"
@@ -14,6 +15,7 @@ import (
 	"github.com/hesamzakerirad/nwrk/internal/exit"
 	"github.com/hesamzakerirad/nwrk/internal/measurement/local"
 	"github.com/hesamzakerirad/nwrk/internal/output"
+	"github.com/hesamzakerirad/nwrk/internal/path"
 	"github.com/hesamzakerirad/nwrk/internal/reporting"
 	"github.com/hesamzakerirad/nwrk/internal/target"
 )
@@ -47,6 +49,11 @@ var seams struct {
 	inspector local.Inspector
 	dial      local.Dial
 	network   inspection
+	plainPort int
+	pingICMP  func(netip.Addr) (path.Pinger, error)
+	pingTCP   func(int) path.Pinger
+	traceICMP func(netip.Addr) (path.Prober, error)
+	traceTCP  func(netip.Addr, int) path.Prober
 }
 
 func (a *app) testOptions(resolvers []string) (apptest.Options, error) {

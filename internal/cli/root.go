@@ -101,6 +101,8 @@ func newRootCmd(a *app) *cobra.Command {
 	root.AddCommand(newDiagnoseCmd(a))
 	root.AddCommand(newConfigCmd(a))
 	root.AddCommand(newDoctorCmd(a))
+	root.AddCommand(newSecurityCmd(a))
+	root.AddCommand(newPathCmd(a))
 	root.AddCommand(newNetworkCmd(a))
 
 	// An unknown shell must be a usage error, not a help page with exit 0.
