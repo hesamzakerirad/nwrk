@@ -212,47 +212,94 @@ func hostPortString(host, port string) string {
 
 // Resolver is a DNS server chosen with --resolver.
 type Resolver struct {
-	Transport string // "udp" or "tcp"
-	Host      string // an IP address
-	Port      int
+	// Transport is "udp", "tcp", "tls" (DNS over TLS) or "https" (DNS over
+	// HTTPS).
+	Transport string
+	// Host is an IP address for udp and tcp. For tls and https it can also
+	// be a host name, which the operating system resolves to connect and
+	// which the server's certificate must match.
+	Host string
+	Port int
+	// Path is the URL path of a DoH endpoint.
+	Path string
 }
+
+// Default ports and the default DoH path.
+const (
+	portDNS     = 53
+	portDoT     = 853
+	portDoH     = 443
+	defaultPath = "/dns-query"
+)
+
+// Encrypted reports whether the transport protects the queries.
+func (r Resolver) Encrypted() bool { return r.Transport == "tls" || r.Transport == "https" }
 
 // Address returns host:port in the form net.Dial accepts.
 func (r Resolver) Address() string {
 	return net.JoinHostPort(r.Host, strconv.Itoa(r.Port))
 }
 
-// String returns the flag syntax that produces r.
-func (r Resolver) String() string {
-	if r.Transport == "tcp" {
-		return "tcp://" + r.Address()
+// Endpoint is what a report shows: host:port, or the URL for DoH.
+func (r Resolver) Endpoint() string {
+	if r.Transport == "https" {
+		return "https://" + r.Address() + r.Path
 	}
 	return r.Address()
+}
+
+// String returns the flag syntax that produces r.
+func (r Resolver) String() string {
+	def := map[string]int{"udp": portDNS, "tcp": portDNS, "tls": portDoT, "https": portDoH}[r.Transport]
+	host := r.Host
+	if strings.Contains(host, ":") {
+		host = "[" + host + "]"
+	}
+	if r.Port != def {
+		host = net.JoinHostPort(r.Host, strconv.Itoa(r.Port))
+	}
+	switch r.Transport {
+	case "tcp":
+		return "tcp://" + host
+	case "tls":
+		return "tls://" + host
+	case "https":
+		return "https://" + host + r.Path
+	}
+	if r.Port == def {
+		return r.Host
+	}
+	return host
 }
 
 // ParseResolver parses one resolver address:
 //
 //	host, host:port, [v6]:port   plain DNS over UDP
 //	tcp://host[:port]            plain DNS over TCP
+//	tls://host[:port]            DNS over TLS (port 853)
+//	https://host[:port][/path]   DNS over HTTPS (port 443, path /dns-query)
 //
-// The host must be an IP address, because a name would need a resolver of
-// its own. DNS over TLS and HTTPS arrive in a later release.
+// For udp and tcp the host must be an IP address, because a name would need
+// a resolver of its own. For tls and https it may be a name, which the
+// operating system resolves; the server certificate must match it.
 func ParseResolver(s string) (Resolver, error) {
 	s = strings.TrimSpace(s)
-	r := Resolver{Transport: "udp", Port: 53}
+	r := Resolver{Transport: "udp", Port: portDNS}
 	switch {
 	case strings.HasPrefix(s, "tcp://"):
 		r.Transport = "tcp"
 		s = strings.TrimPrefix(s, "tcp://")
-	case strings.HasPrefix(s, "tls://"), strings.HasPrefix(s, "https://"):
-		return r, fmt.Errorf("resolver %q: DNS over TLS and HTTPS are not supported yet", s)
+	case strings.HasPrefix(s, "tls://"):
+		return parseEncrypted(r, "tls", strings.TrimPrefix(s, "tls://"), portDoT, s)
+	case strings.HasPrefix(s, "https://"):
+		return parseEncrypted(r, "https", strings.TrimPrefix(s, "https://"), portDoH, s)
 	case strings.Contains(s, "://"):
-		return r, fmt.Errorf("resolver %q: unknown scheme (want host, host:port or tcp://host[:port])", s)
+		return r, fmt.Errorf("resolver %q: unknown scheme (want host, host:port, tcp://, tls:// or https://)", s)
 	}
 	if s == "" {
 		return r, errors.New("resolver is empty")
 	}
-	host, port, err := HostPort(s, 53)
+	host, port, err := HostPort(s, portDNS)
 	if err != nil {
 		return r, fmt.Errorf("resolver %q: %v", s, err)
 	}
@@ -261,6 +308,32 @@ func ParseResolver(s string) (Resolver, error) {
 		return r, fmt.Errorf("resolver %q: the host must be an IP address", s)
 	}
 	r.Host, r.Port = a.String(), port
+	return r, nil
+}
+
+func parseEncrypted(r Resolver, transport, rest string, defPort int, orig string) (Resolver, error) {
+	r.Transport = transport
+	path := ""
+	if transport == "https" {
+		if i := strings.IndexAny(rest, "/?#"); i >= 0 {
+			path, rest = rest[i:], rest[:i]
+		}
+		if path == "" || path == "/" {
+			path = defaultPath
+		}
+		if strings.ContainsAny(path, "?# \t\r\n") {
+			return r, fmt.Errorf("resolver %q: the URL path must not have a query or fragment", orig)
+		}
+		r.Path = path
+	}
+	if rest == "" || strings.ContainsAny(rest, "/@?# ") {
+		return r, fmt.Errorf("resolver %q: want a host, host:port or [v6]:port", orig)
+	}
+	host, port, err := HostPort(rest, defPort)
+	if err != nil {
+		return r, fmt.Errorf("resolver %q: %v", orig, err)
+	}
+	r.Host, r.Port = host, port
 	return r, nil
 }
 

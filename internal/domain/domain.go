@@ -166,6 +166,26 @@ func Begin(t Type, version string, target Target) *Measurement {
 	}
 }
 
+// Probe names, recorded in params.probe.
+const (
+	ProbeMultipleResponses  = "multiple_responses"  // dns: listen for several replies to one query
+	ProbeDNSSEC             = "dnssec"              // dns: signature state and alias chain
+	ProbeAnswerReachability = "answer_reachability" // tcp: connect to the addresses a resolver returned
+	ProbeSNITarget          = "sni_target"          // tls: repeat the handshake with the target name
+	ProbeSNIControl         = "sni_control"         // tls: handshake with a neutral control name
+	ProbeLegacyTLS          = "legacy_tls"          // tls: offer only TLS 1.0 and 1.1
+	ProbePlainHTTP          = "plain_http"          // http: the same request over http://
+)
+
+// Probe returns the name of the probe a measurement belongs to, or "".
+// A probe is a measurement made as evidence for interference rules, such as
+// a handshake with another server name. Probes do not count in the layer
+// summary and are not explained by the ordinary rules.
+func (m Measurement) Probe() string {
+	p, _ := m.Params["probe"].(string)
+	return p
+}
+
 // Finish stamps the end time and duration. The status stays as set.
 func (m *Measurement) Finish() *Measurement {
 	m.EndedAt = time.Now().UTC()
@@ -375,7 +395,7 @@ func (r *Report) Summarize() {
 	for _, t := range []Type{TypeDNS, TypeTCP, TypeTLS, TypeHTTP} {
 		var ok, fail, skip int
 		for _, m := range r.Measurements {
-			if m.Type != t {
+			if m.Type != t || m.Probe() != "" {
 				continue
 			}
 			switch m.Status {

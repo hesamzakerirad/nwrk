@@ -83,6 +83,10 @@ type Options struct {
 	RootCAs *x509.CertPool
 	// NextProtos is the ALPN list offered. Empty means none.
 	NextProtos []string
+	// MaxVersion caps the protocol version offered, for probing whether a
+	// server still accepts legacy versions. Zero means no cap. Certificate
+	// verification stays on.
+	MaxVersion uint16
 	// Dialer opens the TCP connection. Nil means a default dialer.
 	Dialer tcp.Dialer
 }
@@ -114,6 +118,7 @@ func Handshake(ctx context.Context, serverName string, addr netip.AddrPort, opts
 		ServerName: serverName,
 		NextProtos: opts.NextProtos,
 		MinVersion: tls.VersionTLS10,
+		MaxVersion: opts.MaxVersion,
 		// Verification is done in VerifyConnection, so the certificates can
 		// be kept as evidence even when it fails. It is never skipped: the
 		// callback below returns an error whenever the chain is not valid.
@@ -204,4 +209,46 @@ func failureMessage(code domain.ErrorCode, name string, err error) string {
 		return "the connection was reset during the handshake"
 	}
 	return "the TLS handshake failed: " + err.Error()
+}
+
+// How far a handshake got, for comparing handshakes that differ in one
+// respect, such as the server name sent.
+const (
+	// OutcomeCompleted means the handshake completed.
+	OutcomeCompleted = "completed"
+	// OutcomeAnswered means the server answered with its certificate, but
+	// verification failed (for example a certificate for another name).
+	OutcomeAnswered = "answered"
+	// OutcomeAlert means the server answered with a TLS alert.
+	OutcomeAlert = "alert"
+	// OutcomeReset means the connection was reset during the handshake.
+	OutcomeReset = "reset"
+	// OutcomeTimeout means no answer came before the deadline.
+	OutcomeTimeout = "timeout"
+	// OutcomeOther is anything else, such as a refused connection.
+	OutcomeOther = "other"
+)
+
+// Outcome says how far the handshake of m got.
+func Outcome(m *domain.Measurement) string {
+	if m.Status == domain.StatusSuccess {
+		return OutcomeCompleted
+	}
+	if m.Error == nil {
+		return OutcomeOther
+	}
+	switch m.Error.Code {
+	case domain.TLSCertExpired, domain.TLSCertUntrusted, domain.TLSHostnameMismatch:
+		return OutcomeAnswered
+	case domain.TLSReset:
+		return OutcomeReset
+	case domain.TLSTimeout:
+		return OutcomeTimeout
+	case domain.TLSHandshakeFailure:
+		if strings.Contains(m.Error.Message, "remote error") {
+			return OutcomeAlert
+		}
+		return OutcomeReset
+	}
+	return OutcomeOther
 }

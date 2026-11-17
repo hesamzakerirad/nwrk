@@ -145,3 +145,62 @@ func TestCancellation(t *testing.T) {
 		t.Fatalf("cancellation not honored: %v %s", time.Since(start), m.Status)
 	}
 }
+
+func TestOutcomeSeparatesHowFarTheHandshakeGot(t *testing.T) {
+	pki := fixtures.NewPKI(t)
+	// A server that answers with a certificate for another name: it spoke.
+	other := fixtures.TLSServer(t, &tls.Config{Certificates: []tls.Certificate{pki.Valid("other.test")}})
+	m := handshake(t, "example.test", other, Options{RootCAs: pki.Pool}, 3*time.Second)
+	if got := Outcome(m); got != OutcomeAnswered {
+		t.Fatalf("answered: %s %v", got, m.Error)
+	}
+	ok := fixtures.TLSServer(t, &tls.Config{Certificates: []tls.Certificate{pki.Valid("example.test")}})
+	if got := Outcome(handshake(t, "example.test", ok, Options{RootCAs: pki.Pool}, 3*time.Second)); got != OutcomeCompleted {
+		t.Fatalf("completed: %s", got)
+	}
+	alert := fixtures.TLSServer(t, &tls.Config{GetCertificate: func(*tls.ClientHelloInfo) (*tls.Certificate, error) { return nil, context.Canceled }})
+	if got := Outcome(handshake(t, "example.test", alert, Options{}, 3*time.Second)); got != OutcomeAlert {
+		t.Fatalf("alert: %s", got)
+	}
+	if got := Outcome(handshake(t, "example.test", fixtures.MuteServer(t), Options{}, 300*time.Millisecond)); got != OutcomeTimeout {
+		t.Fatalf("timeout: %s", got)
+	}
+	if got := Outcome(handshake(t, "example.test", fixtures.ClosedPort(t), Options{}, 10*time.Second)); got != OutcomeOther {
+		t.Fatalf("refused connection is neither: %s", got)
+	}
+}
+
+func TestSNIDependentBehaviorIsVisible(t *testing.T) {
+	pki := fixtures.NewPKI(t)
+	cert := pki.Valid("blocked.test", "neutral.test")
+	reset := fixtures.SNIServer(t, cert, "blocked.test", fixtures.SNIReset)
+	if got := Outcome(handshake(t, "blocked.test", reset, Options{RootCAs: pki.Pool}, 3*time.Second)); got != OutcomeReset {
+		t.Fatalf("the blocked name must end in a reset: %s", got)
+	}
+	if got := Outcome(handshake(t, "neutral.test", reset, Options{RootCAs: pki.Pool}, 3*time.Second)); got != OutcomeCompleted {
+		t.Fatalf("another name on the same address works: %s", got)
+	}
+	silent := fixtures.SNIServer(t, cert, "blocked.test", fixtures.SNISilent)
+	if got := Outcome(handshake(t, "blocked.test", silent, Options{RootCAs: pki.Pool}, 300*time.Millisecond)); got != OutcomeTimeout {
+		t.Fatalf("%s", got)
+	}
+}
+
+func TestLegacyProtocolProbe(t *testing.T) {
+	pki := fixtures.NewPKI(t)
+	cert := pki.Valid("example.test")
+	legacy := fixtures.LegacyTLSServer(t, cert)
+	modern := fixtures.ModernTLSServer(t, cert)
+	capped := Options{RootCAs: pki.Pool, MaxVersion: tls.VersionTLS11}
+	m := handshake(t, "example.test", legacy, capped, 3*time.Second)
+	if m.Status != domain.StatusSuccess || m.Result.(*Result).Version != "TLS 1.1" {
+		t.Fatalf("a legacy server accepts TLS 1.1: %v %+v", m.Error, m.Result)
+	}
+	if m := handshake(t, "example.test", modern, capped, 3*time.Second); m.Status != domain.StatusFailure {
+		t.Fatalf("a modern server refuses TLS 1.1: %+v", m.Result)
+	}
+	// Capping the version does not weaken verification.
+	if m := handshake(t, "wrong.test", legacy, capped, 3*time.Second); m.Error == nil || m.Error.Code != domain.TLSHostnameMismatch {
+		t.Fatalf("%v", m.Error)
+	}
+}

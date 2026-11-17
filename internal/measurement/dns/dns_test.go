@@ -235,3 +235,93 @@ func TestPriorityPrefersTransportOverEmpty(t *testing.T) {
 		t.Fatal("partial evidence must be kept on failure")
 	}
 }
+
+func TestEncryptedResolvers(t *testing.T) {
+	srv := server(t)
+	pki := fixtures.NewPKI(t)
+	cert := pki.Valid("dns.example.test", "127.0.0.1")
+	dot := srv.StartDoT(t, cert)
+	doh := srv.StartDoH(t, cert)
+	opts := Options{RootCAs: pki.Pool}
+
+	cases := []struct {
+		name string
+		spec string
+		kind string
+	}{
+		{"DoT by address", "tls://" + dot, "tls"},
+		{"DoH by address", "https://" + doh + "/dns-query", "https"},
+	}
+	for _, c := range cases {
+		t.Run(c.name, func(t *testing.T) {
+			r, err := target.ParseResolver(c.spec)
+			if err != nil {
+				t.Fatal(err)
+			}
+			ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+			defer cancel()
+			m := LookupWith(ctx, "ok.test", r, opts)
+			if m.Status != domain.StatusSuccess {
+				t.Fatalf("%v", m.Error)
+			}
+			res := m.Result.(*Result)
+			if len(res.A) != 1 || res.A[0] != "192.0.2.10" || m.Resolver.Kind != c.kind || m.Params["encrypted"] != true {
+				t.Fatalf("%+v %+v %v", res, m.Resolver, m.Params)
+			}
+			// Failures keep their classification over encrypted transports.
+			m = LookupWith(ctx, "nx.test", r, opts)
+			if m.Error == nil || m.Error.Code != domain.DNSNXDomain {
+				t.Fatalf("%v", m.Error)
+			}
+			m = LookupWith(ctx, "servfail.test", r, opts)
+			if m.Error == nil || m.Error.Code != domain.DNSServFail {
+				t.Fatalf("%v", m.Error)
+			}
+		})
+	}
+}
+
+func TestEncryptedResolverVerifiesTheCertificate(t *testing.T) {
+	srv := server(t)
+	pki := fixtures.NewPKI(t)
+	wrong := pki.Valid("other.example.test")
+	dot := srv.StartDoT(t, wrong)
+	doh := srv.StartDoH(t, wrong)
+	for _, spec := range []string{"tls://" + dot, "https://" + doh} {
+		r, _ := target.ParseResolver(spec)
+		ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+		m := LookupWith(ctx, "ok.test", r, Options{RootCAs: pki.Pool})
+		cancel()
+		if m.Status != domain.StatusFailure || m.Error.Code != domain.DNSTransport {
+			t.Fatalf("%s: a certificate for another name must not be accepted: %v", spec, m.Error)
+		}
+	}
+	// With no trusted root at all, the fixture certificate is rejected too.
+	good := pki.Valid("127.0.0.1")
+	r, _ := target.ParseResolver("tls://" + srv.StartDoT(t, good))
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+	if m := Lookup(ctx, "ok.test", r); m.Status != domain.StatusFailure {
+		t.Fatal("verification cannot be skipped")
+	}
+}
+
+func TestDoHServerErrorsAndTimeouts(t *testing.T) {
+	srv := server(t)
+	pki := fixtures.NewPKI(t)
+	doh := srv.StartDoH(t, pki.Valid("127.0.0.1"))
+	r, _ := target.ParseResolver("https://" + doh + "/wrong-path")
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	m := LookupWith(ctx, "ok.test", r, Options{RootCAs: pki.Pool})
+	cancel()
+	if m.Error == nil || m.Error.Code != domain.DNSTransport || !strings.Contains(m.Error.Message, "404") {
+		t.Fatalf("%v", m.Error)
+	}
+	r, _ = target.ParseResolver("https://" + doh)
+	ctx, cancel = context.WithTimeout(context.Background(), 300*time.Millisecond)
+	defer cancel()
+	m = LookupWith(ctx, "silent.test", r, Options{RootCAs: pki.Pool})
+	if m.Error == nil || m.Error.Code != domain.DNSTimeout {
+		t.Fatalf("%v", m.Error)
+	}
+}
