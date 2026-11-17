@@ -77,7 +77,10 @@
         "http.redirect_loop",
         "http.protocol_error",
         "http.reset",
-        "http.error"
+        "http.error",
+        "local.no_interface",
+        "local.no_route",
+        "local.no_resolver"
       ]
     },
     "run": {
@@ -127,6 +130,9 @@
               "type": "string"
             }
           }
+        },
+        "region": {
+          "type": "string"
         }
       }
     },
@@ -167,7 +173,8 @@
             "dns",
             "tcp",
             "tls",
-            "http"
+            "http",
+            "local"
           ]
         },
         "version": {
@@ -251,6 +258,13 @@
           "items": {
             "type": "string"
           }
+        },
+        "scope": {
+          "enum": [
+            "local",
+            "domestic",
+            "international"
+          ]
         }
       },
       "allOf": [
@@ -720,6 +734,8 @@
             "tls",
             "http",
             "ip_family",
+            "local",
+            "reachability",
             "other"
           ]
         },
@@ -871,6 +887,45 @@
               }
             }
           }
+        },
+        "scopes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "scope",
+              "status"
+            ],
+            "properties": {
+              "scope": {
+                "enum": [
+                  "local",
+                  "domestic",
+                  "international"
+                ]
+              },
+              "status": {
+                "enum": [
+                  "ok",
+                  "problem",
+                  "reachable",
+                  "partial",
+                  "unreachable",
+                  "not_checked"
+                ]
+              }
+            }
+          }
+        },
+        "verdict": {
+          "enum": [
+            "healthy",
+            "local",
+            "domestic",
+            "international",
+            "upstream",
+            "partial"
+          ]
         }
       }
     }

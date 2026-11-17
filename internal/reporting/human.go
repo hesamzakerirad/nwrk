@@ -68,6 +68,10 @@ func badge(r *output.Renderer, s domain.Status) string {
 }
 
 func label(m domain.Measurement) string {
+	if m.Type == domain.TypeLocal {
+		c, _ := m.Params["check"].(string)
+		return c
+	}
 	var s string
 	t := m.Target
 	switch {
@@ -89,6 +93,9 @@ func label(m domain.Measurement) string {
 		if t.Family != "" {
 			s += " (" + t.Family + ")"
 		}
+	}
+	if m.Scope != "" && m.Type != domain.TypeLocal {
+		s += " [" + string(m.Scope) + "]"
 	}
 	if m.Resolver != nil {
 		via := m.Resolver.Kind
