@@ -1,0 +1,9 @@
+/bin/
+/dist/
+/site/public/
+/site/resources/
+/site/data/translations.json
+.hugo_build.lock
+.DS_Store
+*.test
+coverage.out
