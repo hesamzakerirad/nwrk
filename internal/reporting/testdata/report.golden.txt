@@ -1,0 +1,26 @@
+nw test http https://example.com/
+
+ok    dns   example.com via system (192.0.2.53:53)  22.0 ms
+      A     203.0.113.10
+      AAAA  no records
+FAIL  dns   example.com via udp 198.51.100.1:53  10000.0 ms
+      dns.timeout: no response from the resolver before the deadline
+      A     no response
+ok    tcp   203.0.113.10:443 (example.com)  41.5 ms
+      connected to 203.0.113.10:443 (ipv4) in 41.5 ms
+FAIL  tls   203.0.113.10:443 (example.com)  80.0 ms
+      tls.cert_expired: the certificate is expired or not yet valid
+      certificate chain not verified: x509: certificate has expired or is not yet valid
+      subject CN=example.com
+      issuer  CN=Example CA
+      valid   2025-01-01 to 2025-12-31
+      names   example.com
+ok    http  https://example.com/  250.0 ms
+      200 OK (HTTP/2.0)
+      redirect 301 from https://example.com/ to https://example.com/home
+      final URL https://example.com/home
+      timing (ms): dns 5.0, connect 40.0, tls 60.0, first byte 150.0, total 160.0
+skip  tcp   example.org:80
+      name resolution failed, so there is no address to connect to
+
+3 of 6 measurements succeeded, 2 failed.

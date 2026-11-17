@@ -52,6 +52,9 @@ func Execute(ctx context.Context, args []string, stdout, stderr io.Writer) int {
 	if ctx.Err() != nil {
 		return exit.Interrupted
 	}
+	if errors.Is(err, exit.ErrFindings) {
+		return exit.Findings
+	}
 	// Flags are not parsed yet when the command itself is unknown, so read
 	// them again, ignoring errors, to honor --output json in the error.
 	_ = root.ParseFlags(args)
@@ -86,6 +89,7 @@ func newRootCmd(a *app) *cobra.Command {
 	f.DurationVar(&a.opts.timeout, "timeout", 10*time.Second, "deadline for each network operation")
 
 	root.AddCommand(newVersionCmd(a))
+	root.AddCommand(newTestCmd(a))
 
 	// An unknown shell must be a usage error, not a help page with exit 0.
 	root.InitDefaultCompletionCmd()

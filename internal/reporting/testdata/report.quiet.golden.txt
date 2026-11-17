@@ -1,0 +1,6 @@
+FAIL  dns   example.com via udp 198.51.100.1:53  10000.0 ms
+      dns.timeout: no response from the resolver before the deadline
+FAIL  tls   203.0.113.10:443 (example.com)  80.0 ms
+      tls.cert_expired: the certificate is expired or not yet valid
+skip  tcp   example.org:80
+      name resolution failed, so there is no address to connect to

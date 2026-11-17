@@ -35,6 +35,10 @@ type Error struct {
 func (e *Error) Error() string { return e.Err.Error() }
 func (e *Error) Unwrap() error { return e.Err }
 
+// ErrFindings is returned by a command that ran and found a problem. The
+// exit code is 1 and nothing more is printed: the report already said it.
+var ErrFindings = &Error{Code: Findings, Kind: KindExecution, Err: errors.New("findings")}
+
 // Usage wraps an invalid flag, target or configuration.
 func Usage(err error) error {
 	return &Error{Code: Failure, Kind: KindUsage, Err: err}
