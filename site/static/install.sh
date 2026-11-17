@@ -106,8 +106,9 @@ say "Checksum verified"
 tar -xzf "$tmp/$archive" -C "$tmp" nw || die "could not extract nw from $archive"
 mkdir -p "$dir" || die "could not create $dir; set NW_INSTALL_DIR to a writable directory"
 # Copy under a temporary name, then rename, so a running nw is replaced safely.
-cp "$tmp/nw" "$dir/.nw.new" && chmod 755 "$dir/.nw.new" && mv -f "$dir/.nw.new" "$dir/nw" ||
+if ! { cp "$tmp/nw" "$dir/.nw.new" && chmod 755 "$dir/.nw.new" && mv -f "$dir/.nw.new" "$dir/nw"; }; then
   die "could not write $dir/nw"
+fi
 
 say "Installed $dir/nw"
 "$dir/nw" version | head -n 1
