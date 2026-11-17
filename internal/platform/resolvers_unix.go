@@ -10,6 +10,11 @@ import (
 
 const resolvConfPath = "/etc/resolv.conf"
 
+const (
+	dnsSource           = resolvConfPath
+	resolvConfPathValue = resolvConfPath
+)
+
 func systemResolvers() ([]string, error) {
 	f, err := os.Open(resolvConfPath)
 	if err != nil {

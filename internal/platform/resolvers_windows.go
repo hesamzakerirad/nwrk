@@ -12,6 +12,11 @@ import (
 	"golang.org/x/sys/windows"
 )
 
+const (
+	dnsSource           = "adapter configuration (GetAdaptersAddresses)"
+	resolvConfPathValue = ""
+)
+
 func joinPort(ip netip.Addr, port int) string {
 	return net.JoinHostPort(ip.String(), strconv.Itoa(port))
 }
