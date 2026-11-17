@@ -16,12 +16,14 @@ import (
 
 // Layers a rule can belong to, in the order reports list them.
 const (
-	LayerDNS      = "dns"
-	LayerTCP      = "tcp"
-	LayerTLS      = "tls"
-	LayerHTTP     = "http"
-	LayerIPFamily = "ip_family"
-	LayerOther    = "other"
+	LayerDNS          = "dns"
+	LayerTCP          = "tcp"
+	LayerTLS          = "tls"
+	LayerHTTP         = "http"
+	LayerIPFamily     = "ip_family"
+	LayerLocal        = "local"
+	LayerReachability = "reachability"
+	LayerOther        = "other"
 )
 
 // Rule is one explicit check over the measurements of a run.

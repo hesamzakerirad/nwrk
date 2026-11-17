@@ -4,6 +4,7 @@ package rules
 
 import (
 	"net"
+	"net/netip"
 	"sort"
 	"strconv"
 	"strings"
@@ -124,3 +125,5 @@ func severityByCoverage(failedN, okN int) domain.Severity {
 
 // cmd builds the nw command that repeats a measurement.
 func cmd(parts ...string) string { return "nw " + strings.Join(parts, " ") }
+
+type netipAddr = netip.Addr

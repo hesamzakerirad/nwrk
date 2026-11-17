@@ -23,9 +23,19 @@ func Diagnosis(r *output.Renderer, rep *domain.Report, quiet, verbose bool) {
 		return
 	}
 
-	fmt.Fprintf(w, "%s %s  %s\n\n", r.Bold("nw diagnose"), rep.Run.Target, r.Dim("(profile "+rep.Run.Profile+")"))
+	if rep.Run.Command == "doctor" {
+		fmt.Fprintf(w, "%s %s\n\n", r.Bold("nw doctor"), rep.Run.Target)
+	} else {
+		fmt.Fprintf(w, "%s %s  %s\n\n", r.Bold("nw diagnose"), rep.Run.Target, r.Dim("(profile "+rep.Run.Profile+")"))
+	}
 
-	if rep.Summary != nil {
+	if rep.Summary != nil && rep.Summary.Verdict != "" {
+		fmt.Fprintln(w, r.Bold("Where the problem is"))
+		for _, sc := range rep.Summary.Scopes {
+			fmt.Fprintf(w, "  %-13s  %s\n", sc.Scope, scopeBadge(r, sc.Status))
+		}
+		fmt.Fprintf(w, "\n%s\n%s\n\n", verdictLine(r, rep.Summary.Verdict), resultLine(r, rep))
+	} else if rep.Summary != nil {
 		fmt.Fprintln(w, r.Bold("Summary"))
 		for _, l := range rep.Summary.Layers {
 			fmt.Fprintf(w, "  %-4s  %s\n", l.Layer, layerBadge(r, l.Status))
@@ -93,13 +103,16 @@ func resolverLabel(m domain.Measurement) string {
 }
 
 func evidence(w interface{ Write([]byte) (int, error) }, label string, list []domain.Evidence) {
-	for _, e := range list {
+	for i, e := range list {
 		text := e.Text
 		if len(e.MeasurementIDs) > 0 {
 			text += " [" + strings.Join(e.MeasurementIDs, ", ") + "]"
 		}
-		fmt.Fprintf(w, "      %-12s %s\n", label+":", text)
-		label = ""
+		head := label + ":"
+		if i > 0 {
+			head = ""
+		}
+		fmt.Fprintf(w, "      %-13s %s\n", head, text)
 	}
 }
 
@@ -147,4 +160,33 @@ func layerBadge(r *output.Renderer, status string) string {
 		return r.Dim("skipped")
 	}
 	return r.Dim("not run")
+}
+
+func scopeBadge(r *output.Renderer, status string) string {
+	switch status {
+	case "ok", "reachable":
+		return r.Green(status)
+	case "problem", "unreachable":
+		return r.Red(strings.ToUpper(status))
+	case "partial":
+		return r.Yellow("partial")
+	}
+	return r.Dim("not checked")
+}
+
+// verdictLine states, in technical terms, which layer the evidence points at.
+func verdictLine(r *output.Renderer, verdict string) string {
+	switch verdict {
+	case domain.VerdictHealthy:
+		return r.Green("Every reference target that was checked is reachable.")
+	case domain.VerdictLocal:
+		return r.Red("The problem is local: it is on this machine or in its network configuration.")
+	case domain.VerdictDomestic:
+		return r.Red("Domestic reference targets are unreachable while international ones answer.")
+	case domain.VerdictInternational:
+		return r.Red("International reference targets are unreachable while the local checks and the domestic targets pass.")
+	case domain.VerdictUpstream:
+		return r.Red("Reference targets do not answer although the local checks pass: the problem is beyond this machine.")
+	}
+	return r.Yellow("Some reference targets are unreachable and others answer.")
 }

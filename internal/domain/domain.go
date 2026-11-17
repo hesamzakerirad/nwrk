@@ -38,6 +38,17 @@ const (
 	TypeTCP  Type = "tcp"
 	TypeTLS  Type = "tls"
 	TypeHTTP Type = "http"
+	// TypeLocal is an inspection of this machine's own network setup.
+	TypeLocal Type = "local"
+)
+
+// Scope says which part of the path a measurement speaks for.
+type Scope string
+
+const (
+	ScopeLocal         Scope = "local"
+	ScopeDomestic      Scope = "domestic"
+	ScopeInternational Scope = "international"
 )
 
 // ErrorCode is the stable category of a failed measurement.
@@ -71,6 +82,10 @@ const (
 	HTTPProtocolError ErrorCode = "http.protocol_error"
 	HTTPReset         ErrorCode = "http.reset"
 	HTTPError         ErrorCode = "http.error"
+
+	LocalNoInterface ErrorCode = "local.no_interface"
+	LocalNoRoute     ErrorCode = "local.no_route"
+	LocalNoResolver  ErrorCode = "local.no_resolver"
 )
 
 // AllErrorCodes lists every code, for documentation and schema checks.
@@ -79,6 +94,7 @@ var AllErrorCodes = []ErrorCode{
 	TCPRefused, TCPTimeout, TCPUnreachable, TCPReset, TCPError,
 	TLSCertExpired, TLSCertUntrusted, TLSHostnameMismatch, TLSHandshakeFailure, TLSReset, TLSTimeout, TLSError,
 	HTTPTimeout, HTTPRedirectLoop, HTTPProtocolError, HTTPReset, HTTPError,
+	LocalNoInterface, LocalNoRoute, LocalNoResolver,
 }
 
 // Error is a structured failure. Message is for people and may change;
@@ -125,6 +141,7 @@ type Measurement struct {
 	StartedAt  time.Time      `json:"started_at"`
 	EndedAt    time.Time      `json:"ended_at"`
 	DurationMS float64        `json:"duration_ms"`
+	Scope      Scope          `json:"scope,omitempty"`
 	Target     Target         `json:"target"`
 	Resolver   *ResolverInfo  `json:"resolver,omitempty"`
 	Params     map[string]any `json:"params,omitempty"`
@@ -255,11 +272,32 @@ type LayerStatus struct {
 	Status string `json:"status"`
 }
 
+// ScopeStatus is the reachability of one scope: "ok" for local checks;
+// "reachable", "partial", "unreachable" or "not_checked" for the others.
+type ScopeStatus struct {
+	Scope  Scope  `json:"scope"`
+	Status string `json:"status"`
+}
+
+// Verdicts say which layer of the path the problem is in, for nw doctor.
+const (
+	VerdictHealthy       = "healthy"
+	VerdictLocal         = "local"
+	VerdictDomestic      = "domestic"
+	VerdictInternational = "international"
+	VerdictUpstream      = "upstream"
+	VerdictPartial       = "partial"
+)
+
 // Summary is the at-a-glance result of a diagnosis.
 type Summary struct {
 	// Outcome is "ok" when no actionable finding was made, else "problem".
 	Outcome string        `json:"outcome"`
 	Layers  []LayerStatus `json:"layers"`
+	// Scopes and Verdict are set by nw doctor: which part of the path works,
+	// and which layer the problem is in.
+	Scopes  []ScopeStatus `json:"scopes,omitempty"`
+	Verdict string        `json:"verdict,omitempty"`
 }
 
 // Platform describes where the run happened.
@@ -276,6 +314,7 @@ type DiagnosticRun struct {
 	Command     string    `json:"command"`
 	Target      string    `json:"target"`
 	Profile     string    `json:"profile,omitempty"`
+	Region      string    `json:"region,omitempty"`
 	ToolVersion string    `json:"tool_version"`
 	Platform    Platform  `json:"platform"`
 }
