@@ -94,6 +94,9 @@ func label(m domain.Measurement) string {
 			s += " (" + t.Family + ")"
 		}
 	}
+	if p := m.Probe(); p != "" {
+		s += " [probe: " + p + "]"
+	}
 	if m.Scope != "" && m.Type != domain.TypeLocal {
 		s += " [" + string(m.Scope) + "]"
 	}

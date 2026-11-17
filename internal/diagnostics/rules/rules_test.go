@@ -2,7 +2,9 @@ package rules
 
 import (
 	"encoding/json"
+	"fmt"
 	"slices"
+	"strings"
 	"testing"
 	"time"
 
@@ -305,11 +307,22 @@ func checkInvariants(t *testing.T, r *domain.Report) {
 		prev = rank
 	}
 	for _, m := range r.Measurements {
-		if m.Status == domain.StatusFailure && !covered[m.ID] {
+		if m.Status == domain.StatusFailure && m.Probe() == "" && !covered[m.ID] {
 			t.Errorf("failed measurement %s is not referenced by any finding", m.ID)
 		}
 	}
 	for _, h := range r.Hypotheses {
+		if h.Confidence == domain.ConfidenceHigh {
+			distinct := map[string]bool{}
+			for _, e := range h.Supporting {
+				for _, id := range e.MeasurementIDs {
+					distinct[id] = true
+				}
+			}
+			if len(distinct) < 2 {
+				t.Errorf("hypothesis %s is high confidence from a single measurement", h.ID)
+			}
+		}
 		if h.Summary == "" || len(h.FindingIDs) == 0 || len(h.Supporting) == 0 || len(h.Missing) == 0 {
 			t.Errorf("hypothesis %s lacks an explanation, a finding, supporting evidence or missing evidence: %+v", h.ID, h)
 		}
@@ -329,6 +342,14 @@ func checkInvariants(t *testing.T, r *domain.Report) {
 	for _, rec := range r.Recommendations {
 		if rec.Summary == "" || len(rec.FindingIDs) == 0 {
 			t.Errorf("recommendation %s is incomplete: %+v", rec.ID, rec)
+		}
+	}
+	// Wording policy (SPEC 8.5): findings use technical vocabulary and never
+	// label an event with a political or accusatory term.
+	text := strings.ToLower(fmt.Sprint(r.Findings, r.Hypotheses, r.Recommendations))
+	for _, w := range []string{"censor", "surveil", "regime", "government", "hijack", "attack", "malicious", "spy", "circumvent", "bypass"} {
+		if strings.Contains(text, w) {
+			t.Errorf("finding text contains %q", w)
 		}
 	}
 	r.Summarize()

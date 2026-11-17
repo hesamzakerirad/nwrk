@@ -60,11 +60,23 @@ type Input struct {
 	Report *domain.Report
 }
 
-// Measurements returns the measurements of type t, in report order.
+// Measurements returns the ordinary measurements of type t, in report
+// order. Probes are left out; ask for them with Probes.
 func (in *Input) Measurements(t domain.Type) []domain.Measurement {
 	var out []domain.Measurement
 	for _, m := range in.Report.Measurements {
-		if m.Type == t {
+		if m.Type == t && m.Probe() == "" {
+			out = append(out, m)
+		}
+	}
+	return out
+}
+
+// Probes returns the measurements of type t made as the named probe.
+func (in *Input) Probes(t domain.Type, probe string) []domain.Measurement {
+	var out []domain.Measurement
+	for _, m := range in.Report.Measurements {
+		if m.Type == t && m.Probe() == probe {
 			out = append(out, m)
 		}
 	}
@@ -75,7 +87,7 @@ func (in *Input) Measurements(t domain.Type) []domain.Measurement {
 // merely skipped.
 func (in *Input) Ran(t domain.Type) bool {
 	for _, m := range in.Report.Measurements {
-		if m.Type == t && m.Status != domain.StatusSkipped {
+		if m.Type == t && m.Probe() == "" && m.Status != domain.StatusSkipped {
 			return true
 		}
 	}
@@ -176,6 +188,7 @@ func Evaluate(rules []Rule, rep *domain.Report) {
 			Caveats:        caveats,
 		})
 		for _, h := range p.out.Hypotheses {
+			h.Confidence = capConfidence(h)
 			h.FindingIDs = []string{fid}
 			rep.Hypotheses = append(rep.Hypotheses, h)
 		}
@@ -221,7 +234,9 @@ var unclassifiedRule = Rule{
 func unclassified(in *Input, covered map[string]bool) *Outcome {
 	var ms []domain.Measurement
 	for _, m := range in.Report.Measurements {
-		if m.Status == domain.StatusFailure && !covered[m.ID] {
+		// A failed probe is evidence for the rules that use it; it is not
+		// by itself a problem with the target.
+		if m.Status == domain.StatusFailure && m.Probe() == "" && !covered[m.ID] {
 			ms = append(ms, m)
 		}
 	}
@@ -269,4 +284,23 @@ func confidenceRank(c domain.Confidence) int {
 		return 2
 	}
 	return 1
+}
+
+// capConfidence enforces that no hypothesis reaches high confidence from a
+// single measurement: high needs supporting evidence from at least two
+// different measurements, otherwise it is lowered to medium.
+func capConfidence(h domain.Hypothesis) domain.Confidence {
+	if h.Confidence != domain.ConfidenceHigh {
+		return h.Confidence
+	}
+	seen := map[string]bool{}
+	for _, e := range h.Supporting {
+		for _, id := range e.MeasurementIDs {
+			seen[id] = true
+		}
+	}
+	if len(seen) < 2 {
+		return domain.ConfidenceMedium
+	}
+	return h.Confidence
 }

@@ -363,3 +363,24 @@ func TestConcurrencyLimitsAreSet(t *testing.T) {
 		t.Fatal("the default profile is standard")
 	}
 }
+
+func TestFailingChosenResolverFallsBackToTheSystemAddresses(t *testing.T) {
+	e := newEnv(t)
+	dead, _ := target.ParseResolver(fixtures.SilentUDP(t))
+	e.opts.Resolvers = []target.Resolver{dead}
+	e.opts.Timeout = 500 * time.Millisecond
+	cert := e.pki.Valid("example.test")
+	srv := fixtures.HTTPServer(t, &cert)
+	rep := e.run(t, "https://example.test:"+port(srv.Listener.Addr().String())+"/ok", Standard)
+	if layer(rep, "tcp") != "success" || layer(rep, "http") != "success" {
+		t.Fatalf("the system resolver's addresses must still be tested: %+v", rep.Summary)
+	}
+	if !slices.Contains(codes(rep), "DNS_RESOLUTION_FAILURE") {
+		t.Fatalf("the failing resolver is still reported: %v", codes(rep))
+	}
+	for _, m := range rep.Measurements {
+		if m.Type == domain.TypeTCP && m.Params["addresses_from"] != apptest.FallbackNote {
+			t.Fatalf("the measurement must say where its addresses came from: %v", m.Params)
+		}
+	}
+}
