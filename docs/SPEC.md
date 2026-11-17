@@ -386,7 +386,7 @@ ICMP may be filtered, deprioritized, or rate-limited. Missing hop responses must
 `doctor` probes a fixed set of reference targets. Targets are defined in reviewed data files in the repository (`internal/regions/presets/*.toml`) and embedded in the binary.
 
 - **`global` (default):** anycast public resolvers (for example 1.1.1.1, 8.8.8.8, 9.9.9.9) and a few large HTTPS endpoints that offer a lightweight check URL.
-- **`ir`:** the global set plus domestic anchors (large, stable Iranian sites and domestic resolvers), so a report can state that domestic reachability works while international reachability fails.
+- **`ir`:** the global set plus domestic anchors (large, stable Iranian sites), so a report can state that domestic reachability works while international reachability fails. No domestic resolver ships in v0.2: none could be verified as stable and neutral, so users add their own.
 - Presets are selected explicitly with `--region` or the config file. The tool never detects the user's country.
 - Preset targets must be stable, neutral, and unrelated to circumvention services.
 - Resolvers in a preset can be overridden as described in section 7.2.1.
@@ -818,7 +818,7 @@ color = "auto"   # auto | always | never
 
 Keys added in P5: default profile, history retention, redaction preferences.
 
-Precedence for every setting: command-line flag, then `NW_*` environment variable, then config file, then built-in default (or region preset, for resolvers).
+Precedence for every setting: command-line flag, then `NW_*` environment variable (`NW_REGION`, `NW_RESOLVERS`, `NW_TIMEOUT`, `NW_COLOR`), then config file, then built-in default (or region preset, for resolvers). `NW_CONFIG` overrides the file location. A region preset supplies resolvers to commands other than `doctor` only when the region was chosen explicitly, so nothing contacts a public resolver unasked.
 
 Do not store passwords, tokens, or credentials in the config file.
 

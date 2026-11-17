@@ -15,7 +15,7 @@ Every measurement has an ID, a type, a status, start and end times, a duration, 
 | `success` | The measurement completed and the check passed |
 | `failure` | The measurement ran and the check did not pass; `error.code` says how |
 | `skipped` | A step it depends on failed, so it did not run; `note` says why |
-| `inconclusive` | It ran but proves nothing (reserved for later commands) |
+| `inconclusive` | It ran but proves nothing, for example a local check that could not read the system; `note` says why |
 
 ## DNS
 
@@ -84,6 +84,23 @@ A failed handshake can have many causes: server configuration, client configurat
 | `http.error` | Another failure |
 
 Plus every `dns.*`, `tcp.*` and `tls.*` code above, when the failure happened in that stage.
+
+## Local checks
+
+`nw doctor` also inspects this machine's own network setup. These measurements have type `local`, scope `local`, and a `params.check` of `interfaces`, `route`, `resolvers` or `proxy`. Their results record counts and kinds, never addresses or interface names, so a report can be shared safely. They read the operating system and send nothing; see [Platform support](../platform-support/) for what each platform can read.
+
+- **interfaces**: is any interface up, not loopback, with an address that is not link-local? Counts of interfaces and the address families in use.
+- **route**: does the operating system have a default route for IPv4 and for IPv6? It asks which route it would use and sends no packet.
+- **resolvers**: how many DNS servers are configured, by kind (private, global, loopback), and where the configuration was read from.
+- **proxy**: whether a proxy is set. It is always a `success`: a proxy is context, not a fault. Credentials are never kept.
+
+A local check that could not read the system is `inconclusive`, with the reason in `note`, rather than a failure.
+
+| Error code | Meaning |
+|---|---|
+| `local.no_interface` | No interface is up with an address that can reach beyond this machine |
+| `local.no_route` | The operating system has no route to the internet for IPv4 or IPv6 |
+| `local.no_resolver` | The operating system has no DNS server configured |
 
 ## Deadlines
 

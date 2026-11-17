@@ -24,7 +24,8 @@ source_rev: d05013e4fb0591e6e6d376a1f346b40f5e8102ea
 | فیلد | معنی |
 |---|---|
 | `id` | `m-001`، `m-002` و ... به ترتیب گزارش، پایدار در یک گزارش |
-| `type` | `dns`، `tcp`، `tls` یا `http` |
+| `type` | `dns`، `tcp`، `tls`، `http` یا `local` (بررسی خود این دستگاه، از `nw doctor`) |
+| `scope` | `local`، `domestic` یا `international`، تعیین‌شده توسط `nw doctor` |
 | `version` | نسخه پیاده‌سازی اندازه‌گیری |
 | `status` | `success`، `failure`، `skipped` یا `inconclusive` |
 | `started_at`، `ended_at`، `duration_ms` | زمان اجرا و مدت آن |
@@ -37,6 +38,8 @@ source_rev: d05013e4fb0591e6e6d376a1f346b40f5e8102ea
 | `redacted` | آنچه عمداً جمع‌آوری نشده، مثلاً `response.set-cookie` |
 
 در اسکریپت‌ها از `error.code` استفاده کنید، نه `error.message`.
+
+برای `nw doctor`، `summary` علاوه بر آن `scopes` (فهرست `{scope, status}`) و `verdict` (`healthy`، `local`، `domestic`، `international`، `upstream` یا `partial`) دارد و `run.region` پیش‌تنظیم منطقه است؛ [منطقه‌ها و پیش‌تنظیم‌ها](../regions/) را ببینید. دستورهای `nw network`، `nw config path` و `nw config show` با `--output json` سندهای JSON کوچک خودشان را چاپ می‌کنند، هر کدام با `schema_version` و همان تعهد سازگاری.
 
 ## وضعیت خروج
 

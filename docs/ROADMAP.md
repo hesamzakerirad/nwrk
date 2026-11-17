@@ -157,13 +157,18 @@ This is the phase-by-phase build plan for `nw`. The product specification is in 
 
 **Goal:** `nw doctor` tells the user whether the problem is local, domestic, or international.
 
-- [ ] `nw doctor`: bounded checklist covering interfaces, default route, system resolvers, the `global` preset, and the selected region preset
-- [ ] `nw network show|interfaces|routes|dns-config|proxy` via platform adapters (native APIs preferred over parsing command output)
-- [ ] Region presets `global.toml` and `ir.toml` embedded from `internal/regions/presets/`; `--region` flag. `ir` anchors chosen for stability and neutrality, with the reason recorded per target
-- [ ] Layered verdict: local / domestic / international
-- [ ] Resolver comparison: system resolver vs chosen resolvers, differences reported as observations
-- [ ] Config file (TOML): `nw config path`, `nw config show` with the source of each value; keys `region`, `resolvers`, `timeout`, `color`; precedence flag > `NW_*` env > config > default/preset
-- [ ] Docs: `docs/regions.md`, `docs/platform-support.md`, `docs/privacy.md`; Farsi translations
+- [x] `nw doctor`: bounded checklist covering interfaces, default route, system resolvers, the `global` preset, and the selected region preset
+- [x] `nw network show|interfaces|routes|dns-config|proxy` via platform adapters (native APIs preferred over parsing command output)
+- [x] Region presets `global.toml` and `ir.toml` embedded from `internal/regions/presets/`; `--region` flag. `ir` anchors chosen for stability and neutrality, with the reason recorded per target (no domestic resolver ships: none could be verified as stable and neutral)
+- [x] Layered verdict: local / domestic / international
+- [x] Resolver comparison: system resolver vs chosen resolvers, differences reported as observations
+- [x] Config file (TOML): `nw config path`, `nw config show` with the source of each value; keys `region`, `resolvers`, `timeout`, `color`; precedence flag > `NW_*` env > config > default/preset
+- [x] Docs: `docs/regions.md`, `docs/platform-support.md`, `docs/privacy.md`; Farsi translations
+
+### Maintainer tasks (manual)
+
+- [ ] Review the `ir` domestic anchors from inside the region before the release, and decide whether to ship any domestic resolver
+- [ ] Run `nw doctor` on real Linux, macOS and Windows machines, with and without IPv6, and record any platform limitation in `docs/platform-support.md`
 
 ### Exit criteria
 

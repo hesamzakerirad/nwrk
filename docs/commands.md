@@ -71,6 +71,67 @@ The target is a host name, `host:port` or a URL. A bare host means https on port
 
 Exit status: `0` when no actionable finding was made, `1` when the target has a problem, `2` for a usage error, `130` when interrupted. `--quiet` prints only the findings; `--verbose` adds the details of each measurement.
 
+## nw doctor
+
+Checks this machine's own network setup, then the reference targets of a region preset, and says whether the problem is **local**, **domestic** or **international**. What it does, the verdicts, and every reference target are in [Regions and presets](../regions/); what it contacts is in [Privacy](../privacy/).
+
+```sh
+nw doctor
+nw doctor --region ir
+nw doctor --region ir --resolver 1.1.1.1 --resolver tcp://9.9.9.9 --output json
+```
+
+It uses the same report format as `nw diagnose`, with a `summary.verdict` and the status of each scope. `--region` is global, `ir`, or any preset listed in [Regions and presets](../regions/); the default is `global`. Exit status as for `nw diagnose`: `0` no actionable finding, `1` a problem, `2` usage error, `130` interrupted.
+
+## nw network
+
+Shows this machine's own network setup, read from the operating system. Nothing is sent over the network. These commands show addresses, because that is their purpose.
+
+| Command | Shows |
+|---|---|
+| `nw network show` | A short summary: interfaces, default route, DNS servers, proxy |
+| `nw network interfaces` | Interfaces with state, MTU and addresses |
+| `nw network routes` | The routing table (not available on Windows) |
+| `nw network dns-config` | The DNS servers and search domains the system uses |
+| `nw network proxy` | Proxy settings applications may use, without credentials |
+
+What each platform can and cannot show is listed in [Platform support](../platform-support/).
+
+## nw config
+
+nw reads an optional TOML file. `nw config path` prints where it is (it exists or not), and `nw config show` prints the effective settings with the source of each.
+
+```sh
+nw config path
+nw config show
+```
+
+```toml
+region = "ir"
+resolvers = ["1.1.1.1", "tcp://9.9.9.9"]
+timeout = "5s"
+color = "auto"   # auto, always or never
+```
+
+| Platform | Location |
+|---|---|
+| Linux | `$XDG_CONFIG_HOME/nwrk/config.toml`, else `~/.config/nwrk/config.toml` |
+| macOS | `~/Library/Application Support/nwrk/config.toml` |
+| Windows | `%LOCALAPPDATA%\nwrk\config.toml` |
+
+The `NW_CONFIG` variable overrides the location. Unknown keys are an error, so a typo cannot silently do nothing. nw never writes the file, and it must not hold credentials.
+
+**Every setting follows one order:** the command-line flag, then the `NW_*` environment variable, then the config file, then the default.
+
+| Setting | Flag | Variable | Default |
+|---|---|---|---|
+| `region` | `--region` | `NW_REGION` | `global` |
+| `resolvers` | `--resolver` | `NW_RESOLVERS` | none (then the preset's, see [Regions](../regions/)) |
+| `timeout` | `--timeout` | `NW_TIMEOUT` | `10s` |
+| `color` | `--no-color` | `NW_COLOR` | `auto` |
+
+`NO_COLOR` and `--no-color` always win over `color = "always"`.
+
 ## nw completion
 
 Generates a completion script for `bash`, `zsh`, `fish` or `powershell`. It makes no network requests.
@@ -98,6 +159,7 @@ nw completion powershell | Out-String | Invoke-Expression
 | `-v`, `--verbose` | Show more detail and debug logs on stderr | off |
 | `-q`, `--quiet` | Hide nonessential output; errors and exit status remain | off |
 | `--timeout` | Deadline for each network operation, for example `5s` | `10s` |
+| `--region` | Region preset: `global` or `ir` | `global` |
 
 `--verbose` and `--quiet` cannot be combined.
 

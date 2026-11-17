@@ -70,7 +70,8 @@ The addresses and times above are illustrative examples, not real measurements.
 | Field | Meaning |
 |---|---|
 | `id` | `m-001`, `m-002`, ... in report order, stable within one report |
-| `type` | `dns`, `tcp`, `tls` or `http` |
+| `type` | `dns`, `tcp`, `tls`, `http`, or `local` (an inspection of this machine, from `nw doctor`) |
+| `scope` | `local`, `domestic` or `international`, set by `nw doctor` |
 | `version` | Version of the measurement implementation |
 | `status` | `success`, `failure`, `skipped` or `inconclusive` |
 | `started_at`, `ended_at`, `duration_ms` | When it ran and how long it took |
@@ -92,7 +93,13 @@ Use `error.code` in scripts, never `error.message`.
 
 **summary** (`nw diagnose` only): `outcome` (`ok` or `problem`) and `layers`, a list of `{layer, status}` for `dns`, `tcp`, `tls` and `http`, with status `success`, `failure`, `partial`, `skipped` or `not_run`. There is deliberately no overall score.
 
-**run.profile** is `quick`, `standard` or `deep` for `nw diagnose`.
+**run.profile** is `quick`, `standard` or `deep` for `nw diagnose`. **run.region** is the region preset for `nw doctor`.
+
+**summary for `nw doctor`** also has `scopes`, a list of `{scope, status}` (`local` is `ok` or `problem`; the others are `reachable`, `partial`, `unreachable` or `not_checked`), and `verdict`: `healthy`, `local`, `domestic`, `international`, `upstream` or `partial`. See [Regions and presets](../regions/).
+
+## Other documents
+
+`nw network`, `nw config path` and `nw config show` print their own small JSON documents with `--output json`. Each has a `schema_version` and follows the same compatibility promise; their fields are the ones shown in the human output.
 
 ## Exit status
 
