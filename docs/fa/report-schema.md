@@ -15,7 +15,7 @@ source_rev: f55f1bcd5b641cc5ef7436c8b0a048a501c66e18
 
 ## ساختار
 
-یک گزارش شامل `schema_version`، `run` و فهرست‌های `measurements`، `findings`، `hypotheses` و `recommendations` است. فهرست‌ها همیشه هستند و آرایه‌اند، هرگز `null` نیستند. در این نسخه `findings`، `hypotheses` و `recommendations` خالی‌اند: دستورهای تفسیر بعداً آن‌ها را پر می‌کنند.
+یک گزارش شامل `schema_version`، `run` و فهرست‌های `measurements`، `findings`، `hypotheses` و `recommendations` است. فهرست‌ها همیشه هستند و آرایه‌اند، هرگز `null` نیستند. `nw test` فهرست‌های `findings`، `hypotheses` و `recommendations` را خالی می‌گذارد؛ `nw diagnose` آن‌ها را پر می‌کند و `summary` را اضافه می‌کند. فیلدهای یافته، فرضیه و پیشنهاد در [نسخه انگلیسی این صفحه](https://github.com/hesamzakerirad/nwrk/blob/main/docs/report-schema.md) و در [یافته‌ها](../findings/) توضیح داده شده‌اند.
 
 مثال کامل با آدرس‌ها و زمان‌های نمایشی (نه اندازه‌گیری واقعی) در [نسخه انگلیسی این صفحه](https://github.com/hesamzakerirad/nwrk/blob/main/docs/report-schema.md) آمده است.
 
@@ -40,4 +40,4 @@ source_rev: f55f1bcd5b641cc5ef7436c8b0a048a501c66e18
 
 ## وضعیت خروج
 
-سند JSON جای وضعیت خروج را نمی‌گیرد: `0` همه اندازه‌گیری‌ها موفق، `1` دست‌کم یکی ناموفق، `2` خطای استفاده، `130` متوقف‌شده. خطاهایی که پیش از هر اندازه‌گیری nw را متوقف می‌کنند، مثل گزینه نادرست، به جای آن `{"schema_version": "1", "error": {"kind", "message"}}` را در خروجی خطا چاپ می‌کنند.
+سند JSON جای وضعیت خروج را نمی‌گیرد. برای `nw test`: `0` همه اندازه‌گیری‌ها موفق، `1` دست‌کم یکی ناموفق. برای `nw diagnose`: `0` یافته قابل اقدامی نیست، `1` دست‌کم یکی هست. در هر دو: `2` خطای استفاده، `130` متوقف‌شده. خطاهایی که پیش از هر اندازه‌گیری nw را متوقف می‌کنند، مثل گزینه نادرست، به جای آن `{"schema_version": "1", "error": {"kind", "message"}}` را در خروجی خطا چاپ می‌کنند.

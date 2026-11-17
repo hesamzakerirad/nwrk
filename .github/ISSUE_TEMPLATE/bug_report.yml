@@ -1,0 +1,28 @@
+name: Bug report
+description: nw crashed, measured something wrongly, or the output is misleading.
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What did you run, what did you expect, and what did you get?
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Output of `nw version`
+    validations:
+      required: true
+  - type: textarea
+    id: output
+    attributes:
+      label: Output
+      description: Paste the output, ideally from `--output json`. Remove anything private first; the report holds IP addresses and host names.
+      render: shell
+  - type: textarea
+    id: context
+    attributes:
+      label: Network context
+      description: Anything relevant, such as a corporate proxy, VPN, or whether IPv6 is available. Optional.

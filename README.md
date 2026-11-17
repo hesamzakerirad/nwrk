@@ -4,7 +4,7 @@
 
 Website: https://nwrk.ir (English and Farsi)
 
-> **Status: early development (v0.0.x).** Four independent measurements (`nw test dns|tcp|tls|http`), `nw version` and shell completion work today. The commands that interpret the evidence arrive in the next releases; see the [roadmap](docs/ROADMAP.md).
+> **Status: early development.** `nw diagnose` and the four measurements (`nw test dns|tcp|tls|http`) work today. `nw doctor`, regional presets and history arrive in the next releases; see the [roadmap](docs/ROADMAP.md).
 
 ## Install
 
@@ -31,6 +31,8 @@ Or download an archive from the [releases page](https://github.com/hesamzakerira
 ## Use
 
 ```sh
+nw diagnose example.com
+nw diagnose https://example.com/health --profile deep
 nw test dns example.com --resolver 1.1.1.1
 nw test tcp example.com:443
 nw test tls example.com
@@ -39,17 +41,21 @@ nw version
 nw completion zsh
 ```
 
-Each measurement reports what it observed and the stable error code of any failure. See [measurements](docs/measurements.md) and the [JSON report schema](docs/report-schema.md).
+`nw diagnose` measures DNS, TCP, TLS and HTTP in order, skips what cannot run with the reason, and explains the evidence: findings say what was observed, hypotheses say what might explain it and what was not checked. See [diagnosing a destination](docs/diagnostics.md), [findings](docs/findings.md), [measurements](docs/measurements.md) and the [JSON report schema](docs/report-schema.md).
 
 Global flags: `--output human|json`, `--no-color`, `--verbose`, `--quiet`, `--timeout`.
 
-Exit codes: `0` no problem found, `1` a measurement failed, `2` usage error or the tool could not run, `130` interrupted.
+Exit codes: `0` no problem found, `1` a problem found (`nw diagnose`) or a measurement failed (`nw test`), `2` usage error or the tool could not run, `130` interrupted.
 
 Color is on for terminals and off for pipes, `--no-color`, and the `NO_COLOR` environment variable.
 
 ## Where this is going
 
-`nw diagnose example.com` will check DNS, TCP, TLS and HTTP in order, show which stage fails, and explain what that evidence does and does not prove. `nw doctor --region ir` will tell local, domestic and international failures apart, and you will be able to pick any DNS resolver with `--resolver`. See [docs/SPEC.md](docs/SPEC.md) and [docs/ROADMAP.md](docs/ROADMAP.md).
+`nw doctor --region ir` will tell local, domestic and international failures apart, and you can already pick any DNS resolver with `--resolver`. See [docs/SPEC.md](docs/SPEC.md) and [docs/ROADMAP.md](docs/ROADMAP.md).
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md). Report vulnerabilities privately, as described in [SECURITY.md](SECURITY.md).
 
 ## Build from source
 

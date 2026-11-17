@@ -6,7 +6,7 @@ weight: 3
 
 This page covers what nw can do today. New commands are added here as they ship.
 
-With `--output json`, the `nw test` commands print a [report](../report-schema/) that follows a versioned schema.
+With `--output json`, `nw test` and `nw diagnose` print a [report](../report-schema/) that follows a versioned schema.
 
 ## nw version
 
@@ -52,6 +52,25 @@ Exit status: `0` when every measurement succeeded, `1` when at least one failed,
 
 `--timeout` sets the deadline of each measurement. `--quiet` prints only the measurements that did not succeed.
 
+## nw diagnose
+
+Investigates a destination across DNS, TCP, TLS and HTTP, then explains what the evidence shows. How it works and how to read the report is in [Diagnosing a destination](../diagnostics/); every rule is in [Findings](../findings/).
+
+```sh
+nw diagnose example.com
+nw diagnose https://example.com/health --profile deep
+nw diagnose example.com:8443 --resolver 1.1.1.1 --output json
+```
+
+| Flag | Meaning |
+|---|---|
+| `--profile` | `quick`, `standard` (default) or `deep` |
+| `--resolver` | A DNS resolver to compare with the system one; same syntax and `NW_RESOLVERS` as `nw test` |
+
+The target is a host name, `host:port` or a URL. A bare host means https on port 443, and port 80 means http.
+
+Exit status: `0` when no actionable finding was made, `1` when the target has a problem, `2` for a usage error, `130` when interrupted. `--quiet` prints only the findings; `--verbose` adds the details of each measurement.
+
 ## nw completion
 
 Generates a completion script for `bash`, `zsh`, `fish` or `powershell`. It makes no network requests.
@@ -91,7 +110,7 @@ nw completion powershell | Out-String | Invoke-Expression
 | `2` | Usage error (bad flag, target or setting), or nw could not run the measurement |
 | `130` | You interrupted the command with Ctrl-C |
 
-A failing network target is a result (`1`), not a tool error (`2`).
+For `nw diagnose`, `1` means at least one `error` or `warning` finding. For `nw test`, `1` means a measurement failed. A failing network target is a result (`1`), not a tool error (`2`).
 
 ## Output conventions
 

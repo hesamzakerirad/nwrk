@@ -61,7 +61,7 @@ The addresses and times above are illustrative examples, not real measurements.
 
 ## Fields
 
-**Report**: `schema_version`, `run`, and the lists `measurements`, `findings`, `hypotheses`, `recommendations`. The lists are always present and are arrays, never `null`. `findings`, `hypotheses` and `recommendations` are empty in this release: the interpretation commands add them later.
+**Report**: `schema_version`, `run`, and the lists `measurements`, `findings`, `hypotheses`, `recommendations`. The lists are always present and are arrays, never `null`. `nw test` leaves `findings`, `hypotheses` and `recommendations` empty; `nw diagnose` fills them, and adds `summary`.
 
 **run**: `id`, `started_at`, `ended_at`, `command`, `target`, `tool_version`, `platform`, and `profile` when a profile was used.
 
@@ -84,6 +84,16 @@ The addresses and times above are illustrative examples, not real measurements.
 
 Use `error.code` in scripts, never `error.message`.
 
+**finding**: `id` (`f-001`, ordered by severity), `code` (the rule ID, stable), `rule_version`, `title`, `layer`, `severity` (`info`, `warning` or `error`), `summary`, `measurement_ids` (at least one; the evidence), and `caveats` (the known ways the rule can be wrong). `warning` and `error` are actionable and make `nw diagnose` exit `1`. See [Findings](../findings/).
+
+**hypothesis**: `id`, `summary`, `finding_ids`, `confidence` (`low`, `medium` or `high`, a ranking and not a probability), and the lists `supporting`, `contradicting` and `missing`, each of `{text, measurement_ids}`, plus `next_measurements`. Hypotheses are ordered by confidence. A hypothesis is a possible explanation, never a verdict.
+
+**recommendation**: `id`, `summary`, optional `command` (a `nw` command to run, where `<ip>` and `<url>` are placeholders), and `finding_ids`.
+
+**summary** (`nw diagnose` only): `outcome` (`ok` or `problem`) and `layers`, a list of `{layer, status}` for `dns`, `tcp`, `tls` and `http`, with status `success`, `failure`, `partial`, `skipped` or `not_run`. There is deliberately no overall score.
+
+**run.profile** is `quick`, `standard` or `deep` for `nw diagnose`.
+
 ## Exit status
 
-The JSON document does not replace the exit status: `0` all measurements succeeded, `1` at least one failed, `2` usage error, `130` interrupted. Errors that stop nw before any measurement, such as a bad flag, print `{"schema_version": "1", "error": {"kind", "message"}}` on standard error instead.
+The JSON document does not replace the exit status. For `nw test`: `0` all measurements succeeded, `1` at least one failed. For `nw diagnose`: `0` no actionable finding, `1` at least one. In both: `2` usage error, `130` interrupted. Errors that stop nw before any measurement, such as a bad flag, print `{"schema_version": "1", "error": {"kind", "message"}}` on standard error instead.

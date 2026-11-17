@@ -115,31 +115,35 @@ This is the phase-by-phase build plan for `nw`. The product specification is in 
 
 ## P2: Diagnose → v0.1.0
 
-**Goal:** the first announced release. `nw diagnose <target>` satisfies SPEC section 23.
+**Goal:** the first announced release. `nw diagnose <target>` satisfies SPEC section 23, except its last bullet (local history), which is delivered in P5.
 
 ### Orchestration
 
-- [ ] Dependency graph: target validation → DNS → address selection → TCP → TLS → HTTP
-- [ ] Skipped tests carry an explicit reason; independent branches run concurrently under a per-profile limit
-- [ ] IPv4 and IPv6 tested separately when both are available
-- [ ] Profiles `quick`, `standard` (default), `deep`, hard-coded and documented
+- [x] Dependency graph: target validation → DNS → address selection → TCP → TLS → HTTP
+- [x] Skipped tests carry an explicit reason; independent branches run concurrently under a per-profile limit
+- [x] IPv4 and IPv6 tested separately when both are available
+- [x] Profiles `quick`, `standard` (default), `deep`, hard-coded and documented
 
 ### Rule engine
 
-- [ ] Rule definition: stable ID, version, required measurements, conditions, severity, caveats, next steps; deterministic evaluation
-- [ ] First rules: `DNS_RESOLUTION_FAILURE`, `NO_USABLE_ADDRESS`, `TCP_CONNECTION_REFUSED`, `TCP_CONNECTION_TIMEOUT`, `TLS_CERTIFICATE_INVALID`, `TLS_HANDSHAKE_FAILURE_AFTER_TCP`, `HTTP_ERROR_RESPONSE`, `IP_FAMILY_BEHAVIOR_DIFFERENCE`
-- [ ] Hypotheses with supporting, contradicting, and missing evidence and qualitative confidence (`low`, `medium`, `high`)
-- [ ] Recommendations for safe next steps
-- [ ] Human report layout per SPEC 13.1
+- [x] Rule definition: stable ID, version, required measurements, conditions, severity, caveats, next steps; deterministic evaluation
+- [x] First rules: `DNS_RESOLUTION_FAILURE`, `NO_USABLE_ADDRESS`, `TCP_CONNECTION_REFUSED`, `TCP_CONNECTION_TIMEOUT`, `TLS_CERTIFICATE_INVALID`, `TLS_HANDSHAKE_FAILURE_AFTER_TCP`, `HTTP_ERROR_RESPONSE`, `IP_FAMILY_BEHAVIOR_DIFFERENCE`; plus `HTTP_REQUEST_FAILURE` (so a failed HTTP request is never unexplained) and the engine safety net `UNCLASSIFIED_FAILURE` (every failed measurement is referenced by a finding)
+- [x] Hypotheses with supporting, contradicting, and missing evidence and qualitative confidence (`low`, `medium`, `high`)
+- [x] Recommendations for safe next steps
+- [x] Human report layout per SPEC 13.1
 
 ### Project
 
-- [ ] `CONTRIBUTING.md`, `SECURITY.md`, issue templates (bug, rule false positive, region preset proposal), pull request template
-- [ ] Start accepting pull requests
+- [x] `CONTRIBUTING.md`, `SECURITY.md`, issue templates (bug, rule false positive, region preset proposal), pull request template
 
 ### Docs
 
-- [ ] `docs/diagnostics.md`, `docs/findings.md` (every rule with its false-positive conditions), full `docs/commands.md`; Farsi translations; announcement on nwrk.ir
+- [x] `docs/diagnostics.md`, `docs/findings.md` (every rule with its false-positive conditions), full `docs/commands.md`; Farsi translations
+
+### Maintainer tasks (manual)
+
+- [ ] Announcement on nwrk.ir
+- [ ] Start accepting pull requests: announce it, enable private vulnerability reporting and issue templates
 
 ### Exit criteria
 

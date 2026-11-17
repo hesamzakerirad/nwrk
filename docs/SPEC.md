@@ -862,7 +862,7 @@ Output conventions:
 
 - Results go to stdout; logs, progress, and errors go to stderr.
 - JSON timestamps are RFC 3339 (ISO 8601) in UTC.
-- Durations in JSON are integer milliseconds (`duration_ms`).
+- Durations in JSON are milliseconds (`duration_ms`), fractional to the microsecond, so sub-millisecond local results stay visible.
 - Color follows the `NO_COLOR` convention and is never the only carrier of meaning.
 
 ---

@@ -72,7 +72,7 @@ A failed handshake can have many causes: server configuration, client configurat
 
 - Each request in the chain is a **hop** with its own timings: DNS, connect, TLS, first byte and total, in milliseconds. A stage that did not happen, such as TLS on plain HTTP, is left out.
 - Up to 1 MiB of the body is read and thrown away, so the total includes the transfer. **Bodies, cookies and authorization headers are never stored.** Only a short list of diagnostic response headers is kept (server, content type and length, cache control, via, alt-svc, strict transport security, retry-after, date).
-- A response with any status code is a completed measurement. A `503` is a `success` with `status_code: 503`; whether that is a problem is for later commands to judge.
+- A response with any status code is a completed measurement. A `503` is a `success` with `status_code: 503`; whether that is a problem is judged by `nw diagnose`; see [Findings](../findings/).
 - Errors from the stages below are reported with their own codes, so an HTTP request that fails in TLS says `tls.cert_expired`, not a generic HTTP error.
 
 | Error code | Meaning |
