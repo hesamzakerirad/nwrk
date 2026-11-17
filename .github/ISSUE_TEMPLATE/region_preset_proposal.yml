@@ -1,0 +1,25 @@
+name: Region preset proposal
+description: Propose changes to the reference targets or resolvers of a region preset (arrives with nw doctor).
+labels: [preset]
+body:
+  - type: input
+    id: region
+    attributes:
+      label: Preset
+      description: For example `ir` or `global`.
+    validations:
+      required: true
+  - type: textarea
+    id: change
+    attributes:
+      label: Proposed change
+      description: Targets or resolvers to add, change or remove. Give the reference to check (host name, port) and why it is a good probe.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Why
+      description: What makes this target stable, neutral and representative? Describe it technically.
+    validations:
+      required: true
