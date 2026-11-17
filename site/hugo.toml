@@ -60,6 +60,12 @@ languages = ["fa"]
 source = "static"
 target = "static"
 
+# The report JSON Schema is published at /schema/report.v1.json.
+[[module.mounts]]
+source = "../schema"
+target = "static/schema"
+files = ["*.json"]
+
 [[module.mounts]]
 source = "layouts"
 target = "layouts"

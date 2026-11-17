@@ -82,28 +82,28 @@ This is the phase-by-phase build plan for `nw`. The product specification is in 
 
 ### Domain and contract
 
-- [ ] Types: `DiagnosticRun`, `Measurement`, `Finding`, `Hypothesis`, `Recommendation`
-- [ ] Statuses: `success`, `failure`, `skipped`, `inconclusive`
-- [ ] Error taxonomy, for example: `dns.nxdomain`, `dns.servfail`, `dns.refused`, `dns.no_answer`, `dns.timeout`, `tcp.refused`, `tcp.timeout`, `tcp.unreachable`, `tcp.reset`, `tls.cert_expired`, `tls.cert_untrusted`, `tls.hostname_mismatch`, `tls.handshake_failure`, `tls.reset`, `tls.timeout`, `http.timeout`, `http.redirect_loop`, `http.protocol_error`
-- [ ] JSON schema v1: `docs/report-schema.md` plus a machine-readable JSON Schema file; golden-file tests
+- [x] Types: `DiagnosticRun`, `Measurement`, `Finding`, `Hypothesis`, `Recommendation`
+- [x] Statuses: `success`, `failure`, `skipped`, `inconclusive`
+- [x] Error taxonomy, for example: `dns.nxdomain`, `dns.servfail`, `dns.refused`, `dns.no_answer`, `dns.timeout`, `tcp.refused`, `tcp.timeout`, `tcp.unreachable`, `tcp.reset`, `tls.cert_expired`, `tls.cert_untrusted`, `tls.hostname_mismatch`, `tls.handshake_failure`, `tls.reset`, `tls.timeout`, `http.timeout`, `http.redirect_loop`, `http.protocol_error`
+- [x] JSON schema v1: `docs/report-schema.md` plus a machine-readable JSON Schema file; golden-file tests
 
 ### Measurements
 
-- [ ] **DNS** (`miekg/dns`): A/AAAA, response code, timing, resolver used; system resolver discovery per platform; repeatable `--resolver host[:port]` and `tcp://host[:port]`; `NW_RESOLVERS`; system resolver always measured as the baseline
-- [ ] **TCP**: per resolved address, address family, duration, classified error
-- [ ] **TLS**: verification always on; version, cipher suite, ALPN; certificate subject, issuer, validity, SANs, chain result; certificate errors kept separate from handshake/transport errors
-- [ ] **HTTP**: GET by default, bounded redirects and body size, `httptrace` timings (DNS, connect, TLS, first byte, total), selected headers; never store bodies, cookies, or authorization headers
-- [ ] Commands: `nw test dns|tcp|tls|http`, human and JSON output
+- [x] **DNS** (`miekg/dns`): A/AAAA, response code, timing, resolver used; system resolver discovery per platform (the baseline uses the OS resolver API and lists the configured servers; chosen resolvers are queried directly for exact response codes); repeatable `--resolver host[:port]` and `tcp://host[:port]`; `NW_RESOLVERS`; system resolver always measured as the baseline
+- [x] **TCP**: per resolved address, address family, duration, classified error
+- [x] **TLS**: verification always on; version, cipher suite, ALPN; certificate subject, issuer, validity, SANs, chain result; certificate errors kept separate from handshake/transport errors
+- [x] **HTTP**: GET by default, bounded redirects and body size, `httptrace` timings (DNS, connect, TLS, first byte, total), selected headers; never store bodies, cookies, or authorization headers
+- [x] Commands: `nw test dns|tcp|tls|http`, human and JSON output
 
 ### Testing
 
-- [ ] Fixtures: local DNS server (NXDOMAIN, empty answer, SERVFAIL, REFUSED, no response), TCP listeners that refuse or never accept, TLS servers with expired, self-signed, and wrong-host certificates, HTTP server with redirect loops and slow responses
-- [ ] Fuzz tests for host, URL, `host:port`, and resolver-address parsers
-- [ ] Cancellation and deadline tests; no goroutine or socket leaks
+- [x] Fixtures (in `internal/fixtures`): local DNS server (NXDOMAIN, empty answer, SERVFAIL, REFUSED, no response), TCP listeners that refuse or never accept, TLS servers with expired, self-signed, and wrong-host certificates, HTTP server with redirect loops and slow responses
+- [x] Fuzz tests for host, URL, `host:port`, and resolver-address parsers
+- [x] Cancellation and deadline tests; no goroutine or socket leaks
 
 ### Docs
 
-- [ ] `docs/measurements.md`, test-command sections of `docs/commands.md`, `docs/report-schema.md`; Farsi translations
+- [x] `docs/measurements.md`, test-command sections of `docs/commands.md`, `docs/report-schema.md`; Farsi translations
 
 ### Exit criteria
 
