@@ -8,6 +8,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/hesamzakerirad/nwrk/internal/diagnostics/engine"
 	"github.com/hesamzakerirad/nwrk/internal/diagnostics/rules"
 	"github.com/hesamzakerirad/nwrk/internal/domain"
 	"github.com/hesamzakerirad/nwrk/internal/regions"
@@ -51,6 +52,22 @@ func TestEveryRuleIsDocumentedWithItsCaveats(t *testing.T) {
 		// DOMESTIC_UNREACHABLE is documented by reference to its twin.
 		if r.ID != "DOMESTIC_UNREACHABLE" && !strings.Contains(section, "When it can be wrong") {
 			t.Errorf("%s: its section must list when it can be wrong", r.ID)
+		}
+	}
+	for _, list := range [][]engineRule{asRules(rules.Interference()), asRules(rules.Security())} {
+		for _, r := range list {
+			i := strings.Index(findings, "### "+r.ID)
+			if i < 0 {
+				t.Errorf("docs/findings.md has no section for %s", r.ID)
+				continue
+			}
+			section := findings[i:]
+			if j := strings.Index(section[4:], "\n#"); j >= 0 {
+				section = section[:j+4]
+			}
+			if !strings.Contains(section, "When it can be wrong") {
+				t.Errorf("%s: its section must list when it can be wrong", r.ID)
+			}
 		}
 	}
 	if !strings.Contains(findings, "## UNCLASSIFIED_FAILURE") {
@@ -109,7 +126,7 @@ func TestProfilesAndCommandsAreDocumented(t *testing.T) {
 		}
 	}
 	c := doc(t, "commands.md")
-	for _, w := range []string{"## nw diagnose", "## nw test", "## nw version", "## nw completion", "## nw doctor", "## nw network", "## nw config", "--profile", "--resolver", "--region", "NW_CONFIG"} {
+	for _, w := range []string{"## nw diagnose", "## nw test", "## nw version", "## nw completion", "## nw doctor", "## nw network", "## nw config", "## nw security", "## nw path", "tls://", "https://", "--profile", "--resolver", "--region", "NW_CONFIG"} {
 		if !strings.Contains(c, w) {
 			t.Errorf("docs/commands.md lacks %q", w)
 		}
@@ -135,4 +152,14 @@ func TestDocsKeepToTheWordingPolicy(t *testing.T) {
 			}
 		}
 	}
+}
+
+type engineRule struct{ ID string }
+
+func asRules(in []engine.Rule) []engineRule {
+	out := make([]engineRule, len(in))
+	for i, r := range in {
+		out[i] = engineRule{r.ID}
+	}
+	return out
 }

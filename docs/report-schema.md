@@ -93,13 +93,19 @@ Use `error.code` in scripts, never `error.message`.
 
 **summary** (`nw diagnose` only): `outcome` (`ok` or `problem`) and `layers`, a list of `{layer, status}` for `dns`, `tcp`, `tls` and `http`, with status `success`, `failure`, `partial`, `skipped` or `not_run`. There is deliberately no overall score.
 
+**Probes.** Measurements made as evidence for the interference rules have `params.probe` (see [Measurements](../measurements/)). Their `result` follows the shape of their type, except two DNS probes that have their own shapes (`responses` for `multiple_responses`, and `signed`, `authenticated`, `cnames` for `dnssec`). The layer summary leaves probes out.
+
+**run.command** is `test dns` and its siblings, `diagnose`, `doctor`, `security inspect` or `security interference`.
+
+**resolver.kind** is `system`, `udp`, `tcp`, `tls` or `https`.
+
 **run.profile** is `quick`, `standard` or `deep` for `nw diagnose`. **run.region** is the region preset for `nw doctor`.
 
 **summary for `nw doctor`** also has `scopes`, a list of `{scope, status}` (`local` is `ok` or `problem`; the others are `reachable`, `partial`, `unreachable` or `not_checked`), and `verdict`: `healthy`, `local`, `domestic`, `international`, `upstream` or `partial`. See [Regions and presets](../regions/).
 
 ## Other documents
 
-`nw network`, `nw config path` and `nw config show` print their own small JSON documents with `--output json`. Each has a `schema_version` and follows the same compatibility promise; their fields are the ones shown in the human output.
+`nw network`, `nw config path`, `nw config show` and `nw path ping`, `trace` and `mtu` print their own small JSON documents with `--output json`. Each has a `schema_version` and follows the same compatibility promise; their fields are the ones shown in the human output.
 
 ## Exit status
 

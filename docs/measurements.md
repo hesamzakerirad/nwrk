@@ -85,6 +85,21 @@ A failed handshake can have many causes: server configuration, client configurat
 
 Plus every `dns.*`, `tcp.*` and `tls.*` code above, when the failure happened in that stage.
 
+## Encrypted DNS, probes and DNSSEC
+
+A resolver can also be reached over TLS (`tls://host`, port 853) or HTTPS (`https://host/dns-query`, port 443). The query and the reply then cannot be read or altered on the path, and the server's certificate is verified against the host in the address. A certificate or connection failure shows as `dns.transport` with the reason in the message. A host name in such an address is resolved by the operating system to connect; that lookup is not measured.
+
+Some measurements are **probes**: extra, comparative measurements that exist as evidence for the [interference rules](../interference/). They carry `params.probe`, are listed in the report, and are ignored by the layer summary and by the ordinary rules, so a failed probe never makes a healthy target look broken. The probes are:
+
+| `params.probe` | Type | What it does |
+|---|---|---|
+| `multiple_responses` | dns | Sends one plain UDP query and keeps listening for 500 ms, recording every reply with its delay |
+| `dnssec` | dns | Asks with DNSSEC requested and records the signature state, the resolver's validation flag and the CNAME chain. On SERVFAIL it asks again with validation disabled, to tell a validation failure from an ordinary failure |
+| `answer_reachability` | tcp | Connects to the addresses that two resolvers returned, when the resolvers disagree |
+| `sni_target`, `sni_control` | tls | Repeats the handshake with the target name, and makes handshakes with a neutral control name, at the same address |
+| `legacy_tls` | tls | Offers only TLS 1.0 and 1.1 (verification stays on) |
+| `plain_http` | http | Makes the same request over http that was made over https |
+
 ## Local checks
 
 `nw doctor` also inspects this machine's own network setup. These measurements have type `local`, scope `local`, and a `params.check` of `interfaces`, `route`, `resolvers` or `proxy`. Their results record counts and kinds, never addresses or interface names, so a report can be shared safely. They read the operating system and send nothing; see [Platform support](../platform-support/) for what each platform can read.
