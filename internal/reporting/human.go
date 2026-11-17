@@ -24,22 +24,7 @@ func Human(r *output.Renderer, rep *domain.Report, quiet bool) {
 		if quiet && (m.Status == domain.StatusSuccess) {
 			continue
 		}
-		fmt.Fprintf(w, "%s  %-4s  %s", badge(r, m.Status), m.Type, label(m))
-		if m.Status == domain.StatusSuccess || m.Status == domain.StatusFailure {
-			fmt.Fprintf(w, "  %s", r.Dim(fmt.Sprintf("%.1f ms", m.DurationMS)))
-		}
-		fmt.Fprintln(w)
-		if m.Error != nil {
-			fmt.Fprintf(w, "      %s: %s\n", m.Error.Code, m.Error.Message)
-		}
-		if m.Note != "" {
-			fmt.Fprintf(w, "      %s\n", m.Note)
-		}
-		if d, ok := m.Result.(domain.Detailer); ok && !quiet {
-			for _, line := range d.Details() {
-				fmt.Fprintf(w, "      %s\n", line)
-			}
-		}
+		measurementLines(r, m, !quiet)
 	}
 	if !quiet {
 		fmt.Fprintf(w, "\n%s\n", Summary(rep))
@@ -88,6 +73,9 @@ func label(m domain.Measurement) string {
 	switch {
 	case t.URL != "":
 		s = t.URL
+		if t.Family != "" {
+			s += " (" + t.Family + ")"
+		}
 	case t.IP != "":
 		s = net.JoinHostPort(t.IP, strconv.Itoa(t.Port))
 		if t.Host != "" && t.Host != t.IP {
@@ -97,6 +85,9 @@ func label(m domain.Measurement) string {
 		s = t.Host
 		if t.Port != 0 {
 			s = net.JoinHostPort(t.Host, strconv.Itoa(t.Port))
+		}
+		if t.Family != "" {
+			s += " (" + t.Family + ")"
 		}
 	}
 	if m.Resolver != nil {
@@ -110,4 +101,26 @@ func label(m domain.Measurement) string {
 		s += " via " + strings.TrimSpace(via)
 	}
 	return s
+}
+
+// measurementLines writes one measurement: a status line, its error or
+// note, and optionally the details of its result.
+func measurementLines(r *output.Renderer, m domain.Measurement, details bool) {
+	w := r.Out
+	fmt.Fprintf(w, "%s  %-4s  %s", badge(r, m.Status), m.Type, label(m))
+	if m.Status == domain.StatusSuccess || m.Status == domain.StatusFailure {
+		fmt.Fprintf(w, "  %s", r.Dim(fmt.Sprintf("%.1f ms", m.DurationMS)))
+	}
+	fmt.Fprintln(w)
+	if m.Error != nil {
+		fmt.Fprintf(w, "      %s: %s\n", m.Error.Code, m.Error.Message)
+	}
+	if m.Note != "" {
+		fmt.Fprintf(w, "      %s\n", m.Note)
+	}
+	if d, ok := m.Result.(domain.Detailer); ok && details {
+		for _, line := range d.Details() {
+			fmt.Fprintf(w, "      %s\n", line)
+		}
+	}
 }

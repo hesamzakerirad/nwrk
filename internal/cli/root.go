@@ -90,6 +90,7 @@ func newRootCmd(a *app) *cobra.Command {
 
 	root.AddCommand(newVersionCmd(a))
 	root.AddCommand(newTestCmd(a))
+	root.AddCommand(newDiagnoseCmd(a))
 
 	// An unknown shell must be a usage error, not a help page with exit 0.
 	root.InitDefaultCompletionCmd()

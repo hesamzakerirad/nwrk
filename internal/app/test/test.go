@@ -46,7 +46,7 @@ func DNS(ctx context.Context, host string, o Options) *domain.Report {
 		m := domain.Begin(domain.TypeDNS, dns.Version, domain.Target{Host: host})
 		rep.Add(m.Skip("the target is an IP address, so there is nothing to resolve"))
 	} else {
-		resolve(ctx, rep, host, o)
+		Resolve(ctx, rep, host, o)
 	}
 	rep.Finish()
 	return rep
@@ -99,7 +99,8 @@ func HTTP(ctx context.Context, u *url.URL, method string, maxRedirects int, o Op
 	}
 	opts := mhttp.Options{Method: method, MaxRedirects: maxRedirects, RootCAs: o.RootCAs}
 	if len(o.Resolvers) > 0 {
-		opts.DialContext = viaResolver(o.Resolvers[0], host, addrs, o.Timeout)
+		r := o.Resolvers[0]
+		opts.DialContext = ViaResolver(&r, host, addrs, o.Timeout)
 	}
 	c, cancel := context.WithTimeout(ctx, o.Timeout)
 	defer cancel()
@@ -115,7 +116,7 @@ func resolveTarget(ctx context.Context, rep *domain.Report, host string, o Optio
 	if a, ok := parseIP(host); ok {
 		return []netip.Addr{a}, ""
 	}
-	addrs = resolve(ctx, rep, host, o)
+	addrs = Resolve(ctx, rep, host, o)
 	if len(addrs) == 0 {
 		return nil, "name resolution failed, so there is no address to connect to"
 	}
@@ -127,10 +128,10 @@ func parseIP(host string) (netip.Addr, bool) {
 	return a.Unmap(), err == nil
 }
 
-// resolve measures host with the system resolver first, as the baseline,
+// Resolve measures host with the system resolver first, as the baseline,
 // then with each chosen resolver, all at once. It returns the addresses of
 // the first chosen resolver, or of the system resolver when none was chosen.
-func resolve(ctx context.Context, rep *domain.Report, host string, o Options) []netip.Addr {
+func Resolve(ctx context.Context, rep *domain.Report, host string, o Options) []netip.Addr {
 	results := make([]*domain.Measurement, 1+len(o.Resolvers))
 	var wg sync.WaitGroup
 	do := func(i int, f func(context.Context) *domain.Measurement) {
@@ -183,11 +184,11 @@ func run(ctx context.Context, rep *domain.Report, addrs []netip.Addr, f func(con
 	}
 }
 
-// viaResolver returns a dial function that connects to host using the
-// addresses already resolved through r, and resolves any other name (a
-// redirect target) through r as well, so the whole request follows the
-// resolver the user chose.
-func viaResolver(r target.Resolver, host string, known []netip.Addr, timeout time.Duration) func(context.Context, string, string) (net.Conn, error) {
+// ViaResolver returns a dial function that connects to host using the
+// addresses in known, and resolves any other name (a redirect target)
+// through r, so the whole request follows the resolver the user chose. With
+// a nil r other names are left to the operating system.
+func ViaResolver(r *target.Resolver, host string, known []netip.Addr, timeout time.Duration) func(context.Context, string, string) (net.Conn, error) {
 	var mu sync.Mutex
 	cache := map[string][]netip.Addr{host: known}
 	return func(ctx context.Context, network, address string) (net.Conn, error) {
@@ -203,8 +204,11 @@ func viaResolver(r target.Resolver, host string, known []netip.Addr, timeout tim
 		addrs, ok := cache[h]
 		mu.Unlock()
 		if !ok {
+			if r == nil {
+				return d.DialContext(ctx, network, address)
+			}
 			c, cancel := context.WithTimeout(ctx, timeout)
-			addrs = dns.Addresses(dns.Lookup(c, h, r))
+			addrs = dns.Addresses(dns.Lookup(c, h, *r))
 			cancel()
 			mu.Lock()
 			cache[h] = addrs
