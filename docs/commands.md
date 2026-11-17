@@ -6,6 +6,8 @@ weight: 3
 
 This page covers what nw can do today. New commands are added here as they ship.
 
+With `--output json`, the `nw test` commands print a [report](../report-schema/) that follows a versioned schema.
+
 ## nw version
 
 Prints the version, commit, build date and platform. It makes no network requests.
@@ -16,6 +18,39 @@ nw version --output json
 ```
 
 `nw --version` prints just the version.
+
+## nw test
+
+Runs one measurement and prints what it observed. Each is independent: you can run `nw test tls` without running anything else first. What each measurement does, and what its errors mean, is in [Measurements](../measurements/).
+
+| Command | Measures |
+|---|---|
+| `nw test dns <host>` | A and AAAA lookups, with the system resolver and any `--resolver` you add |
+| `nw test tcp <host:port>` | A TCP connection to every address of the host |
+| `nw test tls <host[:port]>` | A verified TLS handshake with every address (port 443 by default) |
+| `nw test http <url>` | One HTTP or HTTPS request with stage timings and a bounded redirect chain |
+
+```sh
+nw test dns example.com
+nw test dns example.com --resolver 1.1.1.1 --resolver tcp://9.9.9.9
+nw test tcp example.com:443
+nw test tls example.com
+nw test http https://example.com --output json
+```
+
+Flags of `nw test`:
+
+| Flag | Applies to | Meaning |
+|---|---|---|
+| `--resolver` | all four | A DNS resolver to measure next to the system one. Repeatable. `host`, `host:port`, `[v6]:port` or `tcp://host[:port]`. The host must be an IP address. |
+| `--method` | `http` | `GET` (default) or `HEAD`. Other methods are not supported. |
+| `--max-redirects` | `http` | Redirects to follow, 1 to 50. Default 10. |
+
+The resolver list comes from the first of these that sets one: the `--resolver` flags, then the `NW_RESOLVERS` environment variable (comma-separated). The system resolver is always measured as well, so results from your chosen resolvers are compared with it, never silently replacing it. When you name a resolver, `tcp`, `tls` and `http` connect to the addresses that resolver returned.
+
+Exit status: `0` when every measurement succeeded, `1` when at least one failed, `2` for a usage error. A measurement that did not run because an earlier step failed is reported as `skipped` and does not count as a failure by itself. An HTTP response with an error status such as 404 or 503 is a completed measurement, so it exits `0`; the status code is in the report.
+
+`--timeout` sets the deadline of each measurement. `--quiet` prints only the measurements that did not succeed.
 
 ## nw completion
 
@@ -56,7 +91,7 @@ nw completion powershell | Out-String | Invoke-Expression
 | `2` | Usage error (bad flag, target or setting), or nw could not run the measurement |
 | `130` | You interrupted the command with Ctrl-C |
 
-A failing network target is a result (`1`), not a tool error (`2`). Today no command returns `1` yet, because the diagnostic commands have not shipped.
+A failing network target is a result (`1`), not a tool error (`2`).
 
 ## Output conventions
 

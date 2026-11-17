@@ -7,13 +7,20 @@ LDFLAGS := -s -w \
 	-X $(PKG)/internal/buildinfo.Commit=$(COMMIT) \
 	-X $(PKG)/internal/buildinfo.Date=$(DATE)
 
-.PHONY: build test lint fmt site clean
+.PHONY: build test fuzz lint fmt site clean
 
 build:
 	go build -trimpath -ldflags '$(LDFLAGS)' -o bin/nw ./cmd/nw
 
 test:
 	go test -race ./...
+
+# FUZZTIME bounds each fuzz target; CI uses a short run, raise it locally.
+FUZZTIME ?= 10s
+fuzz:
+	@for f in FuzzHost FuzzHostPort FuzzURL FuzzResolver; do \
+		go test ./internal/target -run '^$$' -fuzz "^$$f\$$" -fuzztime $(FUZZTIME) -parallel 2 || exit 1; \
+	done
 
 lint:
 	@test -z "$$(gofmt -l .)" || { echo "gofmt needed:"; gofmt -l .; exit 1; }

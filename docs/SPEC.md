@@ -715,6 +715,8 @@ nwrk/
 │   │   ├── test/
 │   │   └── watch/
 │   ├── domain/           # run, measurement, finding, hypothesis, recommendation
+│   ├── target/           # host, URL and resolver parsing and validation
+│   ├── fixtures/         # local DNS, TCP, TLS and HTTP servers for tests
 │   ├── measurement/
 │   │   ├── dns/
 │   │   ├── tcp/
@@ -739,7 +741,7 @@ nwrk/
 │       ├── CNAME
 │       ├── install.sh
 │       └── install.ps1
-├── fixtures/             # local test servers, DNS fixtures, certificates
+├── schema/               # JSON Schema of the report, published at /schema/
 ├── .github/
 │   ├── workflows/        # ci.yml, release.yml, site.yml
 │   └── ISSUE_TEMPLATE/

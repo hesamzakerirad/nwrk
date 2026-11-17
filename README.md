@@ -4,7 +4,7 @@
 
 Website: https://nwrk.ir
 
-> **Status: early development (v0.0.x).** Only `nw version` and shell completion work today. The diagnostic commands arrive in the next releases; see the [roadmap](docs/ROADMAP.md).
+> **Status: early development (v0.0.x).** Four independent measurements (`nw test dns|tcp|tls|http`), `nw version` and shell completion work today. The commands that interpret the evidence arrive in the next releases; see the [roadmap](docs/ROADMAP.md).
 
 ## Install
 
@@ -31,14 +31,19 @@ Or download an archive from the [releases page](https://github.com/hesamzakerira
 ## Use
 
 ```sh
+nw test dns example.com --resolver 1.1.1.1
+nw test tcp example.com:443
+nw test tls example.com
+nw test http https://example.com --output json
 nw version
-nw version --output json
 nw completion zsh
 ```
 
+Each measurement reports what it observed and the stable error code of any failure. See [measurements](docs/measurements.md) and the [JSON report schema](docs/report-schema.md).
+
 Global flags: `--output human|json`, `--no-color`, `--verbose`, `--quiet`, `--timeout`.
 
-Exit codes: `0` no problem found, `1` problem found, `2` usage error or the tool could not run, `130` interrupted.
+Exit codes: `0` no problem found, `1` a measurement failed, `2` usage error or the tool could not run, `130` interrupted.
 
 Color is on for terminals and off for pipes, `--no-color`, and the `NO_COLOR` environment variable.
 
