@@ -1,0 +1,46 @@
+{{ define "main" }}
+<section class="hero">
+  <div class="wrap">
+    <p class="eyebrow">{{ i18n "hero_eyebrow" }}</p>
+    <h1>{{ i18n "hero_title" }}</h1>
+    <p class="lead">{{ i18n "hero_lead" }}</p>
+
+    <div class="term" aria-label="{{ i18n "nav_install" }}">
+      <div class="term-row"><span class="term-label">{{ i18n "install_unix" }}</span>
+<pre><code><span class="prompt">$</span> curl -fsSL https://nwrk.ir/install.sh | sh</code></pre></div>
+      <div class="term-row"><span class="term-label">{{ i18n "install_windows" }}</span>
+<pre><code><span class="prompt">&gt;</span> irm https://nwrk.ir/install.ps1 | iex</code></pre></div>
+      <div class="term-row"><span class="term-label">{{ i18n "install_go" }}</span>
+<pre><code><span class="prompt">$</span> go install github.com/hesamzakerirad/nwrk/cmd/nw@latest</code></pre></div>
+    </div>
+
+    <p class="actions">
+      <a class="btn primary" href="{{ "docs/install/" | relLangURL }}">{{ i18n "btn_install" }}</a>
+      <a class="btn" href="{{ site.Params.repo }}">{{ i18n "btn_github" }}</a>
+    </p>
+  </div>
+</section>
+
+<section class="wrap block">
+  <h2>{{ i18n "features_title" }}</h2>
+  <div class="grid">
+    <div><h3>{{ i18n "f1_title" }}</h3><p>{{ i18n "f1_text" | safeHTML }}</p></div>
+    <div><h3>{{ i18n "f2_title" }}</h3><p>{{ i18n "f2_text" | safeHTML }}</p></div>
+    <div><h3>{{ i18n "f3_title" }}</h3><p>{{ i18n "f3_text" | safeHTML }}</p></div>
+    <div><h3>{{ i18n "f4_title" }}</h3><p>{{ i18n "f4_text" | safeHTML }}</p></div>
+  </div>
+</section>
+
+<section class="wrap block">
+  <h2>{{ i18n "status_title" }}</h2>
+  <p class="muted">{{ i18n "status_lead" }}</p>
+  <ol class="steps">
+    <li class="now"><strong>{{ i18n "m1_title" }}</strong><span>{{ i18n "m1_text" }}</span></li>
+    <li><strong>{{ i18n "m2_title" }}</strong><span>{{ i18n "m2_text" }}</span></li>
+    <li><strong>{{ i18n "m3_title" }}</strong><span>{{ i18n "m3_text" }}</span></li>
+    <li><strong>{{ i18n "m4_title" }}</strong><span>{{ i18n "m4_text" }}</span></li>
+    <li><strong>{{ i18n "m5_title" }}</strong><span>{{ i18n "m5_text" }}</span></li>
+  </ol>
+  <p><a href="{{ site.Params.repo }}/blob/main/docs/ROADMAP.md">{{ i18n "roadmap_link" }}</a></p>
+</section>
+{{ end }}

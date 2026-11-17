@@ -1,0 +1,53 @@
+baseURL = "https://nwrk.ir/"
+title = "nwrk"
+defaultContentLanguage = "en"
+defaultContentLanguageInSubdir = false
+disableKinds = ["taxonomy", "term", "RSS"]
+enableRobotsTXT = true
+
+[markup.highlight]
+codeFences = false
+
+[markup.goldmark.renderer]
+unsafe = false
+
+[params]
+repo = "https://github.com/hesamzakerirad/nwrk"
+
+[languages.en]
+label = "English"
+locale = "en"
+weight = 1
+[languages.en.params]
+description = "nw is an open source command-line tool that measures how your network reaches a destination and explains what the evidence shows."
+
+# Landing pages live in site/content; user documentation is the repository's
+# docs/ folder, mounted under /docs/.
+[[module.mounts]]
+source = "content/en"
+target = "content"
+[module.mounts.sites.matrix]
+languages = ["en"]
+
+[[module.mounts]]
+source = "../docs"
+target = "content/docs"
+files = ["! SPEC.md", "! ROADMAP.md"]
+[module.mounts.sites.matrix]
+languages = ["en"]
+
+[[module.mounts]]
+source = "static"
+target = "static"
+
+[[module.mounts]]
+source = "layouts"
+target = "layouts"
+
+[[module.mounts]]
+source = "i18n"
+target = "i18n"
+
+[[module.mounts]]
+source = "data"
+target = "data"
