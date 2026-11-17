@@ -9,8 +9,8 @@ import (
 	"fmt"
 	"io/fs"
 	"os"
-	"path/filepath"
 	"runtime"
+	"strings"
 
 	"github.com/BurntSushi/toml"
 )
@@ -36,21 +36,26 @@ func Path(goos string, getenv func(string) string, home string) string {
 	if p := getenv(EnvPath); p != "" {
 		return p
 	}
+	sep := "/"
+	if goos == "windows" {
+		sep = `\`
+	}
+	join := func(parts ...string) string { return strings.Join(parts, sep) }
 	switch goos {
 	case "windows":
 		base := getenv("LOCALAPPDATA")
 		if base == "" {
-			base = filepath.Join(home, "AppData", "Local")
+			base = join(home, "AppData", "Local")
 		}
-		return filepath.Join(base, "nwrk", "config.toml")
+		return join(base, "nwrk", "config.toml")
 	case "darwin":
-		return filepath.Join(home, "Library", "Application Support", "nwrk", "config.toml")
+		return join(home, "Library", "Application Support", "nwrk", "config.toml")
 	}
 	base := getenv("XDG_CONFIG_HOME")
 	if base == "" {
-		base = filepath.Join(home, ".config")
+		base = join(home, ".config")
 	}
-	return filepath.Join(base, "nwrk", "config.toml")
+	return join(base, "nwrk", "config.toml")
 }
 
 // DefaultPath is Path for the running system.

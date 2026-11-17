@@ -18,8 +18,8 @@ func TestPath(t *testing.T) {
 		{"linux", nil, "/home/u", "/home/u/.config/nwrk/config.toml"},
 		{"linux", map[string]string{"XDG_CONFIG_HOME": "/x"}, "/home/u", "/x/nwrk/config.toml"},
 		{"darwin", nil, "/Users/u", "/Users/u/Library/Application Support/nwrk/config.toml"},
-		{"windows", map[string]string{"LOCALAPPDATA": `C:\L`}, `C:\Users\u`, filepath.Join(`C:\L`, "nwrk", "config.toml")},
-		{"windows", nil, `C:\Users\u`, filepath.Join(`C:\Users\u`, "AppData", "Local", "nwrk", "config.toml")},
+		{"windows", map[string]string{"LOCALAPPDATA": `C:\L`}, `C:\Users\u`, `C:\L\nwrk\config.toml`},
+		{"windows", nil, `C:\Users\u`, `C:\Users\u\AppData\Local\nwrk\config.toml`},
 		{"linux", map[string]string{"NW_CONFIG": "/etc/nw.toml", "XDG_CONFIG_HOME": "/x"}, "/h", "/etc/nw.toml"},
 	}
 	for _, c := range cases {

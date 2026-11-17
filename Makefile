@@ -19,7 +19,7 @@ test:
 FUZZTIME ?= 10s
 fuzz:
 	@for f in FuzzHost FuzzHostPort FuzzURL FuzzResolver; do \
-		go test ./internal/target -run '^$$' -fuzz "^$$f\$$" -fuzztime $(FUZZTIME) || exit 1; \
+		go test ./internal/target -run '^$$' -fuzz "^$$f\$$" -fuzztime $(FUZZTIME) -parallel 2 || exit 1; \
 	done
 
 lint:

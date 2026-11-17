@@ -5,10 +5,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"net"
-	"os"
 	"slices"
 	"strings"
-	"syscall"
 	"testing"
 	"time"
 
@@ -54,7 +52,7 @@ func routeOK(context.Context, string, string) (net.Conn, error) {
 }
 
 func noRoute(context.Context, string, string) (net.Conn, error) {
-	return nil, &net.OpError{Op: "dial", Err: os.NewSyscallError("connect", syscall.ENETUNREACH)}
+	return nil, fixtures.NoRouteError()
 }
 
 // world is a set of local servers standing in for reference targets.

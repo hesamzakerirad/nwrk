@@ -4,12 +4,11 @@ import (
 	"context"
 	"errors"
 	"net"
-	"os"
 	"strings"
-	"syscall"
 	"testing"
 
 	"github.com/hesamzakerirad/nwrk/internal/domain"
+	"github.com/hesamzakerirad/nwrk/internal/fixtures"
 	"github.com/hesamzakerirad/nwrk/internal/platform"
 )
 
@@ -102,7 +101,7 @@ func (okDial) dial(context.Context, string, string) (net.Conn, error) {
 }
 
 func TestRoute(t *testing.T) {
-	noRoute := &net.OpError{Op: "dial", Err: os.NewSyscallError("connect", syscall.ENETUNREACH)}
+	noRoute := fixtures.NoRouteError()
 	m := Route(context.Background(), okDial{}.dial)
 	if m.Status != domain.StatusSuccess || !m.Result.(*RouteResult).IPv4.Available || !m.Result.(*RouteResult).IPv6.Available {
 		t.Fatalf("%+v", m)

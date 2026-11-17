@@ -3,13 +3,12 @@ package rules
 import (
 	"context"
 	"net"
-	"os"
 	"slices"
-	"syscall"
 	"testing"
 
 	"github.com/hesamzakerirad/nwrk/internal/diagnostics/engine"
 	"github.com/hesamzakerirad/nwrk/internal/domain"
+	"github.com/hesamzakerirad/nwrk/internal/fixtures"
 	"github.com/hesamzakerirad/nwrk/internal/measurement/dns"
 	mhttp "github.com/hesamzakerirad/nwrk/internal/measurement/http"
 	"github.com/hesamzakerirad/nwrk/internal/measurement/local"
@@ -104,7 +103,7 @@ func one(ms ...*domain.Measurement) []*domain.Measurement { return ms }
 func TestDoctorRules(t *testing.T) {
 	const intl, dom = domain.ScopeInternational, domain.ScopeDomestic
 	noRoute := func(context.Context, string, string) (net.Conn, error) {
-		return nil, &net.OpError{Op: "dial", Err: os.NewSyscallError("connect", syscall.ENETUNREACH)}
+		return nil, fixtures.NoRouteError()
 	}
 	cases := []struct {
 		name     string

@@ -102,7 +102,9 @@ func TestHandshakeFailureIsNotACertificateError(t *testing.T) {
 func TestNotTLSServer(t *testing.T) {
 	addr := fixtures.RawServer(t, []byte("HTTP/1.1 400 Bad Request\r\n\r\n"))
 	m := handshake(t, "example.test", addr, Options{}, 3*time.Second)
-	if m.Error == nil || m.Error.Code != domain.TLSHandshakeFailure {
+	// The server closes right after writing, without reading the hello. Most
+	// systems deliver the reply first; Windows can deliver a reset instead.
+	if m.Error == nil || (m.Error.Code != domain.TLSHandshakeFailure && m.Error.Code != domain.TLSReset) {
 		t.Fatalf("got %v", m.Error)
 	}
 }

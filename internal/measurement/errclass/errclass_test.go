@@ -9,24 +9,25 @@ import (
 	"io"
 	"net"
 	"os"
-	"syscall"
 	"testing"
 
 	"github.com/hesamzakerirad/nwrk/internal/domain"
 )
 
 func TestTCP(t *testing.T) {
+	// Socket errors are platform specific: the package's own lists say which
+	// numbers this operating system uses.
 	op := func(err error) error { return &net.OpError{Op: "dial", Err: os.NewSyscallError("connect", err)} }
 	cases := []struct {
 		err  error
 		want domain.ErrorCode
 	}{
 		{context.DeadlineExceeded, domain.TCPTimeout},
-		{op(syscall.ETIMEDOUT), domain.TCPTimeout},
-		{op(syscall.ECONNREFUSED), domain.TCPRefused},
-		{op(syscall.ENETUNREACH), domain.TCPUnreachable},
-		{op(syscall.EHOSTUNREACH), domain.TCPUnreachable},
-		{op(syscall.ECONNRESET), domain.TCPReset},
+		{op(os.ErrDeadlineExceeded), domain.TCPTimeout},
+		{op(refusedErrnos[0]), domain.TCPRefused},
+		{op(unreachableErrnos[0]), domain.TCPUnreachable},
+		{op(unreachableErrnos[1]), domain.TCPUnreachable},
+		{op(resetErrnos[0]), domain.TCPReset},
 		{errors.New("other"), domain.TCPError},
 	}
 	for _, c := range cases {
