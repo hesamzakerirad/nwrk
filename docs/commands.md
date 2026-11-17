@@ -42,11 +42,11 @@ Flags of `nw test`:
 
 | Flag | Applies to | Meaning |
 |---|---|---|
-| `--resolver` | all four | A DNS resolver to measure next to the system one. Repeatable. `host`, `host:port`, `[v6]:port` or `tcp://host[:port]`. The host must be an IP address. |
+| `--resolver` | all four | A DNS resolver to measure next to the system one. Repeatable. `host[:port]` or `[v6]:port` (UDP), `tcp://host[:port]`, `tls://host[:port]` (DNS over TLS) or `https://host[:port][/path]` (DNS over HTTPS). For plain DNS the host must be an IP address; for `tls://` and `https://` it can be a name. |
 | `--method` | `http` | `GET` (default) or `HEAD`. Other methods are not supported. |
 | `--max-redirects` | `http` | Redirects to follow, 1 to 50. Default 10. |
 
-The resolver list comes from the first of these that sets one: the `--resolver` flags, then the `NW_RESOLVERS` environment variable (comma-separated). The system resolver is always measured as well, so results from your chosen resolvers are compared with it, never silently replacing it. When you name a resolver, `tcp`, `tls` and `http` connect to the addresses that resolver returned.
+The resolver list comes from the first of these that sets one: the `--resolver` flags, then the `NW_RESOLVERS` environment variable (comma-separated). The system resolver is always measured as well, so results from your chosen resolvers are compared with it, never silently replacing it. When you name a resolver, `tcp`, `tls` and `http` connect to the addresses of the first resolver you named that answered; if none did, they use the system resolver's, and say so in the measurement's `params.addresses_from`.
 
 Exit status: `0` when every measurement succeeded, `1` when at least one failed, `2` for a usage error. A measurement that did not run because an earlier step failed is reported as `skipped` and does not count as a failure by itself. An HTTP response with an error status such as 404 or 503 is a completed measurement, so it exits `0`; the status code is in the report.
 
@@ -131,6 +131,44 @@ The `NW_CONFIG` variable overrides the location. Unknown keys are an error, so a
 | `color` | `--no-color` | `NW_COLOR` | `auto` |
 
 `NO_COLOR` and `--no-color` always win over `color = "always"`.
+
+## nw security
+
+Checks built on the same measurements as `nw diagnose`, for one target. They test only that target with a small, fixed set of extra requests. See [Investigating interference](../interference/) and [Findings](../findings/).
+
+| Command | Does |
+|---|---|
+| `nw security inspect <target>` | DNSSEC status and CNAME chain, certificate expiry, whether TLS 1.0 and 1.1 are accepted, http-to-https upgrade, HSTS |
+| `nw security interference <target>` | Compares resolvers, listens for several DNS replies, compares handshakes by server name, compares http and https |
+
+```sh
+nw security inspect example.com
+nw security interference example.com --resolver tls://9.9.9.9 --resolver 1.1.1.1
+nw security interference example.com --control www.example.net
+```
+
+The target is a host name, `host:port` or a URL, as for `nw diagnose`. `--resolver` works as for `nw test`; for interference, add resolvers you trust, ideally encrypted ones, or the report says which comparisons it could not make. `--control` sets the neutral server name for the server-name comparison (default `www.example.org`). Exit status as for `nw diagnose`.
+
+## nw path
+
+Controlled probes of the path to one destination. ICMP is often filtered, deprioritized or rate-limited, so a missing reply is never shown as proof of a broken router or blocked traffic. The `--method` flag is `icmp`, `tcp`, or `auto` (ICMP, falling back to TCP when it is not permitted, with the reason printed).
+
+| Command | Does | Flags |
+|---|---|---|
+| `nw path ping <host>` | Round-trip time and loss, by ICMP echo or by TCP connect time | `-c/--count 4`, `--interval 1s`, `--wait 2s`, `--method`, `--port 443` |
+| `nw path trace <host>` | The hops toward the destination | `--max-hops 30`, `--queries 3`, `--wait 1s`, `--max-silent 5` (ICMP only), `--method`, `--port 443` |
+| `nw path mtu <host>` | Interface MTU and the segment size of a connection, a hint and not a discovery | `--port 443` |
+
+```sh
+nw path ping example.com
+sudo nw path trace example.com
+nw path trace example.com --method tcp
+nw path mtu example.com
+```
+
+Listing the routers of a trace needs ICMP privileges (root or `CAP_NET_RAW` on Linux and macOS) and is not available on Windows. Without them `trace` uses TCP, which shows how many hops away the destination answers but cannot see the routers, and says so. `ping` uses an unprivileged ICMP socket where the system allows it. Details and limits are in [Platform support](../platform-support/).
+
+Exit status: `ping` and `trace` exit `0` when the destination answered and `1` when it did not; `mtu` exits `0` when the connection was made and `1` when it was not; all exit `2` for a usage error or when the method you asked for is not permitted. With `--output json` they print a document with a `schema_version`.
 
 ## nw completion
 

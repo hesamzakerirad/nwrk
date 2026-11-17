@@ -4,7 +4,7 @@
 
 Website: https://nwrk.ir
 
-> **Status: early development.** `nw doctor`, `nw diagnose`, the four measurements (`nw test dns|tcp|tls|http`), `nw network` and `nw config` work today. Interference investigation, history and reports arrive in the next releases; see the [roadmap](docs/ROADMAP.md).
+> **Status: early development.** `nw doctor`, `nw diagnose`, `nw security inspect|interference`, `nw path ping|trace|mtu`, the four measurements (`nw test dns|tcp|tls|http`), `nw network` and `nw config` work today. History and reports arrive in the next releases; see the [roadmap](docs/ROADMAP.md).
 
 ## Install
 
@@ -31,6 +31,8 @@ Or download an archive from the [releases page](https://github.com/hesamzakerira
 ## Use
 
 ```sh
+nw security interference example.com --resolver tls://9.9.9.9
+nw path ping example.com
 nw doctor --region ir
 nw diagnose example.com
 nw diagnose https://example.com/health --profile deep
@@ -42,7 +44,7 @@ nw version
 nw completion zsh
 ```
 
-`nw doctor` checks this machine and a region's reference targets and says whether the problem is local, domestic or international ([regions](docs/regions.md), [privacy](docs/privacy.md), [platform support](docs/platform-support.md)). `nw diagnose` measures DNS, TCP, TLS and HTTP in order, skips what cannot run with the reason, and explains the evidence: findings say what was observed, hypotheses say what might explain it and what was not checked. See [diagnosing a destination](docs/diagnostics.md), [findings](docs/findings.md), [measurements](docs/measurements.md) and the [JSON report schema](docs/report-schema.md).
+`nw doctor` checks this machine and a region's reference targets and says whether the problem is local, domestic or international ([regions](docs/regions.md), [privacy](docs/privacy.md), [platform support](docs/platform-support.md)). [`nw security interference`](docs/interference.md) compares resolvers, listens for several DNS replies, compares handshakes by server name and http with https, and says what else could explain each difference. `nw diagnose` measures DNS, TCP, TLS and HTTP in order, skips what cannot run with the reason, and explains the evidence: findings say what was observed, hypotheses say what might explain it and what was not checked. See [diagnosing a destination](docs/diagnostics.md), [findings](docs/findings.md), [measurements](docs/measurements.md) and the [JSON report schema](docs/report-schema.md).
 
 Global flags: `--output human|json`, `--no-color`, `--verbose`, `--quiet`, `--timeout`, `--region`. Every setting also has an `NW_*` variable and a config file key; see `nw config show`.
 
@@ -52,7 +54,7 @@ Color is on for terminals and off for pipes, `--no-color`, and the `NO_COLOR` en
 
 ## Where this is going
 
-Next: a deeper look at interference (encrypted DNS, answer comparison, TLS behavior, path tracing), then local history and report export. See [docs/SPEC.md](docs/SPEC.md) and [docs/ROADMAP.md](docs/ROADMAP.md).
+Next: local history, comparison over time and report export (with redaction), then package managers and `nw watch`. See [docs/SPEC.md](docs/SPEC.md) and [docs/ROADMAP.md](docs/ROADMAP.md).
 
 ## Contributing
 

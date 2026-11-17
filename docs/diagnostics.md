@@ -54,9 +54,9 @@ Profiles are fixed and documented here. They will become configurable in a later
 |---|---|---|---|
 | `quick` | DNS, TCP | up to 2 per IP family | 4 |
 | `standard` (default) | DNS, TCP, TLS, HTTP | TCP to up to 4 per family; TLS to the first reachable one per family; one HTTP request per family | 6 |
-| `deep` | DNS, TCP, TLS, HTTP | up to 8 per family; TLS to every reachable address | 8 |
+| `deep` | DNS, TCP, TLS, HTTP, and the [interference probes](../interference/) | up to 8 per family; TLS to every reachable address | 8 |
 
-`--timeout` (default 10 seconds) is the deadline of each measurement.
+`--timeout` (default 10 seconds) is the deadline of each measurement. The deep profile adds a few probes to the standard measurements (another DNS query, extra TLS handshakes with a control server name, and an http request); with `--resolver` it also compares answers. Without an independent resolver it says which comparisons it could not make.
 
 ## Reading the report
 

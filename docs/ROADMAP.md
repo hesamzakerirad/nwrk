@@ -180,14 +180,19 @@ This is the phase-by-phase build plan for `nw`. The product specification is in 
 
 **Goal:** evidence-based detection of DNS, TLS, and HTTP interference patterns, with honest uncertainty.
 
-- [ ] Encrypted DNS resolvers: `tls://` (DoT) and `https://` (DoH)
-- [ ] DNS rules: answer mismatch between system and chosen resolvers, private or reserved addresses returned for public names, signs of injected responses (for example multiple differing answers to one query)
-- [ ] TLS rules: reset or timeout after ClientHello; SNI comparison (same IP, target server name vs a neutral control name)
-- [ ] HTTP rules: unexpected redirect to an unrelated host, response differences between HTTP and HTTPS for the same target
-- [ ] `nw security inspect` and `nw security interference`
-- [ ] `nw path trace` (ICMP where permitted, TCP fallback), `nw path ping`, `nw path mtu`; privilege needs reported clearly
-- [ ] `deep` profile includes the new checks
-- [ ] DNSSEC status and CNAME chain inspection
+- [x] Encrypted DNS resolvers: `tls://` (DoT) and `https://` (DoH)
+- [x] DNS rules: answer mismatch between system and chosen resolvers, private or reserved addresses returned for public names, signs of injected responses (for example multiple differing answers to one query)
+- [x] TLS rules: reset or timeout after ClientHello; SNI comparison (same IP, target server name vs a neutral control name)
+- [x] HTTP rules: unexpected redirect to an unrelated host, response differences between HTTP and HTTPS for the same target
+- [x] `nw security inspect` and `nw security interference`
+- [x] `nw path trace` (ICMP where permitted, TCP fallback), `nw path ping`, `nw path mtu` (a hint from the interface MTU and the negotiated segment size, not a Don't-Fragment discovery); privilege needs reported clearly
+- [x] `deep` profile includes the new checks
+- [x] DNSSEC status and CNAME chain inspection
+
+### Maintainer tasks (manual)
+
+- [ ] Run `sudo nw path trace` on Linux and macOS, and `nw path ping --method icmp` on all three systems, and record anything that differs from `docs/platform-support.md`. The ICMP trace was written against the documented behavior and could not be exercised without privileges.
+- [ ] Read every new finding text in `docs/findings.md` once more for tone before the release (the wording-policy test only catches banned words).
 
 ### Exit criteria
 

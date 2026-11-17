@@ -14,6 +14,8 @@ nw sends network traffic only for the command you run, and only to what that com
 |---|---|
 | `nw test`, `nw diagnose` | The target you name, the DNS resolvers involved (your system's and any you add with `--resolver`), and nothing else. Redirects are followed to the servers they point to, up to the limit. |
 | `nw doctor` | The reference targets and resolvers of the region preset, listed in [Regions](../regions/), plus the resolvers you choose. Nothing else. |
+| `nw security inspect`, `nw security interference`, `nw diagnose --profile deep` | The target you name, with a few extra handshakes, DNS queries and one http request to it, and the resolvers involved. The interference comparison also connects to the target's addresses as returned by each resolver, and to the address of the control server name (the control name is sent only as the server name inside a handshake with the target's own address). |
+| `nw path ping`, `trace`, `mtu` | The one host you name: ICMP echo requests, or TCP connections to the port you choose, some with a low TTL so that routers on the way may answer. |
 | `nw network`, `nw config`, `nw version`, `nw completion` | Nothing. They read local information only. |
 
 The route check of `nw doctor` asks the operating system which route it would use and sends no packet.

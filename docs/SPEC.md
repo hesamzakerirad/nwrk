@@ -219,7 +219,7 @@ Phases refer to [ROADMAP.md](ROADMAP.md).
 | `nw security interference <host>` | Investigate possible network interference | P4 |
 | `nw path trace <host>` | Trace a route toward a destination | P4 |
 | `nw path ping <host>` | Run controlled reachability/latency checks | P4 |
-| `nw path mtu <host>` | Investigate path MTU behavior | P4 |
+| `nw path mtu <host>` | Report the interface MTU and the negotiated segment size (a hint; exact path MTU discovery is not implemented) | P4 |
 | `nw history list` | List local diagnostic runs | P5 |
 | `nw history show <run-id>` | Show a stored run | P5 |
 | `nw report export <run-id>` | Export a report | P5 |

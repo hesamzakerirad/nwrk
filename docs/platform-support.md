@@ -44,6 +44,30 @@ nw prefers native operating system interfaces to parsing the output of other pro
 
 **Other systems.** nw is built for Linux, macOS and Windows only. On other systems the routing table is reported as not supported.
 
+## Path probes
+
+| | Linux | macOS | Windows |
+|---|---|---|---|
+| `path ping`, ICMP | Unprivileged datagram ICMP socket when your group is allowed by `net.ipv4.ping_group_range`; otherwise a raw socket (root or `CAP_NET_RAW`) | Unprivileged datagram ICMP socket | Raw socket, needs an administrator |
+| `path ping`, TCP | works | works | works |
+| `path trace`, ICMP (lists routers) | Needs root or `CAP_NET_RAW` | Needs root | Not available |
+| `path trace`, TCP | Works; shows how many hops away the destination answers, cannot see routers | same | same |
+| `path mtu`: segment size | Read from the connection | Read from the connection | Not reported |
+
+**ICMP needs privileges on some systems.** When the system refuses, `ping` and `trace` with the default `--method auto` use TCP and print why. Asking for `--method icmp` explicitly fails with exit status 2 and says what would allow it.
+
+**TCP trace cannot list routers.** An unprivileged TCP socket never sees the ICMP Time Exceeded messages that routers send. The result is the TTL at which the destination first answers, which is an upper bound on the hop count.
+
+**A hop with no reply proves nothing.** Routers commonly filter or rate-limit ICMP while forwarding traffic normally.
+
+**`path mtu` is a hint, not a discovery.** Finding the exact path MTU needs Don't-Fragment probes and ICMP feedback, which nw does not do. The command reports the MTU of the interface a connection uses and the maximum segment size it negotiated. Tunnels and VPNs show up as a lower segment size, but so does a device that clamps it.
+
+**The ICMP trace has only been written against the documented behavior.** It needs privileges to exercise, and it has not yet been run on every platform; please report anything that looks wrong.
+
+## DNS over TLS and HTTPS
+
+A host name in a `tls://` or `https://` resolver is resolved by the operating system to connect, so that one lookup uses the system resolver and is not measured. Use an IP address to avoid it. The certificate must be valid for the host in the address, including an IP address, when that is what you give.
+
 ## Reporting a limitation
 
 If nw misreports your setup, please open a bug report with the output of `nw network show --output json` (check it for anything private first) and your platform. Every confirmed limitation is added to this page.
