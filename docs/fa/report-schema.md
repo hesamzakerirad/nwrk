@@ -2,7 +2,7 @@
 title: طرح گزارش
 description: سند JSON نسخه‌دار که nw test --output json چاپ می‌کند.
 weight: 5
-source_rev: 79e2467530f6f44656b63936f1c091d0fb3bb448
+source_rev: a39578fbb4a29b17587f1158732af25ebee3859b
 ---
 
 `nw test ... --output json` یک سند JSON در خروجی استاندارد چاپ می‌کند. برای اسکریپت‌ها و ابزارهای دیگر ساخته شده و به شکل خروجی ترمینال وابسته نیست.
