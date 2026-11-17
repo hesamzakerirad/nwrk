@@ -178,29 +178,88 @@ func (m *Measurement) Skip(note string) *Measurement {
 	return m.Finish()
 }
 
-// Finding is a condition the evidence supports. Findings are produced from
-// P2 on, so reports in this version carry none.
+// Severity ranks a finding. Warning and error are actionable: they make
+// nw diagnose exit with status 1. Info is context and never does.
+type Severity string
+
+const (
+	SeverityInfo    Severity = "info"
+	SeverityWarning Severity = "warning"
+	SeverityError   Severity = "error"
+)
+
+// Actionable reports whether a finding of this severity means the target
+// has a problem.
+func (s Severity) Actionable() bool { return s == SeverityWarning || s == SeverityError }
+
+// Confidence is a qualitative level, never a probability.
+type Confidence string
+
+const (
+	ConfidenceLow    Confidence = "low"
+	ConfidenceMedium Confidence = "medium"
+	ConfidenceHigh   Confidence = "high"
+)
+
+// Evidence points at what supports or contradicts a statement. Missing
+// evidence has no measurement IDs: it says what was not observed.
+type Evidence struct {
+	MeasurementIDs []string `json:"measurement_ids,omitempty"`
+	Text           string   `json:"text"`
+}
+
+// Finding is a condition the measurements support. It is an observation:
+// what happened, never why.
 type Finding struct {
 	ID             string   `json:"id"`
 	Code           string   `json:"code"`
-	Severity       string   `json:"severity"`
+	RuleVersion    int      `json:"rule_version,omitempty"`
+	Title          string   `json:"title,omitempty"`
+	Layer          string   `json:"layer,omitempty"`
+	Severity       Severity `json:"severity"`
 	Summary        string   `json:"summary"`
 	MeasurementIDs []string `json:"measurement_ids"`
+	Caveats        []string `json:"caveats,omitempty"`
 }
 
 // Hypothesis is a possible explanation for findings, never a verdict.
 type Hypothesis struct {
-	ID         string   `json:"id"`
-	Summary    string   `json:"summary"`
-	FindingIDs []string `json:"finding_ids"`
-	Confidence string   `json:"confidence"`
+	ID               string     `json:"id"`
+	Summary          string     `json:"summary"`
+	FindingIDs       []string   `json:"finding_ids"`
+	Confidence       Confidence `json:"confidence"`
+	Supporting       []Evidence `json:"supporting,omitempty"`
+	Contradicting    []Evidence `json:"contradicting,omitempty"`
+	Missing          []Evidence `json:"missing,omitempty"`
+	NextMeasurements []string   `json:"next_measurements,omitempty"`
 }
 
-// Recommendation is a safe next step.
+// Recommendation is a safe next step: a measurement to repeat or a thing
+// to inspect. It never changes anything on the user's system.
 type Recommendation struct {
-	ID      string `json:"id"`
-	Summary string `json:"summary"`
-	Command string `json:"command,omitempty"`
+	ID         string   `json:"id"`
+	Summary    string   `json:"summary"`
+	Command    string   `json:"command,omitempty"`
+	FindingIDs []string `json:"finding_ids,omitempty"`
+}
+
+// Layer statuses used in the summary, besides the measurement statuses.
+const (
+	LayerPartial = "partial" // some measurements of the layer succeeded and some failed
+	LayerNotRun  = "not_run" // the profile does not include the layer
+)
+
+// LayerStatus is the outcome of one protocol layer, without a score.
+type LayerStatus struct {
+	Layer  string `json:"layer"`
+	Status string `json:"status"`
+}
+
+// Summary is the at-a-glance result of a diagnosis.
+type Summary struct {
+	// Outcome is "ok" when no actionable finding was made, else "problem".
+	Outcome string        `json:"outcome"`
+	Layers  []LayerStatus `json:"layers"`
 }
 
 // Platform describes where the run happened.
@@ -229,6 +288,7 @@ type Report struct {
 	Findings        []Finding        `json:"findings"`
 	Hypotheses      []Hypothesis     `json:"hypotheses"`
 	Recommendations []Recommendation `json:"recommendations"`
+	Summary         *Summary         `json:"summary,omitempty"`
 }
 
 // NewReport starts a report for one command run. Every list is non-nil so
@@ -255,6 +315,53 @@ func NewReport(command, target, toolVersion string) *Report {
 func (r *Report) Add(m *Measurement) {
 	m.ID = fmt.Sprintf("m-%03d", len(r.Measurements)+1)
 	r.Measurements = append(r.Measurements, *m)
+}
+
+// Actionable reports whether any finding is a warning or an error.
+func (r *Report) Actionable() bool {
+	for _, f := range r.Findings {
+		if f.Severity.Actionable() {
+			return true
+		}
+	}
+	return false
+}
+
+// Summarize fills Summary from the measurements and findings.
+func (r *Report) Summarize() {
+	sum := &Summary{Outcome: "ok"}
+	if r.Actionable() {
+		sum.Outcome = "problem"
+	}
+	for _, t := range []Type{TypeDNS, TypeTCP, TypeTLS, TypeHTTP} {
+		var ok, fail, skip int
+		for _, m := range r.Measurements {
+			if m.Type != t {
+				continue
+			}
+			switch m.Status {
+			case StatusSuccess:
+				ok++
+			case StatusFailure:
+				fail++
+			case StatusSkipped:
+				skip++
+			}
+		}
+		st := string(StatusSuccess)
+		switch {
+		case ok+fail+skip == 0:
+			st = LayerNotRun
+		case fail > 0 && ok > 0:
+			st = LayerPartial
+		case fail > 0:
+			st = string(StatusFailure)
+		case ok == 0:
+			st = string(StatusSkipped)
+		}
+		sum.Layers = append(sum.Layers, LayerStatus{Layer: string(t), Status: st})
+	}
+	r.Summary = sum
 }
 
 // Finish stamps the end of the run.

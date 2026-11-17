@@ -42,6 +42,9 @@
       "items": {
         "$ref": "#/$defs/recommendation"
       }
+    },
+    "summary": {
+      "$ref": "#/$defs/summary"
     }
   },
   "$defs": {
@@ -706,6 +709,29 @@
           "items": {
             "type": "string"
           }
+        },
+        "title": {
+          "type": "string"
+        },
+        "layer": {
+          "enum": [
+            "dns",
+            "tcp",
+            "tls",
+            "http",
+            "ip_family",
+            "other"
+          ]
+        },
+        "rule_version": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "caveats": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       }
     },
@@ -736,6 +762,30 @@
             "medium",
             "high"
           ]
+        },
+        "supporting": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/evidence"
+          }
+        },
+        "contradicting": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/evidence"
+          }
+        },
+        "missing": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/evidence"
+          }
+        },
+        "next_measurements": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       }
     },
@@ -754,6 +804,73 @@
         },
         "command": {
           "type": "string"
+        },
+        "finding_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "required": [
+        "text"
+      ],
+      "properties": {
+        "measurement_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "text": {
+          "type": "string"
+        }
+      }
+    },
+    "summary": {
+      "type": "object",
+      "required": [
+        "outcome",
+        "layers"
+      ],
+      "properties": {
+        "outcome": {
+          "enum": [
+            "ok",
+            "problem"
+          ]
+        },
+        "layers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "layer",
+              "status"
+            ],
+            "properties": {
+              "layer": {
+                "enum": [
+                  "dns",
+                  "tcp",
+                  "tls",
+                  "http"
+                ]
+              },
+              "status": {
+                "enum": [
+                  "success",
+                  "failure",
+                  "partial",
+                  "skipped",
+                  "not_run"
+                ]
+              }
+            }
+          }
         }
       }
     }
