@@ -7,6 +7,8 @@ import (
 	"crypto/tls"
 	"crypto/x509"
 	"crypto/x509/pkix"
+	"errors"
+	"io"
 	"math/big"
 	"net"
 	"testing"
@@ -148,4 +150,56 @@ func TLSServer(t testing.TB, cfg *tls.Config) string {
 	}()
 	t.Cleanup(func() { ln.Close(); <-done })
 	return ln.Addr().String()
+}
+
+// SNIBehavior says what SNIServer does when a client asks for the blocked
+// server name.
+type SNIBehavior int
+
+const (
+	// SNIReset closes the connection with a TCP reset.
+	SNIReset SNIBehavior = iota
+	// SNISilent leaves the handshake unanswered until the client gives up.
+	SNISilent
+)
+
+// SNIServer is a TLS server that behaves normally, except that a client
+// asking for blockedSNI gets the given behavior. Other names get cert.
+func SNIServer(t testing.TB, cert tls.Certificate, blockedSNI string, b SNIBehavior) string {
+	t.Helper()
+	cfg := &tls.Config{
+		Certificates: []tls.Certificate{cert},
+		MinVersion:   tls.VersionTLS10,
+		GetConfigForClient: func(h *tls.ClientHelloInfo) (*tls.Config, error) {
+			if h.ServerName != blockedSNI {
+				return nil, nil
+			}
+			switch b {
+			case SNIReset:
+				if tc, ok := h.Conn.(*net.TCPConn); ok {
+					_ = tc.SetLinger(0)
+				}
+				_ = h.Conn.Close()
+			case SNISilent:
+				// Wait until the client gives up and closes the connection.
+				_, _ = io.Copy(io.Discard, h.Conn)
+			}
+			return nil, errBlocked
+		},
+	}
+	return TLSServer(t, cfg)
+}
+
+var errBlocked = errors.New("blocked server name")
+
+// LegacyTLSServer accepts every protocol version from TLS 1.0 up.
+func LegacyTLSServer(t testing.TB, cert tls.Certificate) string {
+	t.Helper()
+	return TLSServer(t, &tls.Config{Certificates: []tls.Certificate{cert}, MinVersion: tls.VersionTLS10})
+}
+
+// ModernTLSServer accepts only TLS 1.2 and later.
+func ModernTLSServer(t testing.TB, cert tls.Certificate) string {
+	t.Helper()
+	return TLSServer(t, &tls.Config{Certificates: []tls.Certificate{cert}, MinVersion: tls.VersionTLS12})
 }

@@ -107,14 +107,14 @@ func TestURL(t *testing.T) {
 
 func TestParseResolver(t *testing.T) {
 	good := map[string]Resolver{
-		"1.1.1.1":           {"udp", "1.1.1.1", 53},
-		"1.1.1.1:5353":      {"udp", "1.1.1.1", 5353},
-		"tcp://9.9.9.9":     {"tcp", "9.9.9.9", 53},
-		"tcp://9.9.9.9:853": {"tcp", "9.9.9.9", 853},
-		"[2606:4700::1111]": {"udp", "2606:4700::1111", 53},
-		"::1":               {"udp", "::1", 53},
-		"[::1]:5353":        {"udp", "::1", 5353},
-		"tcp://[::1]:5353":  {"tcp", "::1", 5353},
+		"1.1.1.1":           {"udp", "1.1.1.1", 53, ""},
+		"1.1.1.1:5353":      {"udp", "1.1.1.1", 5353, ""},
+		"tcp://9.9.9.9":     {"tcp", "9.9.9.9", 53, ""},
+		"tcp://9.9.9.9:853": {"tcp", "9.9.9.9", 853, ""},
+		"[2606:4700::1111]": {"udp", "2606:4700::1111", 53, ""},
+		"::1":               {"udp", "::1", 53, ""},
+		"[::1]:5353":        {"udp", "::1", 5353, ""},
+		"tcp://[::1]:5353":  {"tcp", "::1", 5353, ""},
 	}
 	for in, want := range good {
 		got, err := ParseResolver(in)
@@ -128,7 +128,7 @@ func TestParseResolver(t *testing.T) {
 			}
 		}
 	}
-	for _, in := range []string{"", "dns.google", "tls://1.1.1.1", "https://dns.google/dns-query", "udp://1.1.1.1", "1.1.1.1:0", "tcp://"} {
+	for _, in := range []string{"", "dns.google", "udp://1.1.1.1", "1.1.1.1:0", "tcp://", "tls://", "https://", "https:///dns-query", "tls://a b", "https://h/q?x=1", "https://h:99999/q", "tls://u@h"} {
 		if r, err := ParseResolver(in); err == nil {
 			t.Errorf("ParseResolver(%q) = %+v; want an error", in, r)
 		}
@@ -213,7 +213,7 @@ func FuzzURL(f *testing.F) {
 }
 
 func FuzzResolver(f *testing.F) {
-	for _, s := range []string{"1.1.1.1", "tcp://[::1]:53", "tls://x", "", "::", "[::1"} {
+	for _, s := range []string{"1.1.1.1", "tcp://[::1]:53", "tls://x", "https://h/p", "", "::", "[::1"} {
 		f.Add(s)
 	}
 	f.Fuzz(func(t *testing.T, s string) {

@@ -233,7 +233,9 @@
               "enum": [
                 "system",
                 "udp",
-                "tcp"
+                "tcp",
+                "tls",
+                "https"
               ]
             },
             "address": {
@@ -242,7 +244,20 @@
           }
         },
         "params": {
-          "type": "object"
+          "type": "object",
+          "properties": {
+            "probe": {
+              "enum": [
+                "multiple_responses",
+                "dnssec",
+                "answer_reachability",
+                "sni_target",
+                "sni_control",
+                "legacy_tls",
+                "plain_http"
+              ]
+            }
+          }
         },
         "result": {
           "type": "object"
@@ -407,70 +422,17 @@
       ]
     },
     "dnsResult": {
-      "type": "object",
-      "required": [
-        "a",
-        "aaaa",
-        "queries"
-      ],
-      "properties": {
-        "a": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
+      "anyOf": [
+        {
+          "$ref": "#/$defs/dnsOrdinaryResult"
         },
-        "aaaa": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
+        {
+          "$ref": "#/$defs/dnsMultipleResult"
         },
-        "queries": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "required": [
-              "type",
-              "answers",
-              "duration_ms"
-            ],
-            "properties": {
-              "type": {
-                "enum": [
-                  "A",
-                  "AAAA"
-                ]
-              },
-              "rcode": {
-                "type": "string"
-              },
-              "answers": {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
-              },
-              "cnames": {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
-              },
-              "duration_ms": {
-                "type": "number",
-                "minimum": 0
-              },
-              "tcp_fallback": {
-                "type": "boolean"
-              },
-              "error": {
-                "$ref": "#/$defs/error"
-              }
-            }
-          }
+        {
+          "$ref": "#/$defs/dnsInspectResult"
         }
-      }
+      ]
     },
     "tcpResult": {
       "type": "object",
@@ -926,6 +888,158 @@
             "upstream",
             "partial"
           ]
+        }
+      }
+    },
+    "dnsOrdinaryResult": {
+      "type": "object",
+      "required": [
+        "a",
+        "aaaa",
+        "queries"
+      ],
+      "properties": {
+        "a": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "aaaa": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "queries": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "type",
+              "answers",
+              "duration_ms"
+            ],
+            "properties": {
+              "type": {
+                "enum": [
+                  "A",
+                  "AAAA"
+                ]
+              },
+              "rcode": {
+                "type": "string"
+              },
+              "answers": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "cnames": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "duration_ms": {
+                "type": "number",
+                "minimum": 0
+              },
+              "tcp_fallback": {
+                "type": "boolean"
+              },
+              "error": {
+                "$ref": "#/$defs/error"
+              }
+            }
+          }
+        }
+      }
+    },
+    "dnsMultipleResult": {
+      "type": "object",
+      "required": [
+        "window_ms",
+        "responses",
+        "distinct"
+      ],
+      "properties": {
+        "window_ms": {
+          "type": "number",
+          "minimum": 0
+        },
+        "distinct": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "responses": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "delay_ms",
+              "rcode",
+              "answers",
+              "ttl"
+            ],
+            "properties": {
+              "delay_ms": {
+                "type": "number",
+                "minimum": 0
+              },
+              "rcode": {
+                "type": "string"
+              },
+              "answers": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "ttl": {
+                "type": "integer",
+                "minimum": 0
+              }
+            }
+          }
+        }
+      }
+    },
+    "dnsInspectResult": {
+      "type": "object",
+      "required": [
+        "rcode",
+        "answers",
+        "cnames",
+        "signed",
+        "authenticated",
+        "validation_failure"
+      ],
+      "properties": {
+        "rcode": {
+          "type": "string"
+        },
+        "answers": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "cnames": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "signed": {
+          "type": "boolean"
+        },
+        "authenticated": {
+          "type": "boolean"
+        },
+        "validation_failure": {
+          "type": "boolean"
         }
       }
     }

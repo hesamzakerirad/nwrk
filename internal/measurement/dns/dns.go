@@ -4,6 +4,8 @@ package dns
 
 import (
 	"context"
+	"crypto/tls"
+	"crypto/x509"
 	"errors"
 	"fmt"
 	"net"
@@ -61,13 +63,24 @@ func (r *Result) Details() []string {
 	return out
 }
 
+// Options tune a lookup. The zero value is the normal one.
+type Options struct {
+	// RootCAs replaces the system trust store for DoT and DoH. Tests use it.
+	RootCAs *x509.CertPool
+}
+
 // Lookup measures resolution of name through the resolver r, asking for A
 // and AAAA records at the same time. ctx carries the deadline.
 func Lookup(ctx context.Context, name string, r target.Resolver) *domain.Measurement {
-	m := begin(name, &domain.ResolverInfo{Kind: r.Transport, Address: r.Address()})
-	m.Params = map[string]any{"qtypes": []string{"A", "AAAA"}}
+	return LookupWith(ctx, name, r, Options{})
+}
+
+// LookupWith is Lookup with options.
+func LookupWith(ctx context.Context, name string, r target.Resolver, o Options) *domain.Measurement {
+	m := begin(name, &domain.ResolverInfo{Kind: r.Transport, Address: r.Endpoint()})
+	m.Params = map[string]any{"qtypes": []string{"A", "AAAA"}, "encrypted": r.Encrypted()}
 	return finish(m, both(func(qtype uint16) QueryResult {
-		return exchange(ctx, name, qtype, r.Transport, r.Address())
+		return exchange(ctx, name, qtype, r, o)
 	}))
 }
 
@@ -136,7 +149,7 @@ func both(q func(qtype uint16) QueryResult) []QueryResult {
 }
 
 // exchange sends one query and classifies the response.
-func exchange(ctx context.Context, name string, qtype uint16, transport, addr string) QueryResult {
+func exchange(ctx context.Context, name string, qtype uint16, r target.Resolver, o Options) QueryResult {
 	q := QueryResult{Type: mdns.TypeToString[qtype], Answers: []string{}}
 	msg := new(mdns.Msg)
 	msg.SetQuestion(mdns.Fqdn(name), qtype)
@@ -144,10 +157,12 @@ func exchange(ctx context.Context, name string, qtype uint16, transport, addr st
 	msg.SetEdns0(1232, false)
 
 	start := time.Now()
-	resp, err := send(ctx, msg, transport, addr)
-	if err == nil && resp.Truncated && transport == "udp" {
+	resp, err := sendVia(ctx, msg, r, o)
+	if err == nil && resp.Truncated && r.Transport == "udp" {
 		q.TCPFallback = true
-		resp, err = send(ctx, msg, "tcp", addr)
+		tcp := r
+		tcp.Transport = "tcp"
+		resp, err = sendVia(ctx, msg, tcp, o)
 	}
 	q.DurationMS = domain.Millis(time.Since(start))
 	if err != nil {
@@ -191,8 +206,19 @@ func exchange(ctx context.Context, name string, qtype uint16, transport, addr st
 	return q
 }
 
-func send(ctx context.Context, msg *mdns.Msg, transport, addr string) (*mdns.Msg, error) {
-	c := &mdns.Client{Net: transport, Timeout: 10 * time.Second}
+// sendVia sends msg through r over its own transport.
+func sendVia(ctx context.Context, msg *mdns.Msg, r target.Resolver, o Options) (*mdns.Msg, error) {
+	switch r.Transport {
+	case "https":
+		return sendDoH(ctx, msg, r, o)
+	case "tls":
+		return send(ctx, msg, "tcp-tls", r.Address(), &tls.Config{ServerName: r.Host, RootCAs: o.RootCAs, MinVersion: tls.VersionTLS12})
+	}
+	return send(ctx, msg, r.Transport, r.Address(), nil)
+}
+
+func send(ctx context.Context, msg *mdns.Msg, transport, addr string, tlsCfg *tls.Config) (*mdns.Msg, error) {
+	c := &mdns.Client{Net: transport, Timeout: 10 * time.Second, TLSConfig: tlsCfg}
 	// The client's own timeouts default to two seconds; the context
 	// deadline, which comes from --timeout, is the one that must rule.
 	if dl, ok := ctx.Deadline(); ok {
