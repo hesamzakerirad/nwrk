@@ -4,6 +4,17 @@ All notable changes to this project are listed here. The format follows [Keep a 
 
 Every release has a hand-written entry. The release workflow publishes the matching section as the GitHub release notes.
 
+## [0.0.2] - 2026-11-17
+
+### Added
+
+- Domain model and report schema version 1, published as a JSON Schema.
+- Input parsers for hosts, ports and URLs. They convert international domain names to punycode.
+- DNS, TCP, TLS and HTTP measurements, tested against local fixtures.
+- `nw test` commands with human and JSON reports.
+- Documentation for the measurements and the report schema.
+- A short fuzz run in CI for the input parsers.
+
 ## [0.0.1] - 2026-11-17
 
 First release. It proves the delivery pipeline. The `nw` command does almost nothing yet.
