@@ -1,0 +1,49 @@
+name: site
+
+on:
+  push:
+    branches: [main]
+    paths: ["site/**", "docs/**", "scripts/translation-status.sh", ".github/workflows/site.yml"]
+  pull_request:
+    paths: ["site/**", "docs/**", "scripts/translation-status.sh", ".github/workflows/site.yml"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0 # the translation check needs history
+      - uses: peaceiris/actions-hugo@v3
+        with:
+          hugo-version: "0.169.0"
+          extended: true
+      - name: Check translations against English sources
+        run: ./scripts/translation-status.sh
+      - name: Build
+        run: hugo --minify --source site
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: site/public
+
+  deploy:
+    if: github.event_name != 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5

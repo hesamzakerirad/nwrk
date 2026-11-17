@@ -1,0 +1,7 @@
+{{ define "main" }}
+<article class="wrap prose">
+  {{ partial "stale.html" . }}
+  <h1>{{ .Title }}</h1>
+  {{ .Content }}
+</article>
+{{ end }}

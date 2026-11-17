@@ -1,0 +1,19 @@
+{{- /* Shown on Farsi pages whose English source changed after translation.
+       site/data/translations.json is written by scripts/translation-status.sh. */ -}}
+{{- $key := replace .File.Path "\\" "/" }}
+{{- /* English is the source language, so only translations can be stale. */ -}}
+{{- if ne site.Language.Lang "en" }}
+{{- with hugo.Data.translations }}
+  {{- with index . $key }}
+    {{- if .stale }}
+<aside class="notice" role="note">
+  <strong>{{ i18n "stale_title" }}</strong>
+  {{ i18n "stale_text" }}
+  {{- range $.Translations }}{{ if eq .Language.Lang "en" }}
+  <a href="{{ .RelPermalink }}" hreflang="en" lang="en">{{ i18n "stale_link" }}</a>
+  {{- end }}{{ end }}
+</aside>
+    {{- end }}
+  {{- end }}
+{{- end }}
+{{- end }}
