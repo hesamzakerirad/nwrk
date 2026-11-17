@@ -1,0 +1,20 @@
+# Changelog
+
+All notable changes to this project are listed here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project uses [Semantic Versioning](https://semver.org/).
+
+Every release has a hand-written entry. The release workflow publishes the matching section as the GitHub release notes.
+
+## [0.0.1] - 2026-11-17
+
+First release. It proves the delivery pipeline. The `nw` command does almost nothing yet.
+
+### Added
+
+- `nw` command-line skeleton with `version` and `completion` commands.
+- Global flags `--output`, `--no-color`, `--verbose`, `--quiet` and `--timeout`.
+- Exit codes `0`, `1`, `2` and `130`. Ctrl+C cancels running work.
+- GitHub Actions CI on Linux, macOS and Windows.
+- GoReleaser configuration with SHA-256 checksums and keyless cosign signatures.
+- Install scripts for POSIX shell and PowerShell.
+- Project specification, roadmap and principles under the MIT license.
+- Hugo website for nwrk.ir, deployed with GitHub Pages.
