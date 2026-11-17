@@ -43,6 +43,26 @@ func ColorEnabled(noColorFlag bool, w io.Writer, getenv func(string) string) boo
 	return enableANSI(f)
 }
 
+// ColorEnabledMode is ColorEnabled with the user's color setting: "never"
+// turns color off, "always" turns it on even when the output is not a
+// terminal, and "auto" decides as ColorEnabled does. NO_COLOR and
+// --no-color win over "always", as the NO_COLOR convention requires.
+func ColorEnabledMode(mode string, noColorFlag bool, w io.Writer, getenv func(string) string) bool {
+	if noColorFlag || getenv("NO_COLOR") != "" {
+		return false
+	}
+	switch mode {
+	case "never":
+		return false
+	case "always":
+		if f, ok := w.(*os.File); ok && term.IsTerminal(int(f.Fd())) {
+			enableANSI(f)
+		}
+		return true
+	}
+	return ColorEnabled(noColorFlag, w, getenv)
+}
+
 // Renderer writes results to Out. Logs and errors belong on stderr.
 type Renderer struct {
 	Out    io.Writer

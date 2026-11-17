@@ -1,0 +1,33 @@
+# The ir preset: the global set plus domestic anchors, so a report can say
+# that domestic reachability works while international reachability does
+# not, or the other way round.
+#
+# Anchors are large, long-lived sites of different operators and sectors,
+# chosen for stability and neutrality. They are ordinary commercial
+# services, unrelated to circumvention and to political content. No domestic
+# resolver is shipped: none could be verified as both stable and neutral by
+# the maintainers, so add the ones you trust with --resolver, NW_RESOLVERS
+# or the config file. Reviewers: please check these anchors from inside the
+# region before each release.
+
+name = "ir"
+description = "The global preset plus domestic anchors, to tell local, domestic and international failures apart."
+includes = ["global"]
+
+[[targets]]
+url = "https://www.digikala.com/"
+name = "Digikala"
+scope = "domestic"
+reason = "One of the largest domestic e-commerce sites; long-lived, heavily used, operated independently of the other anchors."
+
+[[targets]]
+url = "https://www.aparat.com/"
+name = "Aparat"
+scope = "domestic"
+reason = "A large domestic video platform; a different sector and operator from the other anchors."
+
+[[targets]]
+url = "https://divar.ir/"
+name = "Divar"
+scope = "domestic"
+reason = "A large domestic classifieds service; a different sector and operator from the other anchors."

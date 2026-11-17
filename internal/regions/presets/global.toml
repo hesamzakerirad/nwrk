@@ -1,0 +1,42 @@
+# The global preset: the reference set every region builds on.
+#
+# Targets are large, stable services that publish a lightweight check URL,
+# chosen to be neutral and unrelated to any circumvention service. Every
+# entry records why it was chosen. Changes go through a pull request that
+# explains the reason (see CONTRIBUTING.md).
+
+name = "global"
+description = "Public anycast resolvers and large HTTPS endpoints, for checking international reachability."
+
+[[resolvers]]
+address = "1.1.1.1"
+name = "Cloudflare"
+reason = "Anycast public resolver run by a large network operator; stable address, widely deployed."
+
+[[resolvers]]
+address = "8.8.8.8"
+name = "Google Public DNS"
+reason = "Anycast public resolver run by a large operator; stable address, widely deployed."
+
+[[resolvers]]
+address = "9.9.9.9"
+name = "Quad9"
+reason = "Anycast public resolver run by a non-profit operator; stable address, independent of the other two."
+
+[[targets]]
+url = "https://cp.cloudflare.com/generate_204"
+name = "Cloudflare connectivity check"
+scope = "international"
+reason = "A check endpoint published for connectivity detection; returns an empty 204 response, so it is light and stable."
+
+[[targets]]
+url = "https://www.google.com/generate_204"
+name = "Google connectivity check"
+scope = "international"
+reason = "A widely used connectivity check endpoint that returns an empty 204 response; operated independently of the Cloudflare one."
+
+[[targets]]
+url = "https://www.wikipedia.org/"
+name = "Wikipedia"
+scope = "international"
+reason = "A large, stable, non-commercial site served from several regions; a third operator independent of the two above."
