@@ -10,6 +10,7 @@ import (
 
 	"github.com/hesamzakerirad/nwrk/internal/diagnostics/rules"
 	"github.com/hesamzakerirad/nwrk/internal/domain"
+	"github.com/hesamzakerirad/nwrk/internal/regions"
 )
 
 func doc(t *testing.T, name string) string {
@@ -37,6 +38,21 @@ func TestEveryRuleIsDocumentedWithItsCaveats(t *testing.T) {
 			t.Errorf("%s: its section must list when it can be wrong", r.ID)
 		}
 	}
+	for _, r := range rules.Doctor() {
+		i := strings.Index(findings, "### "+r.ID)
+		if i < 0 {
+			t.Errorf("docs/findings.md has no section for the doctor rule %s", r.ID)
+			continue
+		}
+		section := findings[i:]
+		if j := strings.Index(section[4:], "\n#"); j >= 0 {
+			section = section[:j+4]
+		}
+		// DOMESTIC_UNREACHABLE is documented by reference to its twin.
+		if r.ID != "DOMESTIC_UNREACHABLE" && !strings.Contains(section, "When it can be wrong") {
+			t.Errorf("%s: its section must list when it can be wrong", r.ID)
+		}
+	}
 	if !strings.Contains(findings, "## UNCLASSIFIED_FAILURE") {
 		t.Error("docs/findings.md must document UNCLASSIFIED_FAILURE")
 	}
@@ -51,6 +67,40 @@ func TestEveryErrorCodeIsDocumented(t *testing.T) {
 	}
 }
 
+// Every reference target and resolver of every preset is documented with
+// its reason, and every platform adapter limit is listed.
+func TestPresetsAndPlatformLimitsAreDocumented(t *testing.T) {
+	regionsDoc := doc(t, "regions.md")
+	for _, name := range regions.Names() {
+		p, err := regions.Load(name)
+		if err != nil {
+			t.Fatal(err)
+		}
+		for _, r := range p.Resolvers {
+			if !strings.Contains(regionsDoc, "`"+r.Address+"`") {
+				t.Errorf("docs/regions.md does not list the resolver %s of %s", r.Address, name)
+			}
+		}
+		for _, tg := range p.Targets {
+			if !strings.Contains(regionsDoc, tg.Host()) {
+				t.Errorf("docs/regions.md does not list the target %s of %s", tg.Host(), name)
+			}
+		}
+	}
+	platformDoc := doc(t, "platform-support.md")
+	for _, w := range []string{"Windows: the routing table", "systemd-resolved", "system proxy settings", "/proc/net/route"} {
+		if !strings.Contains(platformDoc, w) {
+			t.Errorf("docs/platform-support.md lacks %q", w)
+		}
+	}
+	privacy := doc(t, "privacy.md")
+	for _, w := range []string{"nw doctor", "Cookies", "never", "Nothing is uploaded"} {
+		if !strings.Contains(privacy, w) {
+			t.Errorf("docs/privacy.md lacks %q", w)
+		}
+	}
+}
+
 func TestProfilesAndCommandsAreDocumented(t *testing.T) {
 	d := doc(t, "diagnostics.md")
 	for _, p := range []string{"`quick`", "`standard`", "`deep`"} {
@@ -59,7 +109,7 @@ func TestProfilesAndCommandsAreDocumented(t *testing.T) {
 		}
 	}
 	c := doc(t, "commands.md")
-	for _, w := range []string{"## nw diagnose", "## nw test", "## nw version", "## nw completion", "--profile", "--resolver"} {
+	for _, w := range []string{"## nw diagnose", "## nw test", "## nw version", "## nw completion", "## nw doctor", "## nw network", "## nw config", "--profile", "--resolver", "--region", "NW_CONFIG"} {
 		if !strings.Contains(c, w) {
 			t.Errorf("docs/commands.md lacks %q", w)
 		}
@@ -73,7 +123,7 @@ func TestDocsKeepToTheWordingPolicy(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	banned := []string{"censorship", "circumvent", "bypass"}
+	banned := []string{"censorship", "bypass", "sanction", "unblock"}
 	for _, e := range entries {
 		if e.IsDir() || !strings.HasSuffix(e.Name(), ".md") || e.Name() == "SPEC.md" || e.Name() == "ROADMAP.md" {
 			continue

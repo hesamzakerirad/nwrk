@@ -4,7 +4,7 @@
 
 Website: https://nwrk.ir
 
-> **Status: early development.** `nw diagnose` and the four measurements (`nw test dns|tcp|tls|http`) work today. `nw doctor`, regional presets and history arrive in the next releases; see the [roadmap](docs/ROADMAP.md).
+> **Status: early development.** `nw doctor`, `nw diagnose`, the four measurements (`nw test dns|tcp|tls|http`), `nw network` and `nw config` work today. Interference investigation, history and reports arrive in the next releases; see the [roadmap](docs/ROADMAP.md).
 
 ## Install
 
@@ -31,6 +31,7 @@ Or download an archive from the [releases page](https://github.com/hesamzakerira
 ## Use
 
 ```sh
+nw doctor --region ir
 nw diagnose example.com
 nw diagnose https://example.com/health --profile deep
 nw test dns example.com --resolver 1.1.1.1
@@ -41,9 +42,9 @@ nw version
 nw completion zsh
 ```
 
-`nw diagnose` measures DNS, TCP, TLS and HTTP in order, skips what cannot run with the reason, and explains the evidence: findings say what was observed, hypotheses say what might explain it and what was not checked. See [diagnosing a destination](docs/diagnostics.md), [findings](docs/findings.md), [measurements](docs/measurements.md) and the [JSON report schema](docs/report-schema.md).
+`nw doctor` checks this machine and a region's reference targets and says whether the problem is local, domestic or international ([regions](docs/regions.md), [privacy](docs/privacy.md), [platform support](docs/platform-support.md)). `nw diagnose` measures DNS, TCP, TLS and HTTP in order, skips what cannot run with the reason, and explains the evidence: findings say what was observed, hypotheses say what might explain it and what was not checked. See [diagnosing a destination](docs/diagnostics.md), [findings](docs/findings.md), [measurements](docs/measurements.md) and the [JSON report schema](docs/report-schema.md).
 
-Global flags: `--output human|json`, `--no-color`, `--verbose`, `--quiet`, `--timeout`.
+Global flags: `--output human|json`, `--no-color`, `--verbose`, `--quiet`, `--timeout`, `--region`. Every setting also has an `NW_*` variable and a config file key; see `nw config show`.
 
 Exit codes: `0` no problem found, `1` a problem found (`nw diagnose`) or a measurement failed (`nw test`), `2` usage error or the tool could not run, `130` interrupted.
 
@@ -51,7 +52,7 @@ Color is on for terminals and off for pipes, `--no-color`, and the `NO_COLOR` en
 
 ## Where this is going
 
-`nw doctor --region ir` will tell local, domestic and international failures apart, and you can already pick any DNS resolver with `--resolver`. See [docs/SPEC.md](docs/SPEC.md) and [docs/ROADMAP.md](docs/ROADMAP.md).
+Next: a deeper look at interference (encrypted DNS, answer comparison, TLS behavior, path tracing), then local history and report export. See [docs/SPEC.md](docs/SPEC.md) and [docs/ROADMAP.md](docs/ROADMAP.md).
 
 ## Contributing
 

@@ -106,6 +106,80 @@ Every rule below lists **when it can be wrong**. These caveats are printed with 
 
 **Typical hypotheses:** this network has no IPv6; the IPv6 (or IPv4) path or service is broken or filtered while the other family works.
 
+## Findings of nw doctor
+
+These come from `nw doctor` (see [Regions and presets](../regions/)). Findings that place the problem in the local layer decide the `local` verdict. The caveats below are printed with each finding.
+
+### LOCAL_NO_ACTIVE_INTERFACE
+
+**Layer:** local. **Fires when** no network interface is up with an address that can reach beyond this machine. `error`.
+
+**When it can be wrong:**
+- Interfaces are read from the operating system. A connection that is still being set up, or an adapter the system does not report, shows up as missing.
+- Link-local addresses alone (169.254.x.x, fe80::) cannot reach beyond the local link, so they do not count.
+
+### LOCAL_NO_DEFAULT_ROUTE
+
+**Layer:** local. **Fires when** the operating system has no route to the internet for IPv4 or IPv6. `error`.
+
+**When it can be wrong:**
+- The check asks the operating system for a route to a public address and sends no packet. A route that exists but leads nowhere still passes; the reachability checks cover that.
+- A VPN client can change the routing table, and a route that appears a moment later passes on the next run.
+
+### LOCAL_NO_RESOLVER_CONFIGURED
+
+**Layer:** local. **Fires when** the operating system has no DNS server configured. `warning`.
+
+**When it can be wrong:**
+- nw reads the configuration the platform keeps in files or adapter settings. A system that resolves names through another mechanism may be misreported; see [Platform support](../platform-support/).
+
+### SYSTEM_RESOLVER_FAILING
+
+**Layer:** local. **Fires when** the system resolver could not resolve reference names. `error` when every lookup failed (and then the verdict is `local`), `warning` when only some failed.
+
+**When it can be wrong:**
+- A name can fail to resolve for reasons specific to that name, which is why one failing name is only a warning.
+- The system resolver is queried through the operating system, which does not report response codes.
+
+**Typical hypotheses:** the resolver configured on this machine is unreachable or failing while others work from the same network (higher confidence when two or more other resolvers answer); name resolution does not work from here at all.
+
+### INTERNATIONAL_UNREACHABLE
+
+**Layer:** reachability. **Fires when** some or all international reference targets did not answer an HTTPS request. `error` when none answered, `warning` when some did.
+
+**When it can be wrong:**
+- Reachability is judged from a few reference targets. A single target can be down for its own reasons, which is why one failure among several is only a warning.
+- A target that fails here may work elsewhere and the reverse; the result is about this network at this moment.
+
+**Typical hypotheses:** traffic to international destinations is blocked, dropped or stalled beyond this machine while domestic ones work (it cites the working domestic targets); or no target answers at all and the connection is down beyond this machine. Without domestic anchors the failure cannot be placed, and the report says to select a region that has them.
+
+### DOMESTIC_UNREACHABLE
+
+**Layer:** reachability. The same as `INTERNATIONAL_UNREACHABLE`, for the domestic reference targets of a region such as `ir`.
+
+### REFERENCE_RESOLVER_FAILING
+
+**Layer:** dns. **Fires when** a resolver other than the system one did not return an address. `warning` when you chose the resolver, `info` when it came from the region preset.
+
+**When it can be wrong:**
+- A resolver can be unreachable from this network, refuse this client, or be down; the error alone does not say which.
+- A public resolver that does not answer from here does not mean this machine's own resolver is wrong.
+
+### RESOLVER_ANSWER_DIFFERENCE
+
+**Layer:** dns. **Fires when**, for a name, the system resolver and another resolver returned no address in common. `info`, an observation.
+
+**When it can be wrong:**
+- A differing DNS answer is an observation, not proof of manipulation. CDNs return different addresses by location and by resolver, split-horizon DNS serves internal views, and caches differ.
+- Disjoint answers for a CDN-hosted name are the normal case, not a fault.
+
+### PROXY_CONFIGURED
+
+**Layer:** local. **Fires when** a proxy is set in the environment or the system settings. `info`.
+
+**When it can be wrong:**
+- A proxy setting does not mean the proxy is in use for any given program, and nw measures the direct path without it.
+
 ## UNCLASSIFIED_FAILURE
 
-**Layer:** other. **Fires when** a measurement failed and no other rule explains it, for example a reset during the TCP connection. `warning`. It exists so that a failure is never silent: read the error code and message of the measurements it lists.
+**Layer:** other. **Fires when** a measurement failed and no other rule explains it, for example a reset during the TCP connection. `warning`. It applies to `nw diagnose` and `nw doctor`. It exists so that a failure is never silent: read the error code and message of the measurements it lists.
