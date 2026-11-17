@@ -4,6 +4,15 @@ All notable changes to this project are listed here. The format follows [Keep a 
 
 Every release has a hand-written entry. The release workflow publishes the matching section as the GitHub release notes.
 
+## [0.3.0] - 2026-11-17
+
+### Added
+
+- DNS over TLS and DNS over HTTPS resolvers, and the DNS probes that use them.
+- Interference and security rules for the diagnostic engine.
+- `nw security` and `nw path`.
+- Documentation for interference, path probes and the new commands.
+
 ## [0.2.0] - 2026-11-17
 
 ### Added
