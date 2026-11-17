@@ -1,0 +1,761 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nwrk.ir/schema/report.v1.json",
+  "title": "nw report, schema version 1",
+  "description": "The JSON document nw prints with --output json for the test commands. Fields may be added within version 1; none are renamed or removed.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "run",
+    "measurements",
+    "findings",
+    "hypotheses",
+    "recommendations"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1"
+    },
+    "run": {
+      "$ref": "#/$defs/run"
+    },
+    "measurements": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/measurement"
+      }
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/finding"
+      }
+    },
+    "hypotheses": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/hypothesis"
+      }
+    },
+    "recommendations": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/recommendation"
+      }
+    }
+  },
+  "$defs": {
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "errorCode": {
+      "enum": [
+        "dns.nxdomain",
+        "dns.servfail",
+        "dns.refused",
+        "dns.no_answer",
+        "dns.timeout",
+        "dns.transport",
+        "dns.error",
+        "tcp.refused",
+        "tcp.timeout",
+        "tcp.unreachable",
+        "tcp.reset",
+        "tcp.error",
+        "tls.cert_expired",
+        "tls.cert_untrusted",
+        "tls.hostname_mismatch",
+        "tls.handshake_failure",
+        "tls.reset",
+        "tls.timeout",
+        "tls.error",
+        "http.timeout",
+        "http.redirect_loop",
+        "http.protocol_error",
+        "http.reset",
+        "http.error"
+      ]
+    },
+    "run": {
+      "type": "object",
+      "required": [
+        "id",
+        "started_at",
+        "ended_at",
+        "command",
+        "target",
+        "tool_version",
+        "platform"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "started_at": {
+          "$ref": "#/$defs/timestamp"
+        },
+        "ended_at": {
+          "$ref": "#/$defs/timestamp"
+        },
+        "command": {
+          "type": "string"
+        },
+        "target": {
+          "type": "string"
+        },
+        "profile": {
+          "type": "string"
+        },
+        "tool_version": {
+          "type": "string"
+        },
+        "platform": {
+          "type": "object",
+          "required": [
+            "os",
+            "arch"
+          ],
+          "properties": {
+            "os": {
+              "type": "string"
+            },
+            "arch": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "error": {
+      "type": "object",
+      "required": [
+        "code",
+        "message"
+      ],
+      "properties": {
+        "code": {
+          "$ref": "#/$defs/errorCode"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "measurement": {
+      "type": "object",
+      "required": [
+        "id",
+        "type",
+        "version",
+        "status",
+        "started_at",
+        "ended_at",
+        "duration_ms",
+        "target"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^m-[0-9]{3,}$"
+        },
+        "type": {
+          "enum": [
+            "dns",
+            "tcp",
+            "tls",
+            "http"
+          ]
+        },
+        "version": {
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "success",
+            "failure",
+            "skipped",
+            "inconclusive"
+          ]
+        },
+        "started_at": {
+          "$ref": "#/$defs/timestamp"
+        },
+        "ended_at": {
+          "$ref": "#/$defs/timestamp"
+        },
+        "duration_ms": {
+          "type": "number",
+          "minimum": 0
+        },
+        "target": {
+          "type": "object",
+          "properties": {
+            "host": {
+              "type": "string"
+            },
+            "url": {
+              "type": "string"
+            },
+            "ip": {
+              "type": "string"
+            },
+            "port": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 65535
+            },
+            "family": {
+              "enum": [
+                "ipv4",
+                "ipv6"
+              ]
+            }
+          }
+        },
+        "resolver": {
+          "type": "object",
+          "required": [
+            "kind"
+          ],
+          "properties": {
+            "kind": {
+              "enum": [
+                "system",
+                "udp",
+                "tcp"
+              ]
+            },
+            "address": {
+              "type": "string"
+            }
+          }
+        },
+        "params": {
+          "type": "object"
+        },
+        "result": {
+          "type": "object"
+        },
+        "error": {
+          "$ref": "#/$defs/error"
+        },
+        "note": {
+          "type": "string"
+        },
+        "redacted": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "failure"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "required": [
+              "error"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "success"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "required": [
+              "result"
+            ],
+            "not": {
+              "required": [
+                "error"
+              ]
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "skipped"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "required": [
+              "note"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "dns"
+              }
+            },
+            "required": [
+              "type",
+              "result"
+            ]
+          },
+          "then": {
+            "properties": {
+              "result": {
+                "$ref": "#/$defs/dnsResult"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "tcp"
+              }
+            },
+            "required": [
+              "type",
+              "result"
+            ]
+          },
+          "then": {
+            "properties": {
+              "result": {
+                "$ref": "#/$defs/tcpResult"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "tls"
+              }
+            },
+            "required": [
+              "type",
+              "result"
+            ]
+          },
+          "then": {
+            "properties": {
+              "result": {
+                "$ref": "#/$defs/tlsResult"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "http"
+              }
+            },
+            "required": [
+              "type",
+              "result"
+            ]
+          },
+          "then": {
+            "properties": {
+              "result": {
+                "$ref": "#/$defs/httpResult"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "dnsResult": {
+      "type": "object",
+      "required": [
+        "a",
+        "aaaa",
+        "queries"
+      ],
+      "properties": {
+        "a": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "aaaa": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "queries": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "type",
+              "answers",
+              "duration_ms"
+            ],
+            "properties": {
+              "type": {
+                "enum": [
+                  "A",
+                  "AAAA"
+                ]
+              },
+              "rcode": {
+                "type": "string"
+              },
+              "answers": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "cnames": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "duration_ms": {
+                "type": "number",
+                "minimum": 0
+              },
+              "tcp_fallback": {
+                "type": "boolean"
+              },
+              "error": {
+                "$ref": "#/$defs/error"
+              }
+            }
+          }
+        }
+      }
+    },
+    "tcpResult": {
+      "type": "object",
+      "required": [
+        "address",
+        "family",
+        "connect_ms"
+      ],
+      "properties": {
+        "address": {
+          "type": "string"
+        },
+        "family": {
+          "enum": [
+            "ipv4",
+            "ipv6"
+          ]
+        },
+        "connect_ms": {
+          "type": "number",
+          "minimum": 0
+        }
+      }
+    },
+    "tlsResult": {
+      "type": "object",
+      "required": [
+        "server_name",
+        "handshake_ms",
+        "chain",
+        "certificates"
+      ],
+      "properties": {
+        "server_name": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        },
+        "cipher_suite": {
+          "type": "string"
+        },
+        "alpn": {
+          "type": "string"
+        },
+        "handshake_ms": {
+          "type": "number",
+          "minimum": 0
+        },
+        "chain": {
+          "type": "object",
+          "required": [
+            "verified"
+          ],
+          "properties": {
+            "verified": {
+              "type": "boolean"
+            },
+            "error": {
+              "type": "string"
+            }
+          }
+        },
+        "certificates": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "subject",
+              "issuer",
+              "not_before",
+              "not_after",
+              "sans",
+              "is_ca"
+            ],
+            "properties": {
+              "subject": {
+                "type": "string"
+              },
+              "issuer": {
+                "type": "string"
+              },
+              "not_before": {
+                "$ref": "#/$defs/timestamp"
+              },
+              "not_after": {
+                "$ref": "#/$defs/timestamp"
+              },
+              "sans": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "is_ca": {
+                "type": "boolean"
+              }
+            }
+          }
+        }
+      }
+    },
+    "httpResult": {
+      "type": "object",
+      "required": [
+        "method",
+        "hops",
+        "headers",
+        "body_bytes",
+        "body_truncated",
+        "timings"
+      ],
+      "properties": {
+        "method": {
+          "enum": [
+            "GET",
+            "HEAD"
+          ]
+        },
+        "final_url": {
+          "type": "string"
+        },
+        "status_code": {
+          "type": "integer"
+        },
+        "protocol": {
+          "type": "string"
+        },
+        "hops": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "url",
+              "status_code",
+              "timings"
+            ],
+            "properties": {
+              "url": {
+                "type": "string"
+              },
+              "status_code": {
+                "type": "integer"
+              },
+              "location": {
+                "type": "string"
+              },
+              "timings": {
+                "type": "object",
+                "required": [
+                  "total_ms"
+                ],
+                "properties": {
+                  "dns_ms": {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  "connect_ms": {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  "tls_ms": {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  "ttfb_ms": {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  "total_ms": {
+                    "type": "number",
+                    "minimum": 0
+                  }
+                }
+              }
+            }
+          }
+        },
+        "headers": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "body_bytes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "body_truncated": {
+          "type": "boolean"
+        },
+        "timings": {
+          "type": "object",
+          "required": [
+            "total_ms"
+          ],
+          "properties": {
+            "dns_ms": {
+              "type": "number",
+              "minimum": 0
+            },
+            "connect_ms": {
+              "type": "number",
+              "minimum": 0
+            },
+            "tls_ms": {
+              "type": "number",
+              "minimum": 0
+            },
+            "ttfb_ms": {
+              "type": "number",
+              "minimum": 0
+            },
+            "total_ms": {
+              "type": "number",
+              "minimum": 0
+            }
+          }
+        }
+      }
+    },
+    "finding": {
+      "type": "object",
+      "required": [
+        "id",
+        "code",
+        "severity",
+        "summary",
+        "measurement_ids"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "code": {
+          "type": "string"
+        },
+        "severity": {
+          "enum": [
+            "info",
+            "warning",
+            "error"
+          ]
+        },
+        "summary": {
+          "type": "string"
+        },
+        "measurement_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "hypothesis": {
+      "type": "object",
+      "required": [
+        "id",
+        "summary",
+        "finding_ids",
+        "confidence"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "summary": {
+          "type": "string"
+        },
+        "finding_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "confidence": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        }
+      }
+    },
+    "recommendation": {
+      "type": "object",
+      "required": [
+        "id",
+        "summary"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "summary": {
+          "type": "string"
+        },
+        "command": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
