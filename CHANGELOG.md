@@ -4,6 +4,18 @@ All notable changes to this project are listed here. The format follows [Keep a 
 
 Every release has a hand-written entry. The release workflow publishes the matching section as the GitHub release notes.
 
+## [0.1.0] - 2026-11-17
+
+### Added
+
+- Diagnostic rule engine and the first rules.
+- `nw diagnose`, with profiles and dependency-aware ordering of measurements.
+- Documentation for diagnostics, and issue templates.
+
+### Changed
+
+- The report schema now carries findings and summaries.
+
 ## [0.0.2] - 2026-11-17
 
 ### Added
