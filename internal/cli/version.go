@@ -17,10 +17,11 @@ type versionDoc struct {
 
 func newVersionCmd(a *app) *cobra.Command {
 	return &cobra.Command{
-		Use:   "version",
-		Short: "Print version and build information",
-		Long:  "Print the version, commit, build date and platform of this nw binary.\nThis command makes no network requests.",
-		Args:  cobra.NoArgs,
+		Use:         "version",
+		Short:       "Print version and build information",
+		Long:        "Print the version, commit, build date and platform of this nw binary.\nThis command makes no network requests.",
+		Args:        cobra.NoArgs,
+		Annotations: map[string]string{noConfig: "true"},
 		RunE: func(*cobra.Command, []string) error {
 			info := buildinfo.Get()
 			if a.out.Format == output.JSON {

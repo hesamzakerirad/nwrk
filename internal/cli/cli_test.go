@@ -4,6 +4,8 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"os"
+	"path/filepath"
 	"strings"
 	"testing"
 
@@ -12,6 +14,10 @@ import (
 
 func run(t *testing.T, args ...string) (code int, stdout, stderr string) {
 	t.Helper()
+	// Never read the developer's own configuration file.
+	if os.Getenv("NW_CONFIG") == "" {
+		t.Setenv("NW_CONFIG", filepath.Join(t.TempDir(), "none.toml"))
+	}
 	var out, errb bytes.Buffer
 	code = Execute(context.Background(), args, &out, &errb)
 	return code, out.String(), errb.String()

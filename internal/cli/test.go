@@ -12,6 +12,7 @@ import (
 	"github.com/hesamzakerirad/nwrk/internal/buildinfo"
 	"github.com/hesamzakerirad/nwrk/internal/domain"
 	"github.com/hesamzakerirad/nwrk/internal/exit"
+	"github.com/hesamzakerirad/nwrk/internal/measurement/local"
 	"github.com/hesamzakerirad/nwrk/internal/output"
 	"github.com/hesamzakerirad/nwrk/internal/reporting"
 	"github.com/hesamzakerirad/nwrk/internal/target"
@@ -43,10 +44,13 @@ func resolverFlag(cmd *cobra.Command) *[]string {
 var seams struct {
 	systemDNS func(ctx context.Context, name string) *domain.Measurement
 	rootCAs   *x509.CertPool
+	inspector local.Inspector
+	dial      local.Dial
+	network   inspection
 }
 
 func (a *app) testOptions(resolvers []string) (apptest.Options, error) {
-	rs, err := target.Resolvers(resolvers, target.OSEnv)
+	rs, _, err := a.settings.Resolvers(resolvers)
 	if err != nil {
 		return apptest.Options{}, exit.Usage(err)
 	}
