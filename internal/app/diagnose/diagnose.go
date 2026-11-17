@@ -13,6 +13,7 @@ import (
 	"strings"
 	"sync"
 
+	"github.com/hesamzakerirad/nwrk/internal/app/probes"
 	apptest "github.com/hesamzakerirad/nwrk/internal/app/test"
 	"github.com/hesamzakerirad/nwrk/internal/diagnostics/engine"
 	"github.com/hesamzakerirad/nwrk/internal/diagnostics/rules"
@@ -130,10 +131,28 @@ type runner struct {
 	o   Options
 	sp  spec
 	sem chan struct{}
+	// fellBack is true when the addresses did not come from the first
+	// resolver the user chose, because it did not answer.
+	fellBack bool
 }
 
 // Run investigates t and returns the finished report, findings included.
+// The deep profile adds the interference checks.
 func Run(ctx context.Context, t Target, o Options) *domain.Report {
+	rep := Measure(ctx, t, o)
+	list := rules.All()
+	if o.Profile == Deep {
+		list = append(list, rules.Interference()...)
+	}
+	Finish(rep, list)
+	return rep
+}
+
+// Measure runs the measurements of the profile and returns the report
+// without any findings, so a caller can add more evidence before the rules
+// run. Call Finish when done. The deep profile includes the interference
+// probes.
+func Measure(ctx context.Context, t Target, o Options) *domain.Report {
 	if o.Profile == "" {
 		o.Profile = DefaultProfile
 	}
@@ -146,11 +165,17 @@ func Run(ctx context.Context, t Target, o Options) *domain.Report {
 	r := &runner{rep: rep, t: t, o: o, sp: sp, sem: make(chan struct{}, sp.concurrency)}
 
 	r.run(ctx)
+	if o.Profile == Deep && ctx.Err() == nil {
+		probes.Interference(ctx, rep, t.Host, t.Port, t.TLS, t.URL, probes.Options{Test: o.Test})
+	}
+	return rep
+}
 
-	engine.Evaluate(rules.All(), rep)
+// Finish evaluates the rules over the measurements and completes the report.
+func Finish(rep *domain.Report, list []engine.Rule) {
+	engine.Evaluate(list, rep)
 	rep.Summarize()
 	rep.Finish()
-	return rep
 }
 
 func (r *runner) run(ctx context.Context) {
@@ -184,7 +209,9 @@ func (r *runner) resolve(ctx context.Context) []netip.Addr {
 		r.rep.Add(m.Skip("the target is an IP address, so there is nothing to resolve"))
 		return []netip.Addr{ip.Unmap()}
 	}
-	return apptest.Resolve(ctx, r.rep, r.t.Host, r.o.Test)
+	addrs, fell := apptest.ResolveFrom(ctx, r.rep, r.t.Host, r.o.Test)
+	r.fellBack = fell
+	return addrs
 }
 
 // skipAll records the layers of the profile that cannot run, with a reason.
@@ -239,9 +266,21 @@ func (r *runner) each(ctx context.Context, addrs []netip.Addr, f func(context.Co
 	}
 	wg.Wait()
 	for _, m := range results {
+		r.note(m)
 		r.rep.Add(m)
 	}
 	return results
+}
+
+// note records where the addresses came from when that was not the
+// resolver the user chose.
+func (r *runner) note(m *domain.Measurement) {
+	if r.fellBack && m != nil {
+		if m.Params == nil {
+			m.Params = map[string]any{}
+		}
+		m.Params["addresses_from"] = apptest.FallbackNote
+	}
 }
 
 // tcp connects to every selected address and returns the ones that worked,
@@ -370,6 +409,7 @@ func (r *runner) http(ctx context.Context, v4, v6 []netip.Addr, tcpOK, tlsOK map
 	}
 	wg.Wait()
 	for _, m := range results {
+		r.note(m)
 		r.rep.Add(m)
 	}
 }

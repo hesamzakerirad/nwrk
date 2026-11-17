@@ -23,10 +23,10 @@ func Diagnosis(r *output.Renderer, rep *domain.Report, quiet, verbose bool) {
 		return
 	}
 
-	if rep.Run.Command == "doctor" {
-		fmt.Fprintf(w, "%s %s\n\n", r.Bold("nw doctor"), rep.Run.Target)
+	if rep.Run.Profile != "" {
+		fmt.Fprintf(w, "%s %s  %s\n\n", r.Bold("nw "+rep.Run.Command), rep.Run.Target, r.Dim("(profile "+rep.Run.Profile+")"))
 	} else {
-		fmt.Fprintf(w, "%s %s  %s\n\n", r.Bold("nw diagnose"), rep.Run.Target, r.Dim("(profile "+rep.Run.Profile+")"))
+		fmt.Fprintf(w, "%s %s\n\n", r.Bold("nw "+rep.Run.Command), rep.Run.Target)
 	}
 
 	if rep.Summary != nil && rep.Summary.Verdict != "" {

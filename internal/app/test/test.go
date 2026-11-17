@@ -130,8 +130,20 @@ func parseIP(host string) (netip.Addr, bool) {
 
 // Resolve measures host with the system resolver first, as the baseline,
 // then with each chosen resolver, all at once. It returns the addresses of
-// the first chosen resolver, or of the system resolver when none was chosen.
+// the first chosen resolver that answered, or of the system resolver when
+// none was chosen or none of them answered.
 func Resolve(ctx context.Context, rep *domain.Report, host string, o Options) []netip.Addr {
+	addrs, _ := ResolveFrom(ctx, rep, host, o)
+	return addrs
+}
+
+// FallbackNote is recorded on a measurement made at addresses that did not
+// come from the first resolver the user chose.
+const FallbackNote = "the first resolver you chose did not answer, so the addresses came from another resolver in this report"
+
+// ResolveFrom is Resolve and also says whether the addresses are not those
+// of the first chosen resolver, because that one failed.
+func ResolveFrom(ctx context.Context, rep *domain.Report, host string, o Options) (addrs []netip.Addr, fellBack bool) {
 	results := make([]*domain.Measurement, 1+len(o.Resolvers))
 	var wg sync.WaitGroup
 	do := func(i int, f func(context.Context) *domain.Measurement) {
@@ -149,17 +161,23 @@ func Resolve(ctx context.Context, rep *domain.Report, host string, o Options) []
 	}
 	do(0, func(c context.Context) *domain.Measurement { return system(c, host) })
 	for i, r := range o.Resolvers {
-		do(i+1, func(c context.Context) *domain.Measurement { return dns.Lookup(c, host, r) })
+		do(i+1, func(c context.Context) *domain.Measurement {
+			return dns.LookupWith(c, host, r, dns.Options{RootCAs: o.RootCAs})
+		})
 	}
 	wg.Wait()
 	for _, m := range results {
 		rep.Add(m)
 	}
-	preferred := results[0]
-	if len(o.Resolvers) > 0 {
-		preferred = results[1]
+	// The chosen resolvers come first, in order; the system resolver is the
+	// last resort.
+	order := append(append([]*domain.Measurement{}, results[1:]...), results[0])
+	for i, m := range order {
+		if a := dns.Addresses(m); len(a) > 0 {
+			return a, i > 0 && len(o.Resolvers) > 0
+		}
 	}
-	return dns.Addresses(preferred)
+	return nil, false
 }
 
 // run measures every address at once and adds the results in address order.

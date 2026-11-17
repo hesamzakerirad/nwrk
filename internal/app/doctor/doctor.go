@@ -163,7 +163,7 @@ func (r *runner) network(ctx context.Context) {
 	}
 	for i, j := range jobs {
 		r.do(ctx, &wg, &compared[i], func(c context.Context) *domain.Measurement {
-			m := dns.Lookup(c, j.hs.host, j.r)
+			m := dns.LookupWith(c, j.hs.host, j.r, dns.Options{RootCAs: r.o.Test.RootCAs})
 			m.Scope = j.hs.scope
 			m.Params["chosen"] = r.o.ChosenResolvers
 			return m
