@@ -12,7 +12,7 @@
       <div class="mac" role="group" aria-label="{{ i18n "demo_label" }}">
         <div class="mac-bar">
           <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
-          <span class="mac-title" aria-hidden="true">nw — zsh — 80×24</span>
+          <span class="mac-title" aria-hidden="true">nw <span data-version data-api="https://api.github.com/repos/hesamzakerirad/nwrk/releases/latest">{{ site.Params.version }}</span> — zsh — 80×24</span>
           <button type="button" class="replay" data-replay>{{ i18n "replay" }}</button>
         </div>
         <div class="mac-body" data-seg-group="demo">
@@ -68,33 +68,34 @@
     <p class="sub">{{ i18n "flow_text" }}</p>
   </div>
   <div class="split-body">
-    <div class="flow" aria-hidden="true">
-  <pre><span class="sig">dns</span> ───────▶ <span class="sig">tcp</span> ───────▶ <span class="sig">tls</span> ───────▶ <span class="sig">http</span>
-  <span class="ok">ok</span>           <span class="ok">ok</span>           <span class="fail">FAIL</span>         <span class="dim">skipped</span>
-                            │
-                            └─ <span class="fail">tls.cert_expired</span> <span class="dim">expired</span></pre>
+    <div class="mac trace" data-trace>
+      <div class="mac-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="mac-title" aria-hidden="true">nw diagnose example.com</span></div>
+      <ol class="hops">
+        <li class="signal" aria-hidden="true"><i class="beam"></i><i class="probe"></i></li>
+        <li class="hop end origin" style="--i:0"><span class="node"></span><div class="hop-main"><b class="hop-name">your machine</b><p class="hop-note">Starting point. Nothing is sent until the first layer runs.</p></div><span class="hop-t">+0 ms</span></li>
+        <li class="hop ok" style="--i:1"><span class="node"></span><div class="hop-main"><b class="hop-name">dns <em>ok</em></b><p>{{ i18n "l_dns" }}</p></div><span class="hop-t">+24 ms</span></li>
+        <li class="hop ok" style="--i:2"><span class="node"></span><div class="hop-main"><b class="hop-name">tcp <em>ok</em></b><p>{{ i18n "l_tcp" }}</p></div><span class="hop-t">+36 ms</span></li>
+        <li class="hop fail" style="--i:3"><span class="node"></span><div class="hop-main"><b class="hop-name">tls <em>FAIL</em></b><p>{{ i18n "l_tls" }}</p><code class="hop-out">tls.cert_expired</code></div><span class="hop-t">+78 ms</span></li>
+        <li class="hop off" style="--i:4"><span class="node"></span><div class="hop-main"><b class="hop-name">http <em>skipped</em></b><p>{{ i18n "l_http" }}</p></div><span class="hop-t">&nbsp;</span></li>
+        <li class="hop end dest" style="--i:5"><span class="node"></span><div class="hop-main"><b class="hop-name">example.com</b></div><span class="hop-t">&nbsp;</span></li>
+      </ol>
     </div>
-    <dl class="layers">
-      <div><dt>dns</dt><dd>{{ i18n "l_dns" }}</dd></div>
-      <div><dt>tcp</dt><dd>{{ i18n "l_tcp" }}</dd></div>
-      <div><dt>tls</dt><dd>{{ i18n "l_tls" }}</dd></div>
-      <div><dt>http</dt><dd>{{ i18n "l_http" }}</dd></div>
-    </dl>
   </div>
 </section>
 
 <section class="wrap block split">
   <div class="split-head">
     <h2>{{ i18n "cmds_title" }}</h2>
+    <p class="sub">{{ i18n "cmds_lead" }}</p>
   </div>
   <div class="split-body">
     <div class="cmds">
-      <div class="cmd"><code>nw diagnose google.com</code><p>{{ i18n "c_diagnose" }}</p></div>
-      <div class="cmd"><code>nw doctor --region ir</code><p>{{ i18n "c_doctor" }}</p></div>
-      <div class="cmd"><code>nw security interference google.com</code><p>{{ i18n "c_interference" }}</p></div>
-      <div class="cmd"><code>nw test dns google.com --resolver tls://9.9.9.9</code><p>{{ i18n "c_test" }}</p></div>
-      <div class="cmd"><code>nw path trace google.com</code><p>{{ i18n "c_path" }}</p></div>
-      <div class="cmd"><code>nw network show</code><p>{{ i18n "c_network" }}</p></div>
+      <div class="cmd"><p class="q">{{ i18n "q_diagnose" }}</p><div class="field" data-copy="nw diagnose example.com"><code><span class="prompt">$ </span>nw diagnose example.com</code></div><p>{{ i18n "c_diagnose" }}</p></div>
+      <div class="cmd"><p class="q">{{ i18n "q_doctor" }}</p><div class="field" data-copy="nw doctor --region ir"><code><span class="prompt">$ </span>nw doctor --region ir</code></div><p>{{ i18n "c_doctor" }}</p></div>
+      <div class="cmd"><p class="q">{{ i18n "q_interference" }}</p><div class="field" data-copy="nw security interference example.com"><code><span class="prompt">$ </span>nw security interference example.com</code></div><p>{{ i18n "c_interference" }}</p></div>
+      <div class="cmd"><p class="q">{{ i18n "q_test" }}</p><div class="field" data-copy="nw test dns example.com --resolver tls://9.9.9.9"><code><span class="prompt">$ </span>nw test dns example.com --resolver tls://9.9.9.9</code></div><p>{{ i18n "c_test" }}</p></div>
+      <div class="cmd"><p class="q">{{ i18n "q_path" }}</p><div class="field" data-copy="nw path trace example.com"><code><span class="prompt">$ </span>nw path trace example.com</code></div><p>{{ i18n "c_path" }}</p></div>
+      <div class="cmd"><p class="q">{{ i18n "q_network" }}</p><div class="field" data-copy="nw network show"><code><span class="prompt">$ </span>nw network show</code></div><p>{{ i18n "c_network" }}</p></div>
     </div>
     <p class="more"><a href="{{ "docs/commands/" | relLangURL }}">{{ i18n "cmds_link" }}</a></p>
   </div>
@@ -102,32 +103,32 @@
 
 <section class="wrap block split">
   <div class="split-head">
-    <h2>{{ i18n "rules_title" }}</h2>
+    <h2>{{ i18n "ev_title" }}</h2>
+    <p class="sub">{{ i18n "ev_lead" }}</p>
   </div>
   <div class="split-body">
-    <ul class="checks">
-      <li>{{ i18n "r1" }}</li>
-      <li>{{ i18n "r2" }}</li>
-      <li>{{ i18n "r3" }}</li>
-      <li>{{ i18n "r4" }}</li>
-      <li>{{ i18n "r5" }}</li>
-    </ul>
+    <dl class="ev">
+      <div><dt>finding</dt><dd>{{ i18n "ev_finding" }}</dd></div>
+      <div><dt>hypothesis</dt><dd>{{ i18n "ev_hypothesis" }}</dd></div>
+      <div><dt>not observed</dt><dd>{{ i18n "ev_gap" }}</dd></div>
+      <div><dt>confidence</dt><dd>{{ i18n "ev_confidence" }}</dd></div>
+    </dl>
+    <p class="more"><a href="{{ "docs/findings/" | relLangURL }}">{{ i18n "ev_link" }}</a></p>
   </div>
 </section>
 
 <section class="wrap block split">
   <div class="split-head">
-    <h2>{{ i18n "status_title" }}</h2>
-    <p class="sub">{{ i18n "status_lead" }}</p>
+    <h2>{{ i18n "rules_title" }}</h2>
+    <p class="sub">{{ i18n "rules_lead" }}</p>
   </div>
   <div class="split-body">
-    <p class="progress" aria-hidden="true"><span class="on">██████████████████</span><span class="off">░░░░░░░░░░░░░░</span> v0.3 / v1.0</p>
-    <dl class="steps">
-      <dt>v0.0 – v0.3</dt><dd>{{ i18n "s_done" }}</dd>
-      <dt class="now">v0.4</dt><dd>{{ i18n "s_next" }}</dd>
-      <dt>v1.0</dt><dd>{{ i18n "s_stable" }}</dd>
-    </dl>
-    <p><a href="{{ site.Params.repo }}/blob/main/docs/ROADMAP.md">{{ i18n "roadmap_link" }}</a></p>
+    <ul class="checks">
+      <li>{{ i18n "r1" }}</li>
+      <li>{{ i18n "r3" }}</li>
+      <li>{{ i18n "r4" }}</li>
+    </ul>
+    <p class="more"><a href="{{ "docs/privacy/" | relLangURL }}">{{ i18n "rules_link" }}</a></p>
   </div>
 </section>
 {{ end }}

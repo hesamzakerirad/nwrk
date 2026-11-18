@@ -3,12 +3,25 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{{ if .IsHome }}{{ site.Title }}{{ else }}{{ .Title }} | {{ site.Title }}{{ end }}</title>
-  <meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{ site.Params.description }}{{ end }}">
+  {{- $title := cond .IsHome (i18n "home_title") (printf "%s | %s" .Title site.Title) }}
+  {{- $desc := or .Description site.Params.description }}
+  <title>{{ $title }}</title>
+  <meta name="description" content="{{ $desc }}">
+  <link rel="canonical" href="{{ .Permalink }}">
+  <meta property="og:type" content="{{ if .IsHome }}website{{ else }}article{{ end }}">
+  <meta property="og:site_name" content="{{ site.Title }}">
+  <meta property="og:title" content="{{ $title }}">
+  <meta property="og:description" content="{{ $desc }}">
+  <meta property="og:url" content="{{ .Permalink }}">
+  <meta property="og:locale" content="en_US">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="{{ $title }}">
+  <meta name="twitter:description" content="{{ $desc }}">
   <meta name="color-scheme" content="dark light">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Crect width='16' height='16' fill='%230b1220'/%3E%3Cpath fill='%235b8cff' d='M3 4h2v8H3zM5 5h2v2H5zM7 7h2v2H7zM9 5h2v2H9zM11 4h2v8h-2z'/%3E%3C/svg%3E">
-  {{- range .AllTranslations }}
-  <link rel="alternate" hreflang="{{ .Language.Locale }}" href="{{ .Permalink }}">
+  <link rel="alternate" hreflang="x-default" href="{{ .Permalink }}">
+  {{- if .IsHome }}
+  <script type="application/ld+json">{{ dict "@context" "https://schema.org" "@type" "SoftwareApplication" "name" "nw" "alternateName" "nwrk" "description" $desc "url" .Permalink "applicationCategory" "DeveloperApplication" "operatingSystem" "Linux, macOS, Windows" "license" "https://opensource.org/license/mit" "isAccessibleForFree" true "offers" (dict "@type" "Offer" "price" "0" "priceCurrency" "USD") "author" (dict "@type" "Person" "name" "Hesam Rad" "url" "https://hesamrad.com") "codeRepository" site.Params.repo | jsonify | safeJS }}</script>
   {{- end }}
   <link rel="preload" href="{{ "fonts/jetbrains-mono-latin-400-normal.woff2" | relURL }}" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="{{ "fonts/jetbrains-mono-latin-800-normal.woff2" | relURL }}" as="font" type="font/woff2" crossorigin>

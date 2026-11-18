@@ -37,7 +37,9 @@ The script verifies the checksum, installs `nw.exe` into `%LOCALAPPDATA%\nwrk\bi
 go install github.com/hesamzakerirad/nwrk/cmd/nw@latest
 ```
 
-This builds from source and puts `nw` in your Go bin directory.
+This builds from source and puts `nw` in your Go bin directory. That directory is `$(go env GOBIN)`, or `$(go env GOPATH)/bin` when `GOBIN` is not set. For most users it is `~/go/bin`.
+
+Go prints only `go: downloading ...` when it succeeds. If your shell then says `command not found: nw`, the Go bin directory is not on your `PATH`. See [Troubleshooting](#troubleshooting).
 
 ## Manual download
 
@@ -72,7 +74,13 @@ cosign verify-blob checksums.txt \
 
 **The download is slow or fails.** GitHub can be slow or unreliable on some networks. The install scripts retry three times. If they still fail, they print the release page, where you can download the files by any means and follow the manual steps above.
 
-**`nw: command not found`.** The install directory is not on your `PATH`. The installer tells you which directory to add.
+**`nw: command not found`.** The install directory is not on your `PATH`. The installer tells you which directory to add. If you installed with Go, add the Go bin directory. For zsh, run this once and open a new terminal:
+
+```sh
+echo 'export PATH="$PATH:$(go env GOPATH)/bin"' >> ~/.zshrc
+```
+
+For bash, use `~/.bashrc` instead of `~/.zshrc`. If you set `GOBIN`, add that directory instead. To run `nw` without changing `PATH`, use its full path, for example `~/go/bin/nw version`.
 
 **A different `nw` runs.** The NW.js project also installs a program named `nw`. If `which nw` (or `where nw` on Windows) points elsewhere, put the nwrk install directory earlier in your `PATH`.
 

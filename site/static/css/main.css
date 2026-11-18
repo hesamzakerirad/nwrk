@@ -131,6 +131,17 @@ canvas { image-rendering: pixelated; }
 .stage .mac { width: 100%; }
 .mac-body { padding: 1.5rem 1.9rem 2rem; }
 .demo-head { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+/* The tab band runs edge to edge, like a terminal tab bar: the active tab joins the window body. */
+.demo-head { margin: -1.5rem -1.9rem 0; }
+.demo-head .seg { display: flex; width: 100%; padding: 0; gap: 0; border-radius: 0; background: var(--chrome); overflow-x: auto; scrollbar-width: none; }
+.demo-head .seg button { position: relative; flex: 1 1 0; display: flex; align-items: center; justify-content: center; gap: 0.5rem; min-width: max-content; border-radius: 0; padding: 0.7rem 1rem; font-size: 0.76rem; color: var(--dim); box-shadow: none; border-block-end: 1px solid color-mix(in srgb, var(--line) 80%, transparent); border-inline-end: 1px solid color-mix(in srgb, var(--line) 80%, transparent); }
+.demo-head .seg button:last-child { border-inline-end: 0; }
+.demo-head .seg button:hover { color: var(--ink); background: color-mix(in srgb, var(--dim) 10%, transparent); }
+.demo-head .seg button[aria-selected="true"], :root[data-theme="light"] .demo-head .seg button[aria-selected="true"] { background: var(--term); color: var(--ink); box-shadow: none; border-block-end-color: var(--term); }
+.demo-head .seg button[aria-selected="true"]::before { content: ""; position: absolute; inset: 0 0 auto; height: 2px; background: var(--signal); }
+.demo-head .seg kbd { margin: 0; background: none; padding: 0; opacity: 0.7; }
+.demo-head .seg kbd::before { content: "\2318"; }
+.demo-head .seg button[aria-selected="true"] kbd { background: none; }
 .seg kbd { margin-inline-start: 0.55rem; font: 500 0.66rem/1 var(--mono); color: var(--dim); background: color-mix(in srgb, var(--dim) 18%, transparent); border-radius: 4px; padding: 0.18rem 0.35rem; }
 .seg button[aria-selected="true"] kbd { color: var(--signal); background: color-mix(in srgb, var(--signal) 16%, transparent); }
 .replay { position: absolute; inset-inline-end: 1rem; font: 500 0.75rem/1 var(--text); color: var(--dim); background: none; border: 0; padding: 0.4rem 0.2rem; cursor: pointer; display: none; }
@@ -170,33 +181,60 @@ h4::before { content: "#### "; color: var(--dim); font-weight: 400; }
 .split-head .sub { max-width: 34ch; margin: 0; color: var(--dim); font-size: 0.92rem; line-height: 1.75; }
 .more { margin: 3rem 0 0; }
 
-.flow { margin: 0 0 3rem; }
-.flow pre { margin: 0; padding: 2rem 2.25rem; background: var(--term); border-radius: 12px; box-shadow: 0 0 0 1px var(--line); font: 400 1rem/1.5 var(--mono); direction: ltr; text-align: left; white-space: pre; overflow-x: auto; }
-.flow .ok { color: var(--ok); } .flow .fail { color: var(--fail); } .flow .dim { color: var(--dim); } .flow .sig { color: var(--signal); }
-.layers { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2.5rem 3rem; margin: 0; }
-.layers dt { font: 800 1.05rem var(--mono); color: var(--signal); letter-spacing: -0.02em; }
-.layers dd { margin: 0.5rem 0 0; color: var(--dim); font-size: 0.88rem; line-height: 1.7; }
+/* Trace: nw walks down the layers like a probe on a rail. Green is reached, red is where it stopped, dashed is never reached. */
+.trace { margin: 0; --rail: 2.4rem; --step: 0.65s; }
+.hops { margin: 0; padding: 1.9rem 1.9rem 1.6rem; list-style: none; direction: ltr; text-align: left; }
+.hop { position: relative; display: grid; grid-template-columns: var(--rail) minmax(0, 1fr) auto; column-gap: 0.4rem; padding-block-end: 1.9rem; }
+.hop:last-child { padding-block-end: 0; }
+.hop .node { grid-column: 1; justify-self: start; width: 1.05rem; height: 1.05rem; margin-block-start: 0.2rem; border-radius: 50%; background: var(--term); box-shadow: 0 0 0 2px var(--ok); position: relative; z-index: 1; }
+.hop.ok .node::after, .hop.fail .node::after { content: ""; position: absolute; inset: 0.27rem; border-radius: 50%; background: var(--ok); }
+.hop.fail .node { box-shadow: 0 0 0 2px var(--fail), 0 0 0 6px color-mix(in srgb, var(--fail) 22%, transparent); }
+.hop.fail .node::after { background: var(--fail); }
+.hop.off .node, .hop.dest .node { box-shadow: 0 0 0 2px color-mix(in srgb, var(--dim) 60%, transparent); }
+.hop.origin .node { box-shadow: 0 0 0 2px var(--ok), 0 0 0 6px color-mix(in srgb, var(--ok) 20%, transparent); background: var(--ok); }
+/* The rail to the next stage. */
+.hop::after { content: ""; position: absolute; inset-inline-start: calc(0.525rem - 1px); top: 1.55rem; bottom: -0.15rem; width: 2px; background: var(--ok); transform-origin: top; }
+.hop:last-child::after { display: none; }
+.hop.fail::after, .hop.off::after { background: repeating-linear-gradient(to bottom, color-mix(in srgb, var(--dim) 60%, transparent) 0 5px, transparent 5px 10px); }
+.hop-main { grid-column: 2; min-width: 0; }
+.hop-name { display: flex; align-items: baseline; gap: 0.7rem; font: 800 1.3rem/1.2 var(--mono); letter-spacing: -0.03em; color: var(--signal); }
+.hop.origin .hop-name { color: var(--ok); }
+.hop.end .hop-name { color: var(--ink); font-size: 1rem; font-weight: 700; letter-spacing: -0.01em; }
+.hop.dest .hop-name { color: var(--dim); }
+.hop-name em { font: 700 0.72rem/1 var(--mono); letter-spacing: 0; padding: 0.28rem 0.5rem; border-radius: 5px; }
+.hop.ok em { color: var(--ok); background: color-mix(in srgb, var(--ok) 14%, transparent); }
+.hop.fail em { color: var(--fail); background: color-mix(in srgb, var(--fail) 16%, transparent); }
+.hop.off em { color: var(--dim); background: color-mix(in srgb, var(--dim) 16%, transparent); }
+.hop p { margin: 0.45rem 0 0; max-width: 52ch; color: var(--dim); font-size: 0.88rem; line-height: 1.7; }
+.hop.fail .hop-name { color: var(--fail); }
+.hop.off .hop-name, .hop.off p { opacity: 0.6; }
+.hop-out { display: inline-block; margin-block-start: 0.7rem; font: 600 0.8rem/1 var(--mono); color: var(--fail); background: color-mix(in srgb, var(--fail) 10%, transparent); box-shadow: inset 2px 0 0 var(--fail); padding: 0.5rem 0.75rem; border-radius: 0 6px 6px 0; }
+.hop-t { grid-column: 3; padding-block-start: 0.3rem; font: 500 0.76rem/1 var(--mono); color: var(--dim); font-variant-numeric: tabular-nums; }
+/* One reveal: when the window scrolls into view, the probe runs down the rail and stops at the failure. */
+.js .trace:not(.run) .hop::after { transform: scaleY(0); }
+.js .trace:not(.run) .hop:not(.origin) > * { opacity: 0.18; }
+.js .trace.run .hop::after { transition: transform var(--step) linear; transition-delay: calc(var(--i) * var(--step)); }
+.js .trace.run .hop > * { transition: opacity 0.4s; transition-delay: calc(var(--i) * var(--step) - 0.15s); }
+.js .trace.run .hop.fail .node { animation: trip 0.5s calc(var(--i) * var(--step) - 0.15s) both; }
+@keyframes trip { 0%, 100% { transform: scale(1); } 40% { transform: scale(1.5); } }
+@media (prefers-reduced-motion: reduce) { .js .trace .hop::after, .js .trace .hop > * { transition: none !important; animation: none !important; transform: none !important; opacity: 1 !important; } }
+@media (max-width: 40rem) { .hops { padding: 1.25rem 1rem; } .hop { grid-template-columns: 1.9rem minmax(0, 1fr); } .hop-t { display: none; } .hop-name { font-size: 1.15rem; } }
 
 .cmds { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0; }
 .cmd { padding-block: 1.6rem; border-block-end: 1px solid color-mix(in srgb, var(--line) 70%, transparent); }
 .cmd:first-child { padding-block-start: 0; }
 .cmd code { display: block; direction: ltr; unicode-bidi: isolate; white-space: normal; overflow-wrap: anywhere; color: var(--ink); background: none; padding: 0; font-weight: 500; font-size: 0.92rem; }
-.cmd code::before { content: "$ "; color: var(--dim); }
 .cmd p { margin: 0.5rem 0 0; color: var(--dim); max-width: 46ch; font-size: 0.9rem; }
 
 .checks { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.5rem; }
 .checks li { display: grid; grid-template-columns: 4ch 1fr; max-width: 48ch; }
 .checks li::before { content: "[x]"; color: var(--ok); }
 
-.progress { font-family: var(--mono); direction: ltr; text-align: left; margin: 0 0 2rem; }
-.progress .on { color: var(--signal); } .progress .off { color: var(--line); }
-.steps { display: grid; grid-template-columns: 14ch 1fr; gap: 1rem 2rem; max-width: 72ch; margin: 0 0 2.5rem; }
-.steps dt { color: var(--ink); } .steps dd { margin: 0; color: var(--dim); }
-.steps dt.now { color: var(--signal); }
 
 /* ---- footer ---- */
 .site-footer { margin-block-start: 2rem; border-block-start: 1px solid color-mix(in srgb, var(--line) 70%, transparent); }
 .site-footer .wrap { padding-block: 4rem 4.5rem; display: flex; flex-wrap: wrap; gap: 2rem 4rem; align-items: flex-end; justify-content: space-between; }
+.footer-logo { display: inline-block; text-decoration: none; }
 .ascii { margin: 0; padding: 0; background: none; box-shadow: none; overflow: visible; font: 800 0.62rem/0.95 var(--mono); color: var(--signal); direction: ltr; white-space: pre; }
 .site-footer p { margin: 0 0 0.25rem; color: var(--dim); }
 
@@ -254,7 +292,6 @@ hr { border: 0; height: 8px; background-image: radial-gradient(var(--line) 1px, 
   body { font-size: 14.5px; }
   .wrap { width: min(100% - 2rem, 84rem); }
   .cards a { grid-template-columns: minmax(0, 1fr); gap: 0.1rem; }
-  .layers { grid-template-columns: minmax(0, 1fr); }
   .mac-body { padding: 1rem; }
   .screen pre { font-size: 0.74rem; }
   .replay { display: none !important; }
@@ -262,7 +299,6 @@ hr { border: 0; height: 8px; background-image: radial-gradient(var(--line) 1px, 
   .statusbar .sb-end { margin-inline-start: 0; flex-basis: 100%; border-block-start: 1px solid color-mix(in srgb, var(--line) 90%, transparent); }
   .seg kbd { display: none; }
   .screen pre { font-size: 0.74rem; }
-  .flow pre { padding: 1.1rem; font-size: 0.82rem; }
   .ascii { font-size: 0.5rem; }
   .bar { gap: 0.25rem 1rem; }
   .tools { gap: 0.9rem; flex-wrap: wrap; width: 100%; justify-content: space-between; }
@@ -364,3 +400,39 @@ hr { border: 0; height: 8px; background-image: radial-gradient(var(--line) 1px, 
   .hero-grid { min-height: 0; padding-top: 0; }
   .hero .stage-wrap { align-self: start; }
 }
+
+/* Keep the hero heading on one line: size it from the width of its column. */
+.hero-copy:not(.hero-cta) { container-type: inline-size; }
+.hero h1 { white-space: nowrap; max-width: none; font-size: min(clamp(2.4rem, 4.2vw, 3.6rem), 8.3cqw); }
+
+/* More room around the landing text. */
+.hero h1 { margin-block-end: 2rem; }
+.lead { line-height: 1.95; }
+.hero .getit { margin-block-start: 2.75rem; }
+
+/* Every home section uses the hero's 6fr / 7fr split, so the page reads as one even grid. */
+@media (min-width: 62rem) {
+  .split { grid-template-columns: minmax(0, 6fr) minmax(0, 7fr); column-gap: clamp(2.5rem, 4.5vw, 4.5rem); }
+}
+
+/* Signal: a packet runs down the rail, turns red at tls and the rail above tls pulses. Driven by site.js. */
+.hops { position: relative; }
+.hops > .signal { position: absolute; inset: 0; margin: 0; padding: 0; display: block; pointer-events: none; z-index: 2; }
+.signal .probe { position: absolute; left: 0; top: 0; width: 0.7rem; height: 0.7rem; margin: -0.35rem 0 0 -0.35rem; border-radius: 50%; color: var(--ok); background: currentColor; box-shadow: 0 0 0 4px color-mix(in srgb, currentColor 24%, transparent), 0 0 16px 3px currentColor; opacity: 0; }
+.signal .probe::before { content: ""; position: absolute; left: calc(50% - 1px); bottom: 50%; width: 2px; height: 2.6rem; background: linear-gradient(to top, currentColor, transparent); }
+.signal .beam { position: absolute; left: 0; top: 0; width: 4px; margin-left: -2px; border-radius: 2px; background: linear-gradient(to bottom, transparent, var(--fail)); box-shadow: 0 0 14px 2px var(--fail); opacity: 0; }
+.no-signal .signal { display: none; }
+@media (prefers-reduced-motion: reduce) { .signal { display: none !important; } }
+
+/* Home: command rows lead with the question, the evidence list uses the same voice as the layer names. */
+.cmd .q { margin: 0 0 0.6rem; color: var(--ink); font-weight: 600; font-size: 0.98rem; max-width: none; }
+.cmd .q + code + p { margin-top: 0.6rem; }
+.ev { display: grid; gap: 1.8rem; margin: 0; }
+.ev dt { font: 800 1.05rem var(--mono); letter-spacing: -0.02em; color: var(--signal); }
+.ev dd { margin: 0.45rem 0 0; max-width: 52ch; color: var(--dim); font-size: 0.9rem; line-height: 1.7; }
+
+/* Command rows reuse the install field: a boxed, copyable command. */
+.cmd .field { display: flex; align-items: center; gap: 1rem; margin: 0; padding: 0.7rem 0.9rem; background: var(--term); border-radius: 10px; text-align: left; box-shadow: 0 0 0 1px var(--line), inset 0 1px 0 rgba(255, 255, 255, 0.05); }
+.cmd .field code { flex: 1; min-width: 0; white-space: pre-wrap; overflow-wrap: anywhere; font-size: 0.86rem; line-height: 1.5; }
+.cmd .field + p { margin-top: 0.75rem; }
+

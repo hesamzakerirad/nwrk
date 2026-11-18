@@ -13,13 +13,15 @@ unsafe = false
 
 [params]
 repo = "https://github.com/hesamzakerirad/nwrk"
+# Shown on the home page until the GitHub release lookup replaces it.
+version = "v0.3.0"
 
 [languages.en]
 label = "English"
 locale = "en"
 weight = 1
 [languages.en.params]
-description = "nw is an open source command-line tool that measures how your network reaches a destination and explains what the evidence shows."
+description = "Debug your connection with nw, a free, open source command-line tool. It checks DNS, TCP, TLS and HTTP in order, shows where it breaks, and explains the evidence."
 
 # Landing pages live in site/content; user documentation is the repository's
 # docs/ folder, mounted under /docs/.
