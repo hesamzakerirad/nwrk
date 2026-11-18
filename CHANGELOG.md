@@ -4,6 +4,12 @@ All notable changes to this project are listed here. The format follows [Keep a 
 
 Every release has a hand-written entry. The release workflow publishes the matching section as the GitHub release notes.
 
+## [Unreleased]
+
+### Changed
+
+- Redesigned the website with a terminal look and clearer homepage copy.
+
 ## [0.3.0] - 2026-11-17
 
 ### Added
