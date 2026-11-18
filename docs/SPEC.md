@@ -220,10 +220,10 @@ Phases refer to [ROADMAP.md](ROADMAP.md).
 | `nw path trace <host>` | Trace a route toward a destination | P4 |
 | `nw path ping <host>` | Run controlled reachability/latency checks | P4 |
 | `nw path mtu <host>` | Report the interface MTU and the negotiated segment size (a hint; exact path MTU discovery is not implemented) | P4 |
-| `nw history list` | List local diagnostic runs | P5 |
-| `nw history show <run-id>` | Show a stored run | P5 |
-| `nw report export <run-id>` | Export a report | P5 |
-| `nw watch <target>` | Repeat measurements locally | P7 |
+| `nw history list` | List local diagnostic runs | P6 |
+| `nw history show <run-id>` | Show a stored run | P6 |
+| `nw report export <run-id>` | Export a report | P6 |
+| `nw watch <target>` | Repeat measurements locally | P8 |
 
 ### 6.2 Command examples
 
@@ -781,7 +781,7 @@ Create packages only when their responsibilities and dependencies are clear, not
 
 ## 12. Local Storage and Configuration
 
-### 12.1 History storage (P5)
+### 12.1 History storage (P6)
 
 Use local JSONL files for measurement history initially.
 
@@ -815,7 +815,7 @@ timeout = "5s"
 color = "auto"   # auto | always | never
 ```
 
-Keys added in P5: default profile, history retention, redaction preferences.
+Keys added in P6: default profile, history retention, redaction preferences.
 
 Precedence for every setting: command-line flag, then `NW_*` environment variable (`NW_REGION`, `NW_RESOLVERS`, `NW_TIMEOUT`, `NW_COLOR`), then config file, then built-in default (or region preset, for resolvers). `NW_CONFIG` overrides the file location. A region preset supplies resolvers to commands other than `doctor` only when the region was chosen explicitly, so nothing contacts a public resolver unasked.
 
@@ -842,7 +842,7 @@ A report should include:
 ### 13.2 Export formats
 
 - P1-P2: human-readable terminal output and JSON (`--output json`).
-- P5: export of stored runs as JSON or Markdown, and redacted reports suitable for issue trackers or support requests.
+- P6: export of stored runs as JSON or Markdown, and redacted reports suitable for issue trackers or support requests.
 
 ### 13.3 Exit codes and output conventions
 
@@ -896,7 +896,7 @@ v0.1.0 is the end of phase P2 in the roadmap. It deliberately ships one complete
 
 ### 14.3 Deferred beyond v0.1.0
 
-`doctor`, local network inspection, region presets, and the config file (P3); interference rules, encrypted DNS, path tracing, and MTU (P4); history, report export, and redaction (P5); package managers (P6); `watch` (P7); TUI and external measurement networks (after v1.0).
+`doctor`, local network inspection, region presets, and the config file (P3); interference rules, encrypted DNS, path tracing, and MTU (P4); history, report export, and redaction (P6); package managers (P7); `watch` (P8); TUI and external measurement networks (after v1.0).
 
 ### 14.4 Acceptance criteria
 
@@ -926,10 +926,11 @@ The phase-by-phase plan, with scope and exit criteria, lives in [ROADMAP.md](ROA
 | P2 | v0.1.0 | Diagnose: orchestration and first rules (first announced release) |
 | P3 | v0.2.0 | Local and regional: `doctor`, network inspection, region presets, config file |
 | P4 | v0.3.0 | Interference investigation, encrypted DNS, path diagnostics |
-| P5 | v0.4.0 | History, report export, redaction |
-| P6 | v0.5.0 | Package managers |
-| P7 | v0.6.0 | Local observability (`watch`) |
-| P8 | v1.0.0 | Stable contracts |
+| P5 | v0.4.0 | Developer reachability |
+| P6 | v0.5.0 | History, report export, redaction |
+| P7 | v0.6.0 | Package managers |
+| P8 | v0.7.0 | Local observability (`watch`) |
+| P9 | v1.0.0 | Stable contracts |
 
 External measurement networks (Globalping, RIPE Atlas) and a TUI are deferred until after v1.0.
 
@@ -1059,7 +1060,7 @@ go install github.com/hesamzakerirad/nwrk/cmd/nw@latest
 
 The install scripts detect OS and architecture, download the archive from GitHub Releases, verify it against `checksums.txt`, and install `nw` into a user-writable directory without requiring root. Users who have cosign can also verify the signature; the docs show how.
 
-From P6: Homebrew tap, Scoop bucket, WinGet, and AUR.
+From P7: Homebrew tap, Scoop bucket, WinGet, and AUR.
 
 ### 18.3 Release automation
 
@@ -1222,13 +1223,13 @@ These resources are useful references, not mandatory dependencies or endorsement
 | Resolvers | Repeatable `--resolver`; precedence flag > `NW_RESOLVERS` > config > preset; system resolver always measured |
 | Region model | Explicit presets (`global` default, `ir`); no geolocation |
 | Configuration | TOML, from P3 |
-| Install | `install.sh`, `install.ps1`, `go install`, manual; package managers in P6 |
+| Install | `install.sh`, `install.ps1`, `go install`, manual; package managers in P7 |
 | Build targets | Linux, macOS, Windows on amd64 and arm64 |
 | Release integrity | SHA-256 checksums and cosign keyless signatures |
 | Release cadence | Every phase ends in a tagged release |
 | First announced release | v0.1.0 (end of P2): `diagnose` and `test` commands |
 | Default privacy model | No automatic measurement uploads |
-| Storage | Local JSONL history, from P5 |
+| Storage | Local JSONL history, from P6 |
 | External measurement networks | After v1.0 |
 | Web, desktop, mobile apps, browser extension | Not planned |
 | Contributions | Pull requests accepted from v0.1.0 |

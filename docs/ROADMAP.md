@@ -9,10 +9,11 @@ This is the phase-by-phase build plan for `nw`. The product specification is in 
 | [P2](#p2-diagnose--v010) | **v0.1.0** | Diagnose: orchestration and first rules (first announced release) |
 | [P3](#p3-local-and-regional--v020) | v0.2.0 | `doctor`, network inspection, region presets, config file |
 | [P4](#p4-interference-investigation--v030) | v0.3.0 | Interference rules, encrypted DNS, path diagnostics |
-| [P5](#p5-history-and-reports--v040) | v0.4.0 | History, report export, redaction |
-| [P6](#p6-distribution--v050) | v0.5.0 | Package managers |
-| [P7](#p7-observability--v060) | v0.6.0 | `watch` and intermittent failures |
-| [P8](#p8-stable--v100) | v1.0.0 | Frozen contracts |
+| [P5](#p5-developer-reachability--v040) | v0.4.0 | Developer reachability: `dev` preset, restriction classifier, QUIC, IPv4/IPv6, `ru`/`tr`/`cn` presets, user presets |
+| [P6](#p6-history-and-reports--v050) | v0.5.0 | History, report export, redaction |
+| [P7](#p7-distribution--v060) | v0.6.0 | Package managers |
+| [P8](#p8-observability--v070) | v0.7.0 | `watch` and intermittent failures |
+| [P9](#p9-stable--v100) | v1.0.0 | Frozen contracts |
 
 ## Ground rules for every phase
 
@@ -202,7 +203,27 @@ This is the phase-by-phase build plan for `nw`. The product specification is in 
 
 ---
 
-## P5: History and reports → v0.4.0
+## P5: Developer reachability → v0.4.0
+
+**Goal:** answer one question for developers and sysadmins: is this failure a server-side restriction or network interference? Primary users work in filtered networks and need to tell a local problem, an ISP problem and a restriction apart.
+
+- [ ] `dev` endpoint preset: GitHub, `proxy.golang.org`, npm, PyPI, Docker Hub, crates.io, apt mirrors, Homebrew
+- [ ] Classifier with neutral wording: "server-side restriction" (HTTP 403, provider block page, geo error) versus "network interference" (DNS tampering, reset, timeout). Docs may name sanctions as one cause of server-side restriction
+- [ ] QUIC and HTTP/3 probe
+- [ ] IPv4 and IPv6 split: run each measurement per address family and report the difference
+- [ ] Region presets `ru`, `tr` and `cn`, each with researched domestic reference targets
+- [ ] User-defined endpoint presets in the config file, in the same format as the built-in `dev` preset
+- [ ] Docs: `docs/regions.md`, `docs/findings.md`, `docs/commands.md`, `docs/report-schema.md`
+
+### Exit criteria
+
+- Every new rule has documented false-positive conditions plus positive and negative fixture tests.
+- The classifier never reports `high` confidence from a single measurement.
+- A wording-policy review of all new finding text passes.
+
+---
+
+## P6: History and reports → v0.5.0
 
 **Goal:** runs can be kept, revisited, and shared safely.
 
@@ -219,10 +240,10 @@ This is the phase-by-phase build plan for `nw`. The product specification is in 
 
 ---
 
-## P6: Distribution → v0.5.0
+## P7: Distribution → v0.6.0
 
 - [ ] Homebrew tap (`hesamzakerirad/homebrew-tap`), Scoop bucket, WinGet manifest, AUR `nwrk-bin`, all published by GoReleaser
-- [ ] Install docs updated in both languages
+- [ ] Install docs updated
 
 ### Exit criteria
 
@@ -230,7 +251,7 @@ This is the phase-by-phase build plan for `nw`. The product specification is in 
 
 ---
 
-## P7: Observability → v0.6.0
+## P8: Observability → v0.7.0
 
 - [ ] `nw watch <target>`: interval, count, bounded runtime, Ctrl-C safe
 - [ ] Change detection between runs, intermittent-failure detection, configurable thresholds
@@ -242,7 +263,7 @@ This is the phase-by-phase build plan for `nw`. The product specification is in 
 
 ---
 
-## P8: Stable → v1.0.0
+## P9: Stable → v1.0.0
 
 - [ ] CLI flags, commands, exit codes, and JSON schema v1 frozen; compatibility tests against golden output from earlier versions
 - [ ] Performance, memory, and leak tests under repeated runs
@@ -260,4 +281,5 @@ This is the phase-by-phase build plan for `nw`. The product specification is in 
 - Optional external measurement networks (Globalping, RIPE Atlas)
 - TUI
 - SQLite history if JSONL becomes a bottleneck
+- Proxy-aware diagnosis: compare a direct path with the user's own proxy. It measures only and does not configure or provide a proxy
 - Additional region presets contributed by the community
