@@ -99,6 +99,7 @@ Some measurements are **probes**: extra, comparative measurements that exist as 
 | `sni_target`, `sni_control` | tls | Repeats the handshake with the target name, and makes handshakes with a neutral control name, at the same address |
 | `legacy_tls` | tls | Offers only TLS 1.0 and 1.1 (verification stays on) |
 | `plain_http` | http | Makes the same request over http that was made over https |
+| `http3` | http | Makes a HEAD request over HTTP/3 (QUIC, UDP) to one address |
 
 ## Local checks
 

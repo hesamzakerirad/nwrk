@@ -6,6 +6,14 @@ Every release has a hand-written entry. The release workflow publishes the match
 
 ## [Unreleased]
 
+### Added
+
+- `nw reach`, with the built-in `dev` endpoint preset (GitHub, the Go module proxy, npm, PyPI, Docker Hub, crates.io, apt mirrors and Homebrew).
+- A classifier that separates a server-side restriction (HTTP 403 or 451) from network interference (resets, timeouts, failed handshakes, private answers for public names).
+- An HTTP/3 probe over QUIC, and a separate request per IP family, with findings for the differences.
+- Region presets `ru`, `tr` and `cn`.
+- User-defined endpoint presets in the config file, in the same format as the built-in preset.
+
 ### Changed
 
 - Redesigned the website with a terminal look and clearer homepage copy.

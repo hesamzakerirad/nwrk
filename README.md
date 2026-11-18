@@ -4,7 +4,7 @@
 
 Website: https://nwrk.ir
 
-> **Status: early development.** `nw doctor`, `nw diagnose`, `nw security inspect|interference`, `nw path ping|trace|mtu`, the four measurements (`nw test dns|tcp|tls|http`), `nw network` and `nw config` work today. History and reports arrive in the next releases; see the [roadmap](docs/ROADMAP.md).
+> **Status: early development.** `nw doctor`, `nw diagnose`, `nw security inspect|interference`, `nw path ping|trace|mtu`, `nw reach`, the four measurements (`nw test dns|tcp|tls|http`), `nw network` and `nw config` work today. History and reports arrive in the next releases; see the [roadmap](docs/ROADMAP.md).
 
 ## Install
 
@@ -34,6 +34,7 @@ Or download an archive from the [releases page](https://github.com/hesamzakerira
 nw security interference example.com --resolver tls://9.9.9.9
 nw path ping example.com
 nw doctor --region ir
+nw reach
 nw diagnose example.com
 nw diagnose https://example.com/health --profile deep
 nw test dns example.com --resolver 1.1.1.1

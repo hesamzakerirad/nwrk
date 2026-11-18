@@ -54,7 +54,7 @@ func TestEveryRuleIsDocumentedWithItsCaveats(t *testing.T) {
 			t.Errorf("%s: its section must list when it can be wrong", r.ID)
 		}
 	}
-	for _, list := range [][]engineRule{asRules(rules.Interference()), asRules(rules.Security())} {
+	for _, list := range [][]engineRule{asRules(rules.Interference()), asRules(rules.Security()), asRules(rules.Reach()[1:])} {
 		for _, r := range list {
 			i := strings.Index(findings, "### "+r.ID)
 			if i < 0 {
@@ -126,7 +126,7 @@ func TestProfilesAndCommandsAreDocumented(t *testing.T) {
 		}
 	}
 	c := doc(t, "commands.md")
-	for _, w := range []string{"## nw diagnose", "## nw test", "## nw version", "## nw completion", "## nw doctor", "## nw network", "## nw config", "## nw security", "## nw path", "tls://", "https://", "--profile", "--resolver", "--region", "NW_CONFIG"} {
+	for _, w := range []string{"## nw diagnose", "## nw test", "## nw version", "## nw completion", "## nw doctor", "## nw reach", "## nw network", "## nw config", "## nw security", "## nw path", "tls://", "https://", "--profile", "--resolver", "--region", "NW_CONFIG"} {
 		if !strings.Contains(c, w) {
 			t.Errorf("docs/commands.md lacks %q", w)
 		}
@@ -147,6 +147,11 @@ func TestDocsKeepToTheWordingPolicy(t *testing.T) {
 		}
 		text := strings.ToLower(doc(t, e.Name()))
 		for _, w := range banned {
+			// Two pages may name sanctions as one example cause of a
+			// server-side restriction (SPEC 8.5).
+			if w == "sanction" && (e.Name() == "reach.md" || e.Name() == "findings.md") {
+				continue
+			}
 			if strings.Contains(text, w) {
 				t.Errorf("docs/%s uses %q", e.Name(), w)
 			}

@@ -207,13 +207,13 @@ This is the phase-by-phase build plan for `nw`. The product specification is in 
 
 **Goal:** answer one question for developers and sysadmins: is this failure a server-side restriction or network interference? Primary users work in filtered networks and need to tell a local problem, an ISP problem and a restriction apart.
 
-- [ ] `dev` endpoint preset: GitHub, `proxy.golang.org`, npm, PyPI, Docker Hub, crates.io, apt mirrors, Homebrew
-- [ ] Classifier with neutral wording: "server-side restriction" (HTTP 403, provider block page, geo error) versus "network interference" (DNS tampering, reset, timeout). Docs may name sanctions as one cause of server-side restriction
-- [ ] QUIC and HTTP/3 probe
-- [ ] IPv4 and IPv6 split: run each measurement per address family and report the difference
-- [ ] Region presets `ru`, `tr` and `cn`, each with researched domestic reference targets
-- [ ] User-defined endpoint presets in the config file, in the same format as the built-in `dev` preset
-- [ ] Docs: `docs/regions.md`, `docs/findings.md`, `docs/commands.md`, `docs/report-schema.md`
+- [x] `dev` endpoint preset: GitHub, `proxy.golang.org`, npm, PyPI, Docker Hub, crates.io, apt mirrors, Homebrew
+- [x] Classifier with neutral wording: "server-side restriction" (HTTP 403, provider block page, geo error) versus "network interference" (DNS tampering, reset, timeout). Docs may name sanctions as one cause of server-side restriction
+- [x] QUIC and HTTP/3 probe
+- [x] IPv4 and IPv6 split: run each measurement per address family and report the difference
+- [x] Region presets `ru`, `tr` and `cn`, each with researched domestic reference targets
+- [x] User-defined endpoint presets in the config file, in the same format as the built-in `dev` preset
+- [x] Docs: `docs/regions.md`, `docs/findings.md`, `docs/commands.md`, `docs/report-schema.md`
 
 ### Exit criteria
 

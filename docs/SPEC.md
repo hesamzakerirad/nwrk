@@ -441,7 +441,7 @@ The tool should not automatically label an event as censorship, hijacking, surve
 - Do not change DNS, firewall, proxy, routing, or VPN configuration automatically.
 ### 8.5 Wording policy
 
-Findings, rule identifiers, documentation, and the website use technical vocabulary only, for example `DNS_ANSWER_MISMATCH` or `TLS_RESET_AFTER_CLIENTHELLO`. Political terms are not used to label results, and the project does not ship circumvention features. This protects users who share reports and the maintainers who publish the tool, and it follows principle 4 (honest uncertainty).
+Findings, rule identifiers, documentation, and the website use technical vocabulary only, for example `DNS_ANSWER_MISMATCH` or `TLS_RESET_AFTER_CLIENTHELLO`. Political terms are not used to label results, and the project does not ship circumvention features. The one exception is documentation: `docs/reach.md` and `docs/findings.md` may name sanctions as one example cause of a server-side restriction. Findings and rule output never do. This protects users who share reports and the maintainers who publish the tool, and it follows principle 4 (honest uncertainty).
 
 ---
 

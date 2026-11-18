@@ -301,6 +301,53 @@ These come from `nw doctor` (see [Regions and presets](../regions/)). Findings t
 **When it can be wrong:**
 - A proxy setting does not mean the proxy is in use for any given program, and nw measures the direct path without it.
 
+## Findings of nw reach
+
+These come from `nw reach` (see [Developer reachability](../reach/)). `nw reach` also reports `DNS_RESOLUTION_FAILURE` and `UNCLASSIFIED_FAILURE`, described above and below.
+
+### REACH_SERVER_SIDE_RESTRICTION
+
+**Layer:** reachability. **Fires when** an endpoint completed the exchange and the final response has status 403 or 451. `warning`. Confidence in the hypothesis is `low`, or `medium` for 451.
+
+**When it can be wrong:**
+- A 403 is also the normal answer to a request that lacks credentials, a path or a header the server expects. nw sends no cookies and a minimal User-Agent.
+- CDNs and bot protection answer a command-line client differently from a browser.
+- nw does not keep the response body, so it cannot tell a provider error page from an ordinary one.
+- One network is one vantage point. The same answer from another network would show whether the refusal depends on the address or the region.
+
+**Typical hypotheses:** the server, a CDN or a hosting provider restricts access from this address or region (access rules, geographic policy or legal compliance, including sanctions).
+
+### REACH_NETWORK_INTERFERENCE
+
+**Layer:** reachability. **Fires when** every request to an endpoint failed with a reset, a timeout or a failed handshake, or the system resolver answered a public name with a private, loopback or link-local address. `warning`. Confidence is `low`, or `medium` when at least two endpoints show the pattern and another endpoint answered.
+
+**When it can be wrong:**
+- An overloaded or offline server, a firewall at the server and a broken route produce the same resets and timeouts.
+- Split-horizon DNS, corporate networks, tunnels and captive portals return private addresses for public names on purpose.
+- nw measures from one network. Without a second vantage point the cause stays open.
+
+**Typical hypotheses:** a device on the path alters, resets or drops the exchange.
+
+### REACH_HTTP3_FAILS_TCP_WORKS
+
+**Layer:** reachability. **Fires when** the server advertises HTTP/3 in its `Alt-Svc` header, the HTTPS request over TCP succeeded, and the HTTP/3 probe over UDP got no response. `info`.
+
+**When it can be wrong:**
+- Many networks and firewalls drop UDP port 443 without any intent to restrict a service.
+- A server can advertise HTTP/3 for some of its hosts only.
+
+**Typical hypotheses:** UDP port 443 is filtered on this network or on the path to the server.
+
+### REACH_IP_FAMILY_DIFFERENCE
+
+**Layer:** ip_family. **Fires when** an endpoint has IPv4 and IPv6 addresses and the request succeeded over one family and failed over the other. `warning`, or `info` when the failing family has no route.
+
+**When it can be wrong:**
+- A name with no AAAA record is not an IPv6 failure, and this rule does not fire for it.
+- Many networks have no IPv6 connectivity at all. A missing route is reported as informational.
+
+**Typical hypotheses:** this network has no route for one family; the path or the server treats the two families differently.
+
 ## UNCLASSIFIED_FAILURE
 
-**Layer:** other. **Fires when** a measurement failed and no other rule explains it, for example a reset during the TCP connection. `warning`. It applies to `nw diagnose` and `nw doctor`. It exists so that a failure is never silent: read the error code and message of the measurements it lists.
+**Layer:** other. **Fires when** a measurement failed and no other rule explains it, for example a reset during the TCP connection. `warning`. It applies to `nw diagnose`, `nw doctor` and `nw reach`. It exists so that a failure is never silent: read the error code and message of the measurements it lists.

@@ -83,6 +83,23 @@ nw doctor --region ir --resolver 1.1.1.1 --resolver tcp://9.9.9.9 --output json
 
 It uses the same report format as `nw diagnose`, with a `summary.verdict` and the status of each scope. `--region` is `global`, `ir`, `ru`, `tr`, `cn`, or any preset listed in [Regions and presets](../regions/); the default is `global`. Exit status as for `nw diagnose`: `0` no actionable finding, `1` a problem, `2` usage error, `130` interrupted.
 
+## nw reach
+
+Requests the endpoints of an endpoint preset, or the URLs you list, and says whether a failure looks like a **server-side restriction** or like **network interference**. It requests each endpoint over IPv4 and IPv6 separately and probes HTTP/3. How it decides, and the preset format, are in [Developer reachability](../reach/).
+
+```sh
+nw reach
+nw reach --preset work
+nw reach github.com proxy.golang.org --output json
+```
+
+| Flag | Meaning |
+|---|---|
+| `--preset` | Endpoint preset: `dev` (default) or one from the config file |
+| `--no-http3` | Skip the HTTP/3 probe |
+
+Exit status as for `nw diagnose`.
+
 ## nw network
 
 Shows this machine's own network setup, read from the operating system. Nothing is sent over the network. These commands show addresses, because that is their purpose.
@@ -111,6 +128,13 @@ region = "ir"
 resolvers = ["1.1.1.1", "tcp://9.9.9.9"]
 timeout = "5s"
 color = "auto"   # auto, always or never
+
+# Endpoint presets for nw reach, in the format described in "Developer reachability"
+[[endpoint_presets]]
+name = "work"
+
+[[endpoint_presets.endpoints]]
+url = "https://git.example.com/"
 ```
 
 | Platform | Location |
