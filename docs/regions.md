@@ -43,6 +43,9 @@ A preset is used only when you choose it. nw never detects your country. Choose 
 |---|---|
 | `global` | Public resolvers and large HTTPS endpoints, for international reachability |
 | `ir` | Everything in `global`, plus domestic anchors, so a report can say that domestic reachability works while international does not |
+| `ru` | Everything in `global`, plus domestic anchors for Russia |
+| `tr` | Everything in `global`, plus domestic anchors for Turkey |
+| `cn` | Everything in `global`, plus domestic anchors for mainland China |
 
 New regions are added through pull requests that explain, for each target, why it was chosen. The proposal template is "Region preset proposal".
 
@@ -57,7 +60,7 @@ The system resolver is always measured as the baseline. Other resolvers are comp
 
 For `nw doctor`, when none of those apply, the preset's resolvers are used, because comparing against reference resolvers is what the command is for. A compared resolver that fails is a warning when you chose it and informational when it came from the preset.
 
-The `ir` preset ships **no domestic resolver**: none could be verified as both stable and neutral. Add the ones you trust:
+The `ir`, `ru`, `tr` and `cn` presets ship **no domestic resolver**: none could be verified as both stable and neutral. Add the ones you trust:
 
 ```toml
 # config file
@@ -97,6 +100,38 @@ Targets (domestic):
 | `divar.ir` | A large domestic classifieds service; a different sector and operator from the other anchors |
 
 The anchors are ordinary commercial services of different operators and sectors. Several are used so that one site's outage does not decide the verdict. Reviewers inside the region are asked to check them before each release.
+
+### ru (in addition)
+
+Targets (domestic):
+
+| Target | Why |
+|---|---|
+| `ya.ru` | A large domestic search and services portal; long-lived and heavily used |
+| `vk.com` | A large domestic social network; a different sector and operator from the other anchors |
+| `www.gosuslugi.ru` | The national public services portal; a different sector and operator from the other anchors |
+
+### tr (in addition)
+
+Targets (domestic):
+
+| Target | Why |
+|---|---|
+| `www.turkiye.gov.tr` | The national public services portal; long-lived and heavily used |
+| `www.hurriyet.com.tr` | A large domestic news site; a different sector and operator from the other anchors |
+| `www.garantibbva.com.tr` | A large domestic bank; a different sector and operator from the other anchors |
+
+### cn (in addition)
+
+Targets (domestic):
+
+| Target | Why |
+|---|---|
+| `www.baidu.com` | A large domestic search engine; long-lived and heavily used |
+| `www.jd.com` | A large domestic e-commerce site; a different sector and operator from the other anchors |
+| `www.taobao.com` | A large domestic e-commerce marketplace; operated independently of the other anchors |
+
+The `ru`, `tr` and `cn` anchors were checked for a response from outside their regions only. Some of them do not answer from outside. Reviewers inside each region are asked to check them before each release.
 
 ## Limits
 

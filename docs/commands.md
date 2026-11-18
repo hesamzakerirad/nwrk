@@ -81,7 +81,7 @@ nw doctor --region ir
 nw doctor --region ir --resolver 1.1.1.1 --resolver tcp://9.9.9.9 --output json
 ```
 
-It uses the same report format as `nw diagnose`, with a `summary.verdict` and the status of each scope. `--region` is global, `ir`, or any preset listed in [Regions and presets](../regions/); the default is `global`. Exit status as for `nw diagnose`: `0` no actionable finding, `1` a problem, `2` usage error, `130` interrupted.
+It uses the same report format as `nw diagnose`, with a `summary.verdict` and the status of each scope. `--region` is `global`, `ir`, `ru`, `tr`, `cn`, or any preset listed in [Regions and presets](../regions/); the default is `global`. Exit status as for `nw diagnose`: `0` no actionable finding, `1` a problem, `2` usage error, `130` interrupted.
 
 ## nw network
 
@@ -197,7 +197,7 @@ nw completion powershell | Out-String | Invoke-Expression
 | `-v`, `--verbose` | Show more detail and debug logs on stderr | off |
 | `-q`, `--quiet` | Hide nonessential output; errors and exit status remain | off |
 | `--timeout` | Deadline for each network operation, for example `5s` | `10s` |
-| `--region` | Region preset: `global` or `ir` | `global` |
+| `--region` | Region preset: `global`, `ir`, `ru`, `tr` or `cn` | `global` |
 
 `--verbose` and `--quiet` cannot be combined.
 

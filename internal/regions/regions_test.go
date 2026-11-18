@@ -8,7 +8,7 @@ import (
 )
 
 func TestShippedPresetsAreValid(t *testing.T) {
-	if got := strings.Join(Names(), ","); got != "global,ir" {
+	if got := strings.Join(Names(), ","); got != "cn,global,ir,ru,tr" {
 		t.Fatalf("presets: %s", got)
 	}
 	for _, n := range Names() {
@@ -94,7 +94,7 @@ func TestPresetsKeepToTheWordingPolicy(t *testing.T) {
 }
 
 func TestUnknownRegion(t *testing.T) {
-	if _, err := Load("zz"); err == nil || !strings.Contains(err.Error(), "global, ir") {
+	if _, err := Load("zz"); err == nil || !strings.Contains(err.Error(), "cn, global, ir, ru, tr") {
 		t.Fatalf("the error must list the choices: %v", err)
 	}
 	if !Valid("ir") || Valid("zz") {

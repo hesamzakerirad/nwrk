@@ -1,0 +1,33 @@
+# The cn preset: the global set plus domestic anchors, so a report can say
+# that domestic reachability works while international reachability does
+# not, or the other way round.
+#
+# Anchors are large, long-lived sites of different operators and sectors,
+# chosen for stability and neutrality. They are ordinary commercial or public
+# services, unrelated to circumvention and to political content. No domestic
+# resolver is shipped: none could be verified as both stable and neutral by
+# the maintainers, so add the ones you trust with --resolver, NW_RESOLVERS
+# or the config file. The anchors were checked for a response from outside the region, where some of them do not answer. Reviewers: please check these anchors from
+# inside the region before each release.
+
+name = "cn"
+description = "The global preset plus domestic anchors for mainland China, to tell local, domestic and international failures apart."
+includes = ["global"]
+
+[[targets]]
+url = "https://www.baidu.com/"
+name = "Baidu"
+scope = "domestic"
+reason = "A large domestic search engine; long-lived and heavily used."
+
+[[targets]]
+url = "https://www.jd.com/"
+name = "JD.com"
+scope = "domestic"
+reason = "A large domestic e-commerce site; a different sector and operator from the other anchors."
+
+[[targets]]
+url = "https://www.taobao.com/"
+name = "Taobao"
+scope = "domestic"
+reason = "A large domestic e-commerce marketplace; operated independently of the other anchors."

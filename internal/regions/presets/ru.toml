@@ -1,0 +1,33 @@
+# The ru preset: the global set plus domestic anchors, so a report can say
+# that domestic reachability works while international reachability does
+# not, or the other way round.
+#
+# Anchors are large, long-lived sites of different operators and sectors,
+# chosen for stability and neutrality. They are ordinary commercial or public
+# services, unrelated to circumvention and to political content. No domestic
+# resolver is shipped: none could be verified as both stable and neutral by
+# the maintainers, so add the ones you trust with --resolver, NW_RESOLVERS
+# or the config file. The anchors were checked for a response only from outside the region. Reviewers: please check these anchors from
+# inside the region before each release.
+
+name = "ru"
+description = "The global preset plus domestic anchors for Russia, to tell local, domestic and international failures apart."
+includes = ["global"]
+
+[[targets]]
+url = "https://ya.ru/"
+name = "Yandex"
+scope = "domestic"
+reason = "A large domestic search and services portal; long-lived and heavily used."
+
+[[targets]]
+url = "https://vk.com/"
+name = "VK"
+scope = "domestic"
+reason = "A large domestic social network; a different sector and operator from the other anchors."
+
+[[targets]]
+url = "https://www.gosuslugi.ru/"
+name = "Gosuslugi"
+scope = "domestic"
+reason = "The national public services portal; a different sector and operator from the other anchors."
