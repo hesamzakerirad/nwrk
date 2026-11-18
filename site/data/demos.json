@@ -1,0 +1,100 @@
+[
+  {
+    "id": "healthy",
+    "label": "demo_healthy",
+    "cmd": "nw diagnose google.com",
+    "lines": [
+      "",
+      "<span class=\"dim\">Summary</span>",
+      "  dns   <span class=\"ok\">ok</span>",
+      "  tcp   <span class=\"ok\">ok</span>",
+      "  tls   <span class=\"ok\">ok</span>",
+      "  http  <span class=\"ok\">ok</span>",
+      "",
+      "<span class=\"ok\">No actionable findings.</span>",
+      "",
+      "<span class=\"ok\">ok</span>    dns   google.com via system  <span class=\"dim\">24.1 ms</span>",
+      "<span class=\"ok\">ok</span>    tcp   216.239.38.120:443  <span class=\"dim\">11.8 ms</span>",
+      "<span class=\"ok\">ok</span>    tcp   [2001:4860:4802:32::78]:443  <span class=\"dim\">12.6 ms</span>",
+      "<span class=\"ok\">ok</span>    tls   216.239.38.120:443  <span class=\"dim\">39.4 ms</span>",
+      "<span class=\"ok\">ok</span>    tls   [2001:4860:4802:32::78]:443  <span class=\"dim\">41.0 ms</span>",
+      "<span class=\"ok\">ok</span>    http  https://google.com/ (ipv4)  <span class=\"dim\">96.7 ms</span>",
+      "<span class=\"ok\">ok</span>    http  https://google.com/ (ipv6)  <span class=\"dim\">98.2 ms</span>"
+    ]
+  },
+  {
+    "id": "cert",
+    "label": "demo_cert",
+    "cmd": "nw diagnose example.test:8443",
+    "lines": [
+      "",
+      "<span class=\"dim\">Summary</span>",
+      "  dns   <span class=\"ok\">ok</span>",
+      "  tcp   <span class=\"ok\">ok</span>",
+      "  tls   <span class=\"fail\">FAIL</span>",
+      "  http  <span class=\"dim\">skipped</span>",
+      "",
+      "<span class=\"fail\">Problem found:</span> 1 error, 0 warning, 0 informational.",
+      "",
+      "<span class=\"fail\">FAIL</span>  tls   203.0.113.7:8443 (example.test)",
+      "      tls.cert_expired: the certificate is expired or not yet valid",
+      "<span class=\"dim\">skip</span>  http  https://example.test:8443/ (ipv4)",
+      "",
+      "<span class=\"sig\">Hypotheses</span> <span class=\"dim\">(possible explanations, not conclusions)</span>",
+      "  h-001  medium confidence",
+      "      The certificate expired and was not renewed,",
+      "      or this machine's clock is wrong",
+      "      <span class=\"dim\">not observed: the clock was not compared with a trusted source</span>"
+    ]
+  },
+  {
+    "id": "ipv6",
+    "label": "demo_ipv6",
+    "cmd": "nw diagnose google.com",
+    "lines": [
+      "",
+      "<span class=\"dim\">Summary</span>",
+      "  dns   <span class=\"ok\">ok</span>",
+      "  tcp   <span class=\"warn\">partial</span>",
+      "  tls   <span class=\"ok\">ok</span>",
+      "  http  <span class=\"ok\">ok</span>",
+      "",
+      "<span class=\"ok\">No actionable findings.</span> 1 informational.",
+      "",
+      "<span class=\"ok\">ok</span>    tcp   216.239.38.120:443",
+      "<span class=\"fail\">FAIL</span>  tcp   [2001:4860:4802:32::78]:443",
+      "      tcp.unreachable: no route to [2001:4860:4802:32::78]:443",
+      "",
+      "<span class=\"dim\">INFO</span>  IP_FAMILY_BEHAVIOR_DIFFERENCE",
+      "      ipv4 works and ipv6 fails at the tcp layer",
+      "  h-001  high confidence",
+      "      This network has no IPv6 connectivity, which is",
+      "      normal and not a fault of the destination"
+    ]
+  },
+  {
+    "id": "doctor",
+    "label": "demo_doctor",
+    "cmd": "nw doctor --region ir",
+    "lines": [
+      "",
+      "<span class=\"dim\">Where the problem is</span>",
+      "  local          <span class=\"ok\">ok</span>",
+      "  domestic       <span class=\"ok\">reachable</span>",
+      "  international  <span class=\"fail\">UNREACHABLE</span>",
+      "",
+      "<span class=\"fail\">International reference targets are unreachable while the</span>",
+      "<span class=\"fail\">local checks and the domestic targets pass.</span>",
+      "",
+      "<span class=\"fail\">ERROR</span>  INTERNATIONAL_UNREACHABLE",
+      "      3 of 3 international reference targets did not answer",
+      "      (http.timeout)",
+      "",
+      "<span class=\"sig\">Hypotheses</span> <span class=\"dim\">(possible explanations, not conclusions)</span>",
+      "  h-001  medium confidence",
+      "      Traffic to international destinations is dropped or",
+      "      stalled beyond this machine; domestic ones work",
+      "      <span class=\"dim\">not observed: where on the path the traffic stops</span>"
+    ]
+  }
+]

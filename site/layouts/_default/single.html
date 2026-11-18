@@ -1,6 +1,16 @@
 {{ define "main" }}
+{{ if eq .Section "docs" }}
+<div class="wrap docs">
+  {{ partial "tree.html" . }}
+  <article class="docs-main">
+    <h1 class="no-mark">{{ .Title }}</h1>
+    {{ .Content }}
+  </article>
+</div>
+{{ else }}
 <article class="wrap prose">
-  <h1>{{ .Title }}</h1>
+  <h1 class="no-mark">{{ .Title }}</h1>
   {{ .Content }}
 </article>
+{{ end }}
 {{ end }}

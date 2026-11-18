@@ -5,14 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{{ if .IsHome }}{{ site.Title }}{{ else }}{{ .Title }} | {{ site.Title }}{{ end }}</title>
   <meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{ site.Params.description }}{{ end }}">
-  <meta name="color-scheme" content="light dark">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230d1117'/%3E%3Ctext x='16' y='22' font-family='monospace' font-size='16' font-weight='700' text-anchor='middle' fill='%234fd1b5'%3Enw%3C/text%3E%3C/svg%3E">
+  <meta name="color-scheme" content="dark light">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Crect width='16' height='16' fill='%230b1220'/%3E%3Cpath fill='%235b8cff' d='M3 4h2v8H3zM5 5h2v2H5zM7 7h2v2H7zM9 5h2v2H9zM11 4h2v8h-2z'/%3E%3C/svg%3E">
   {{- range .AllTranslations }}
   <link rel="alternate" hreflang="{{ .Language.Locale }}" href="{{ .Permalink }}">
   {{- end }}
-  <link rel="stylesheet" href="{{ "css/main.css" | relURL }}">
+  <link rel="preload" href="{{ "fonts/jetbrains-mono-latin-400-normal.woff2" | relURL }}" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="{{ "fonts/jetbrains-mono-latin-800-normal.woff2" | relURL }}" as="font" type="font/woff2" crossorigin>
+  <script>try{var t=localStorage.getItem("nwrk-theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+  <link rel="stylesheet" href="{{ "css/main.css" | relURL }}{{ if hugo.IsServer }}?v={{ now.UnixNano }}{{ end }}">
+  <script defer src="{{ "js/site.js" | relURL }}{{ if hugo.IsServer }}?v={{ now.UnixNano }}{{ end }}"></script>
 </head>
-<body>
+<body data-l-copy="{{ i18n "copy" }}" data-l-copied="{{ i18n "copied" }}" data-l-theme="{{ i18n "theme" }}">
   <a class="skip" href="#main">{{ i18n "skip" }}</a>
   {{ partial "header.html" . }}
   <main id="main">

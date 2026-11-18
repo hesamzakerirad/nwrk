@@ -1,46 +1,140 @@
 {{ define "main" }}
 <section class="hero">
   <div class="wrap">
-    <p class="eyebrow">{{ i18n "hero_eyebrow" }}</p>
     <h1>{{ i18n "hero_title" }}</h1>
-    <p class="lead">{{ i18n "hero_lead" }}</p>
-
-    <div class="term" aria-label="{{ i18n "nav_install" }}">
-      <div class="term-row"><span class="term-label">{{ i18n "install_unix" }}</span>
-<pre><code><span class="prompt">$</span> curl -fsSL https://nwrk.ir/install.sh | sh</code></pre></div>
-      <div class="term-row"><span class="term-label">{{ i18n "install_windows" }}</span>
-<pre><code><span class="prompt">&gt;</span> irm https://nwrk.ir/install.ps1 | iex</code></pre></div>
-      <div class="term-row"><span class="term-label">{{ i18n "install_go" }}</span>
-<pre><code><span class="prompt">$</span> go install github.com/hesamzakerirad/nwrk/cmd/nw@latest</code></pre></div>
+    <div class="intro">
+      <p class="lead">{{ i18n "hero_lead" }}</p>
     </div>
-
-    <p class="actions">
-      <a class="btn primary" href="{{ "docs/install/" | relLangURL }}">{{ i18n "btn_install" }}</a>
-      <a class="btn" href="{{ site.Params.repo }}">{{ i18n "btn_github" }}</a>
-    </p>
+  </div>
+  <div class="wrap stage-wrap">
+    <div class="stage">
+      <div class="mac" role="group" aria-label="{{ i18n "demo_label" }}">
+        <div class="mac-bar">
+          <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span class="mac-title" aria-hidden="true">nw — zsh — 80×24</span>
+          <button type="button" class="replay" data-replay>{{ i18n "replay" }}</button>
+        </div>
+        <div class="mac-body" data-seg-group="demo">
+          <div class="demo-head">
+            <div class="seg" role="tablist" aria-label="{{ i18n "demo_label" }}">
+              {{- range $i, $d := hugo.Data.demos }}
+              <button type="button" role="tab" id="tab-{{ $d.id }}" aria-controls="panel-{{ $d.id }}" aria-selected="{{ if eq $i 0 }}true{{ else }}false{{ end }}"{{ if ne $i 0 }} tabindex="-1"{{ end }}>{{ i18n $d.label }}<kbd aria-hidden="true">{{ add $i 1 }}</kbd></button>
+              {{- end }}
+            </div>
+          </div>
+          <div class="screen">
+            {{- range $i, $d := hugo.Data.demos }}
+            <div role="tabpanel" id="panel-{{ $d.id }}" aria-labelledby="tab-{{ $d.id }}"{{ if ne $i 0 }} hidden{{ end }}>
+<pre>
+<span data-line data-text="{{ $d.cmd }}"><span class="prompt">$ </span><span data-type>{{ $d.cmd }}</span></span>
+{{- range $d.lines }}
+<span data-line>{{ . | safeHTML }}</span>
+{{- end }}
+<span data-line><span class="prompt">$ </span><span class="cur"></span></span></pre>
+            </div>
+            {{- end }}
+          </div>
+        </div>
+      </div>
+      <p class="caption">{{ i18n "demo_caption" }}</p>
+    </div>
+  </div>
+  <div class="wrap">
+    <div class="getit">
+        <div class="install" data-seg-group>
+          <div class="seg" role="tablist" aria-label="{{ i18n "nav_install" }}">
+            <button type="button" role="tab" id="os-unix" aria-controls="cmd-unix" aria-selected="true">{{ i18n "install_unix" }}</button>
+            <button type="button" role="tab" id="os-win" aria-controls="cmd-win" aria-selected="false" tabindex="-1">{{ i18n "install_windows" }}</button>
+            <button type="button" role="tab" id="os-go" aria-controls="cmd-go" aria-selected="false" tabindex="-1">{{ i18n "install_go" }}</button>
+          </div>
+          <div class="field" role="tabpanel" id="cmd-unix" aria-labelledby="os-unix" data-copy="curl -fsSL https://nwrk.ir/install.sh | sh"><code><span class="prompt">$ </span>curl -fsSL https://nwrk.ir/install.sh | sh</code></div>
+          <div class="field" role="tabpanel" id="cmd-win" aria-labelledby="os-win" data-copy="irm https://nwrk.ir/install.ps1 | iex" hidden><code><span class="prompt">&gt; </span>irm https://nwrk.ir/install.ps1 | iex</code></div>
+          <div class="field" role="tabpanel" id="cmd-go" aria-labelledby="os-go" data-copy="go install github.com/hesamzakerirad/nwrk/cmd/nw@latest" hidden><code><span class="prompt">$ </span>go install github.com/hesamzakerirad/nwrk/cmd/nw@latest</code></div>
+        </div>
+        <p class="note">{{ i18n "install_note" }}</p>
+        <p class="actions">
+          <a class="btn primary" href="{{ "docs/install/" | relLangURL }}">{{ i18n "btn_install" }}</a>
+          <a class="btn" href="{{ site.Params.repo }}">{{ i18n "btn_github" }}</a>
+        </p>
+    </div>
+  </div>
+  <div class="wrap">
+    <div class="statusbar" role="list" aria-label="{{ i18n "sb_label" }}">
+      <span role="listitem" class="sb-name">nw</span>
+      <span role="listitem">{{ i18n "sb_license" }}</span>
+      <span role="listitem">{{ i18n "sb_platforms" }}</span>
+      <span role="listitem">{{ i18n "sb_private" }}</span>
+      <span role="listitem" class="sb-end">{{ i18n "sb_release" }}</span>
+    </div>
   </div>
 </section>
 
-<section class="wrap block">
-  <h2>{{ i18n "features_title" }}</h2>
-  <div class="grid">
-    <div><h3>{{ i18n "f1_title" }}</h3><p>{{ i18n "f1_text" | safeHTML }}</p></div>
-    <div><h3>{{ i18n "f2_title" }}</h3><p>{{ i18n "f2_text" | safeHTML }}</p></div>
-    <div><h3>{{ i18n "f3_title" }}</h3><p>{{ i18n "f3_text" | safeHTML }}</p></div>
-    <div><h3>{{ i18n "f4_title" }}</h3><p>{{ i18n "f4_text" | safeHTML }}</p></div>
+<section class="wrap block split">
+  <div class="split-head">
+    <h2>{{ i18n "flow_title" }}</h2>
+    <p class="sub">{{ i18n "flow_text" }}</p>
+  </div>
+  <div class="split-body">
+    <div class="flow" aria-hidden="true">
+  <pre><span class="sig">dns</span> ───────▶ <span class="sig">tcp</span> ───────▶ <span class="sig">tls</span> ───────▶ <span class="sig">http</span>
+  <span class="ok">ok</span>           <span class="ok">ok</span>           <span class="fail">FAIL</span>         <span class="dim">skipped</span>
+                            │
+                            └─ <span class="fail">tls.cert_expired</span> <span class="dim">expired</span></pre>
+    </div>
+    <dl class="layers">
+      <div><dt>dns</dt><dd>{{ i18n "l_dns" }}</dd></div>
+      <div><dt>tcp</dt><dd>{{ i18n "l_tcp" }}</dd></div>
+      <div><dt>tls</dt><dd>{{ i18n "l_tls" }}</dd></div>
+      <div><dt>http</dt><dd>{{ i18n "l_http" }}</dd></div>
+    </dl>
   </div>
 </section>
 
-<section class="wrap block">
-  <h2>{{ i18n "status_title" }}</h2>
-  <p class="muted">{{ i18n "status_lead" }}</p>
-  <ol class="steps">
-    <li class="now"><strong>{{ i18n "m1_title" }}</strong><span>{{ i18n "m1_text" }}</span></li>
-    <li><strong>{{ i18n "m2_title" }}</strong><span>{{ i18n "m2_text" }}</span></li>
-    <li><strong>{{ i18n "m3_title" }}</strong><span>{{ i18n "m3_text" }}</span></li>
-    <li><strong>{{ i18n "m4_title" }}</strong><span>{{ i18n "m4_text" }}</span></li>
-    <li><strong>{{ i18n "m5_title" }}</strong><span>{{ i18n "m5_text" }}</span></li>
-  </ol>
-  <p><a href="{{ site.Params.repo }}/blob/main/docs/ROADMAP.md">{{ i18n "roadmap_link" }}</a></p>
+<section class="wrap block split">
+  <div class="split-head">
+    <h2>{{ i18n "cmds_title" }}</h2>
+  </div>
+  <div class="split-body">
+    <div class="cmds">
+      <div class="cmd"><code>nw diagnose google.com</code><p>{{ i18n "c_diagnose" }}</p></div>
+      <div class="cmd"><code>nw doctor --region ir</code><p>{{ i18n "c_doctor" }}</p></div>
+      <div class="cmd"><code>nw security interference google.com</code><p>{{ i18n "c_interference" }}</p></div>
+      <div class="cmd"><code>nw test dns google.com --resolver tls://9.9.9.9</code><p>{{ i18n "c_test" }}</p></div>
+      <div class="cmd"><code>nw path trace google.com</code><p>{{ i18n "c_path" }}</p></div>
+      <div class="cmd"><code>nw network show</code><p>{{ i18n "c_network" }}</p></div>
+    </div>
+    <p class="more"><a href="{{ "docs/commands/" | relLangURL }}">{{ i18n "cmds_link" }}</a></p>
+  </div>
+</section>
+
+<section class="wrap block split">
+  <div class="split-head">
+    <h2>{{ i18n "rules_title" }}</h2>
+  </div>
+  <div class="split-body">
+    <ul class="checks">
+      <li>{{ i18n "r1" }}</li>
+      <li>{{ i18n "r2" }}</li>
+      <li>{{ i18n "r3" }}</li>
+      <li>{{ i18n "r4" }}</li>
+      <li>{{ i18n "r5" }}</li>
+    </ul>
+  </div>
+</section>
+
+<section class="wrap block split">
+  <div class="split-head">
+    <h2>{{ i18n "status_title" }}</h2>
+    <p class="sub">{{ i18n "status_lead" }}</p>
+  </div>
+  <div class="split-body">
+    <p class="progress" aria-hidden="true"><span class="on">██████████████████</span><span class="off">░░░░░░░░░░░░░░</span> v0.3 / v1.0</p>
+    <dl class="steps">
+      <dt>v0.0 – v0.3</dt><dd>{{ i18n "s_done" }}</dd>
+      <dt class="now">v0.4</dt><dd>{{ i18n "s_next" }}</dd>
+      <dt>v1.0</dt><dd>{{ i18n "s_stable" }}</dd>
+    </dl>
+    <p><a href="{{ site.Params.repo }}/blob/main/docs/ROADMAP.md">{{ i18n "roadmap_link" }}</a></p>
+  </div>
 </section>
 {{ end }}
