@@ -1,12 +1,13 @@
 {{ define "main" }}
 <section class="hero">
-  <div class="wrap">
+  <div class="wrap hero-grid">
+  <div class="hero-copy">
     <h1>{{ i18n "hero_title" }}</h1>
     <div class="intro">
       <p class="lead">{{ i18n "hero_lead" }}</p>
     </div>
   </div>
-  <div class="wrap stage-wrap">
+  <div class="stage-wrap">
     <div class="stage">
       <div class="mac" role="group" aria-label="{{ i18n "demo_label" }}">
         <div class="mac-bar">
@@ -39,7 +40,7 @@
       <p class="caption">{{ i18n "demo_caption" }}</p>
     </div>
   </div>
-  <div class="wrap">
+  <div class="hero-copy hero-cta">
     <div class="getit">
         <div class="install" data-seg-group>
           <div class="seg" role="tablist" aria-label="{{ i18n "nav_install" }}">
@@ -58,14 +59,6 @@
         </p>
     </div>
   </div>
-  <div class="wrap">
-    <div class="statusbar" role="list" aria-label="{{ i18n "sb_label" }}">
-      <span role="listitem" class="sb-name">nw</span>
-      <span role="listitem">{{ i18n "sb_license" }}</span>
-      <span role="listitem">{{ i18n "sb_platforms" }}</span>
-      <span role="listitem">{{ i18n "sb_private" }}</span>
-      <span role="listitem" class="sb-end">{{ i18n "sb_release" }}</span>
-    </div>
   </div>
 </section>
 
