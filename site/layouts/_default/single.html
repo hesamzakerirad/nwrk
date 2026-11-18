@@ -1,7 +1,18 @@
 {{ define "main" }}
+{{ if eq .Section "docs" }}
+<div class="wrap docs">
+  {{ partial "tree.html" . }}
+  <article class="docs-main">
+    {{ partial "stale.html" . }}
+    <h1 class="no-mark">{{ .Title }}</h1>
+    {{ .Content }}
+  </article>
+</div>
+{{ else }}
 <article class="wrap prose">
   {{ partial "stale.html" . }}
-  <h1>{{ .Title }}</h1>
+  <h1 class="no-mark">{{ .Title }}</h1>
   {{ .Content }}
 </article>
+{{ end }}
 {{ end }}

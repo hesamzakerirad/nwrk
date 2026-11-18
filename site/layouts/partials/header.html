@@ -1,23 +1,26 @@
 <header class="site-header">
   <div class="wrap bar">
-    <a class="brand" href="{{ "" | relLangURL }}" aria-label="nwrk">nw<span>rk</span></a>
+    <a class="brand" href="{{ "" | relLangURL }}" aria-label="nwrk">nw<b>rk</b></a>
     <nav aria-label="Main">
       <a href="{{ "docs/" | relLangURL }}">{{ i18n "nav_docs" }}</a>
       <a href="{{ "docs/install/" | relLangURL }}">{{ i18n "nav_install" }}</a>
       <a href="{{ site.Params.repo }}">{{ i18n "nav_github" }}</a>
     </nav>
-    <div class="langs" role="group" aria-label="{{ i18n "language" }}">
-      {{- $page := . }}
-      {{- range hugo.Sites }}
-        {{- $lang := .Language }}
-        {{- $href := .Home.RelPermalink }}
-        {{- range $page.AllTranslations }}{{ if eq .Language.Lang $lang.Lang }}{{ $href = .RelPermalink }}{{ end }}{{ end }}
-        {{- if eq $lang.Lang site.Language.Lang }}
-      <span lang="{{ $lang.Locale }}" aria-current="true">{{ $lang.Label }}</span>
-        {{- else }}
-      <a lang="{{ $lang.Locale }}" hreflang="{{ $lang.Locale }}" href="{{ $href }}">{{ $lang.Label }}</a>
+    <div class="tools">
+      <div class="langs" role="group" aria-label="{{ i18n "language" }}">
+        {{- $page := . }}
+        {{- range hugo.Sites }}
+          {{- $lang := .Language }}
+          {{- $href := .Home.RelPermalink }}
+          {{- range $page.AllTranslations }}{{ if eq .Language.Lang $lang.Lang }}{{ $href = .RelPermalink }}{{ end }}{{ end }}
+          {{- if eq $lang.Lang site.Language.Lang }}
+        <span lang="{{ $lang.Locale }}" aria-current="true">{{ $lang.Label }}</span>
+          {{- else }}
+        <a lang="{{ $lang.Locale }}" hreflang="{{ $lang.Locale }}" href="{{ $href }}">{{ $lang.Label }}</a>
+          {{- end }}
         {{- end }}
-      {{- end }}
+      </div>
+      <button type="button" class="switch" role="switch" aria-checked="true" data-theme-toggle><span class="track" aria-hidden="true"></span><span data-theme-label>{{ i18n "theme" }}</span></button>
     </div>
   </div>
 </header>

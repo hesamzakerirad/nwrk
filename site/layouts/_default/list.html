@@ -1,15 +1,18 @@
 {{ define "main" }}
-<article class="wrap prose">
-  {{ partial "stale.html" . }}
-  <h1>{{ .Title }}</h1>
-  {{ .Content }}
-  {{ with .Pages }}
-  <h2>{{ i18n "docs_in_section" }}</h2>
-  <ul class="cards">
-    {{ range .ByWeight }}
-    <li><a href="{{ .RelPermalink }}"><strong>{{ .Title }}</strong>{{ with .Description }}<span>{{ . }}</span>{{ end }}</a></li>
+<div class="wrap docs">
+  {{ partial "tree.html" . }}
+  <article class="docs-main">
+    {{ partial "stale.html" . }}
+    <h1 class="no-mark">{{ .Title }}</h1>
+    {{ .Content }}
+    {{ with .Pages }}
+    <h2>{{ i18n "docs_in_section" }}</h2>
+    <ul class="cards">
+      {{ range .ByWeight }}
+      <li><a href="{{ .RelPermalink }}"><strong>{{ .Title }}</strong>{{ with .Description }}<span>{{ . }}</span>{{ end }}</a></li>
+      {{ end }}
+    </ul>
     {{ end }}
-  </ul>
-  {{ end }}
-</article>
+  </article>
+</div>
 {{ end }}

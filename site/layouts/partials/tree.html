@@ -1,0 +1,12 @@
+{{- /* The docs sidebar, drawn as a file tree. */ -}}
+{{- $cur := . }}
+<nav class="tree" aria-label="{{ i18n "nav_docs" }}">
+  <p>docs/</p>
+  <ul>
+    {{- with site.GetPage "/docs" }}
+    {{- range .Pages.ByWeight }}
+    <li><a href="{{ .RelPermalink }}"{{ if eq .RelPermalink $cur.RelPermalink }} aria-current="page"{{ end }}>{{ .Title }}</a></li>
+    {{- end }}
+    {{- end }}
+  </ul>
+</nav>
