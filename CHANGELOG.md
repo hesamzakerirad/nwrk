@@ -6,6 +6,10 @@ Every release has a hand-written entry. The release workflow publishes the match
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-11-18
+
+Developer reachability. The question this release answers: is it a server-side restriction or network interference?
+
 ### Added
 
 - `nw reach`, with the built-in `dev` endpoint preset (GitHub, the Go module proxy, npm, PyPI, Docker Hub, crates.io, apt mirrors and Homebrew).
