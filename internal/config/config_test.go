@@ -70,3 +70,30 @@ func TestBadFiles(t *testing.T) {
 		}
 	}
 }
+
+func TestEndpointPresets(t *testing.T) {
+	p := write(t, `
+[[endpoint_presets]]
+name = "work"
+description = "Internal services"
+
+[[endpoint_presets.endpoints]]
+url = "https://git.example.com/"
+name = "Git"
+reason = "Source code"
+
+[[endpoint_presets.endpoints]]
+url = "https://registry.example.com/"
+`)
+	f, _, err := Load(p)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(f.EndpointPresets) != 1 || len(f.EndpointPresets[0].Endpoints) != 2 || f.EndpointPresets[0].Endpoints[0].Name != "Git" {
+		t.Fatalf("%+v", f.EndpointPresets)
+	}
+	bad := write(t, "[[endpoint_presets]]\nname = \"dev\"\n[[endpoint_presets.endpoints]]\nurl = \"https://example.com/\"\n")
+	if _, _, err := Load(bad); err == nil || !strings.Contains(err.Error(), "built in") {
+		t.Fatalf("a preset named dev must be refused, got %v", err)
+	}
+}

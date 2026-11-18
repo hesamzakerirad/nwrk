@@ -1,0 +1,55 @@
+# The dev preset: endpoints a developer needs to build, install and ship
+# software. nw reach requests each one and reports whether a failure looks
+# like a server-side restriction or like network interference.
+#
+# Entries are the public front doors of widely used package registries and
+# code hosts. Each record says why it was chosen. Changes go through a pull
+# request that explains the reason (see CONTRIBUTING.md).
+
+name = "dev"
+description = "Code hosts and package registries that developers depend on."
+
+[[endpoints]]
+url = "https://github.com/"
+name = "GitHub"
+reason = "The main code host; source downloads, releases and many install scripts depend on it."
+
+[[endpoints]]
+url = "https://proxy.golang.org/"
+name = "Go module proxy"
+reason = "The default source of Go modules; go get and go build fail without it."
+
+[[endpoints]]
+url = "https://registry.npmjs.org/"
+name = "npm registry"
+reason = "The default registry for Node.js packages."
+
+[[endpoints]]
+url = "https://pypi.org/simple/"
+name = "PyPI"
+reason = "The default index for Python packages."
+
+[[endpoints]]
+url = "https://registry-1.docker.io/v2/"
+name = "Docker Hub registry"
+reason = "The default registry for container images; the endpoint answers 401 without credentials, which shows it is reachable."
+
+[[endpoints]]
+url = "https://crates.io/"
+name = "crates.io"
+reason = "The default registry for Rust crates."
+
+[[endpoints]]
+url = "https://deb.debian.org/"
+name = "Debian mirror"
+reason = "The default package mirror for Debian; a stand-in for apt mirrors."
+
+[[endpoints]]
+url = "https://archive.ubuntu.com/ubuntu/"
+name = "Ubuntu archive"
+reason = "The default package archive for Ubuntu; a stand-in for apt mirrors."
+
+[[endpoints]]
+url = "https://formulae.brew.sh/"
+name = "Homebrew formulae"
+reason = "The index Homebrew uses to find packages on macOS and Linux."

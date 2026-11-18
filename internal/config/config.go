@@ -13,6 +13,8 @@ import (
 	"strings"
 
 	"github.com/BurntSushi/toml"
+
+	"github.com/hesamzakerirad/nwrk/internal/endpoints"
 )
 
 // EnvPath names the environment variable that overrides the file location.
@@ -24,6 +26,9 @@ type File struct {
 	Resolvers []string `toml:"resolvers"`
 	Timeout   string   `toml:"timeout"`
 	Color     string   `toml:"color"`
+	// EndpointPresets are user-defined presets for nw reach, in the same
+	// format as the built-in ones.
+	EndpointPresets []endpoints.Preset `toml:"endpoint_presets"`
 }
 
 // Path returns where the configuration file lives for the given operating
@@ -79,7 +84,10 @@ func Load(path string) (f File, exists bool, err error) {
 		return File{}, true, fmt.Errorf("%s: %w", path, err)
 	}
 	if u := md.Undecoded(); len(u) > 0 {
-		return File{}, true, fmt.Errorf("%s: unknown key %q (valid keys: region, resolvers, timeout, color)", path, u[0].String())
+		return File{}, true, fmt.Errorf("%s: unknown key %q (valid keys: region, resolvers, timeout, color, endpoint_presets)", path, u[0].String())
+	}
+	if err := endpoints.ValidateUser(f.EndpointPresets); err != nil {
+		return File{}, true, fmt.Errorf("%s: %w", path, err)
 	}
 	return f, true, nil
 }

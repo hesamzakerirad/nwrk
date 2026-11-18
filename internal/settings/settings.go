@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/hesamzakerirad/nwrk/internal/config"
+	"github.com/hesamzakerirad/nwrk/internal/endpoints"
 	"github.com/hesamzakerirad/nwrk/internal/regions"
 	"github.com/hesamzakerirad/nwrk/internal/target"
 )
@@ -182,3 +183,6 @@ func (e *Effective) PresetResolvers() ([]target.Resolver, error) {
 
 // ConfigResolvers returns the resolver list as written in the config file.
 func (e *Effective) ConfigResolvers() []string { return e.cfg.Resolvers }
+
+// EndpointPresets returns the endpoint presets defined in the config file.
+func (e *Effective) EndpointPresets() []endpoints.Preset { return e.cfg.EndpointPresets }
