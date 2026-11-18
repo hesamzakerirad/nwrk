@@ -101,6 +101,7 @@ func newRootCmd(a *app) *cobra.Command {
 	root.AddCommand(newDiagnoseCmd(a))
 	root.AddCommand(newConfigCmd(a))
 	root.AddCommand(newDoctorCmd(a))
+	root.AddCommand(newReachCmd(a))
 	root.AddCommand(newSecurityCmd(a))
 	root.AddCommand(newPathCmd(a))
 	root.AddCommand(newNetworkCmd(a))
