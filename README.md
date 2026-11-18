@@ -26,7 +26,7 @@ With Go:
 go install github.com/hesamzakerirad/nwrk/cmd/nw@latest
 ```
 
-Or download an archive from the [releases page](https://github.com/hesamzakerirad/nwrk/releases). Every release has `checksums.txt` and a cosign signature; see the [install guide](docs/install.md) for how to verify them.
+Or download an archive from the [releases page](https://github.com/hesamzakerirad/nwrk/releases). Changes for each version are listed in the [changelog](CHANGELOG.md). Every release has `checksums.txt` and a cosign signature; see the [install guide](docs/install.md) for how to verify them.
 
 ## Use
 

@@ -10,6 +10,10 @@ Thank you for helping. nw is a diagnosis tool, so the most valuable contribution
 - **Safe by default.** Nothing is uploaded, no system setting is changed, every network operation has a deadline and a size limit, and cookies, bodies and credentials are never recorded.
 - **Tests use local fixtures.** Core tests never touch the public internet; use the servers in `internal/fixtures`.
 
+## Support
+
+nwrk is maintained on a best-effort basis. Expect a reply within a week.
+
 ## Setup
 
 You need Go (the version in `go.mod`) and, for the site, [Hugo](https://gohugo.io/) extended.
@@ -33,6 +37,7 @@ make site      # build the website
 
 - Open an issue first for anything larger than a fix, so we can agree on the approach.
 - Keep a pull request to one change. Update the docs in the same pull request:
+- Add a line to the `Unreleased` section of [CHANGELOG.md](CHANGELOG.md) for any change a user can see.
 - CI must pass on Linux, macOS and Windows.
 - Commit messages say what changed and why, in the imperative ("Add TCP timeout rule").
 
