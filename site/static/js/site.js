@@ -135,4 +135,64 @@
       if (n >= 1 && n <= tabsEl.length) { start(n - 1, true); }
     });
   }
+  // The trace runs once, when it first scrolls into view.
+  var trace = d.querySelector("[data-trace]");
+  if (trace) {
+    var reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var anims = [], visible = false, delay = null;
+    // The signal runs down the rail, turns red at tls, and loops. Positions come from the real node centers.
+    var buildSignal = function () {
+      anims.forEach(function (a) { a.cancel(); });
+      anims = [];
+      var hops = trace.querySelector(".hops"), probe = trace.querySelector(".probe"), beam = trace.querySelector(".beam");
+      var nodes = trace.querySelectorAll(".hop .node");
+      if (!hops || !probe || !beam || nodes.length < 4 || !probe.animate) return;
+      var base = hops.getBoundingClientRect();
+      var pt = function (n) { var r = n.getBoundingClientRect(); return { x: r.left - base.left + r.width / 2, y: r.top - base.top + r.height / 2 }; };
+      var y = [0, 1, 2, 3].map(function (i) { return pt(nodes[i]).y; }), x = pt(nodes[0]).x;
+      probe.style.left = x + "px"; beam.style.left = x + "px";
+      beam.style.top = y[2] + "px"; beam.style.height = (y[3] - y[2]) + "px";
+      var G = "var(--ok)", R = "var(--fail)", T = "translateY(", dur = 7200;
+      var f = function (o, yy, op, col, sc) { return { offset: o, transform: T + yy + "px) scale(" + (sc || 1) + ")", opacity: op, color: col }; };
+      anims.push(probe.animate([
+        f(0, y[0], 0, G), f(0.04, y[0], 1, G), f(0.26, y[1], 1, G), f(0.44, y[2], 1, G), f(0.6, y[3], 1, G),
+        f(0.61, y[3], 1, R, 1.5), f(0.68, y[3], 1, R, 1), f(0.75, y[3], 1, R, 1.5), f(0.82, y[3], 1, R, 1),
+        f(0.9, y[3], 0, R, 1), f(1, y[0], 0, G)
+      ], { duration: dur, iterations: Infinity, easing: "ease-in-out" }));
+      var pulse = function (o, v) { return { offset: o, opacity: v }; };
+      anims.push(beam.animate([
+        pulse(0, 0), pulse(0.58, 0), pulse(0.61, 1), pulse(0.66, 0.35), pulse(0.71, 1), pulse(0.76, 0.35), pulse(0.81, 1), pulse(0.9, 0), pulse(1, 0)
+      ], { duration: dur, iterations: Infinity }));
+      if (!visible) anims.forEach(function (a) { a.pause(); });
+    };
+    var armSignal = function () {
+      if (reduce) return;
+      delay = setTimeout(function () { visible = true; buildSignal(); }, 2400);
+      var rt;
+      window.addEventListener("resize", function () { clearTimeout(rt); rt = setTimeout(function () { if (visible) buildSignal(); }, 150); });
+      if ("IntersectionObserver" in window) {
+        new IntersectionObserver(function (es) {
+          visible = es[0].isIntersecting;
+          anims.forEach(function (a) { visible ? a.play() : a.pause(); });
+        }, { threshold: 0.2 }).observe(trace);
+      }
+    };
+    if ("IntersectionObserver" in window) {
+      var io = new IntersectionObserver(function (es) {
+        if (es[0].isIntersecting) { trace.classList.add("run"); io.disconnect(); armSignal(); }
+      }, { threshold: 0.35 });
+      io.observe(trace);
+    } else { trace.classList.add("run"); armSignal(); }
+  }
+  // The latest version comes from the newest GitHub release. If the lookup fails, the built-in version stays.
+  var ver = d.querySelector("[data-version]");
+  if (ver && window.fetch) {
+    fetch(ver.getAttribute("data-api"), { headers: { Accept: "application/vnd.github+json" } })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (j) {
+        if (!j || !j.tag_name) return;
+        ver.textContent = j.tag_name;
+      })
+      .catch(function () {});
+  }
 })();
