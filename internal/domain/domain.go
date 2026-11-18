@@ -175,6 +175,7 @@ const (
 	ProbeSNIControl         = "sni_control"         // tls: handshake with a neutral control name
 	ProbeLegacyTLS          = "legacy_tls"          // tls: offer only TLS 1.0 and 1.1
 	ProbePlainHTTP          = "plain_http"          // http: the same request over http://
+	ProbeHTTP3              = "http3"               // http: the same request over HTTP/3 (QUIC)
 )
 
 // Probe returns the name of the probe a measurement belongs to, or "".

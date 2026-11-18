@@ -254,7 +254,8 @@
                 "sni_target",
                 "sni_control",
                 "legacy_tls",
-                "plain_http"
+                "plain_http",
+                "http3"
               ]
             }
           }
