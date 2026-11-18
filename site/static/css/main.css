@@ -276,3 +276,91 @@ hr { border: 0; height: 8px; background-image: radial-gradient(var(--line) 1px, 
   .site-header, .site-footer, .tree, .plate canvas, .strip { display: none; }
   body { background: #fff; color: #000; }
 }
+
+/* ---- hero, wide screens: text and install on one side, the terminal on the other ---- */
+@media (min-width: 62rem) {
+  .hero { text-align: start; padding-block: clamp(2.5rem, 5vw, 4.5rem) clamp(2.5rem, 5vw, 4rem); }
+  .hero-grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); grid-template-areas: "copy stage" "cta stage"; grid-template-rows: auto 1fr; column-gap: clamp(2.5rem, 5vw, 5rem); align-items: start; }
+  .hero-copy:not(.hero-cta) { grid-area: copy; }
+  .hero-cta { grid-area: cta; align-self: start; }
+  .stage-wrap { grid-area: stage; margin: 0; align-self: center; }
+  .hero h1 { font-size: clamp(2.4rem, 4.2vw, 3.6rem); margin: 0 0 1.5rem; max-width: 12ch; }
+  .lead { margin: 0; max-width: 44ch; font-size: 1rem; }
+  .hero .getit { margin: 2rem 0 0; max-width: none; text-align: start; }
+  .hero .install { align-items: flex-start; margin-bottom: 1rem; }
+  .hero .note { margin: 0 0 1.5rem; }
+  .hero .actions { justify-content: flex-start; }
+  .hero .stage { max-width: none; }
+  .hero .mac-body { padding: 1.25rem 1.5rem 1.6rem; }
+  .hero .screen pre { font-size: 0.82rem; }
+  .hero .statusbar { max-width: none; margin-top: clamp(2.5rem, 5vw, 4rem); }
+}
+.hero .install .seg { display: flex; width: 100%; }
+.hero .install .seg button { flex: 1; }
+
+/* ---- hero polish: fewer line breaks, one shared vertical center, quieter backdrop ---- */
+@media (min-width: 62rem) {
+  .hero-grid { grid-template-columns: minmax(0, 6fr) minmax(0, 7fr); grid-template-rows: auto auto; align-content: center; min-height: min(34rem, calc(100svh - 12rem)); column-gap: clamp(2.5rem, 4.5vw, 4.5rem); }
+  .hero h1 { font-size: clamp(2.2rem, 3.6vw, 3.2rem); max-width: 14ch; margin-bottom: 1.25rem; line-height: 1.08; }
+  .lead { max-width: 42ch; font-size: 0.95rem; line-height: 1.75; }
+  .hero .getit { margin-top: 1.75rem; }
+  .hero .install .field { margin-top: 0.6rem; padding: 0.8rem 1rem; box-shadow: 0 0 0 1px var(--line); }
+  .hero .install code { white-space: nowrap; overflow-x: auto; font-size: 0.82rem; }
+  .hero .install { margin-bottom: 0.9rem; }
+  .hero .note { margin-bottom: 1.25rem; font-size: 0.78rem; }
+  .hero .btn { padding: 0.62rem 1.2rem; font-size: 0.88rem; }
+  .hero .stage::before { display: none; }
+  .hero .stage::after { opacity: 0.1; }
+  .hero .stage-wrap { grid-row: 1 / span 2; }
+  .hero .caption { margin-top: 1rem; }
+}
+@media (min-width: 62rem) {
+  .hero-grid { grid-template-rows: auto 1fr; align-content: start; min-height: 0; }
+  .hero .install code { font-size: clamp(0.68rem, 1.02vw, 0.82rem); overflow: hidden; text-overflow: clip; }
+  .hero .stage-wrap { align-self: start; }
+}
+/* Center the text column against the terminal: both halves meet at the midline. */
+@media (min-width: 62rem) {
+  .hero-grid { grid-template-rows: 1fr 1fr; }
+  .hero-copy:not(.hero-cta) { align-self: end; }
+  .hero-cta { align-self: start; }
+}
+/* The hero fills the first screen, and its content sits in the vertical middle of it. */
+@media (min-width: 62rem) {
+  .hero { display: flex; align-items: center; min-height: calc(100svh - 3.6rem); padding-block: 2.5rem; box-sizing: border-box; }
+  .hero > .wrap { flex: none; }
+}
+/* Final layout: the text column is two rows between two equal spacers, the terminal spans all four. */
+@media (min-width: 62rem) {
+  .hero-grid { grid-template-areas: none; grid-template-rows: 1fr auto auto 1fr; align-content: normal; }
+  .hero-copy:not(.hero-cta) { grid-area: 2 / 1; align-self: auto; }
+  .hero-cta { grid-area: 3 / 1; align-self: auto; }
+  .hero .stage-wrap { grid-area: 1 / 2 / 5 / 3; align-self: center; }
+}
+/* The text column starts at the top edge of the terminal. */
+@media (min-width: 62rem) {
+  .hero-grid { grid-template-rows: auto auto 1fr; }
+  .hero-copy:not(.hero-cta) { grid-area: 1 / 1; }
+  .hero-cta { grid-area: 2 / 1; }
+  .hero .stage-wrap { grid-area: 1 / 2 / 4 / 3; }
+}
+@media (min-width: 62rem) {
+  .hero-grid { align-content: start; }
+  .hero-copy:not(.hero-cta), .hero-cta { align-self: start; }
+  .hero .stage-wrap { align-self: start; }
+}
+/* Text column starts at the top of the hero; the terminal stays centered in it. */
+@media (min-width: 62rem) {
+  .hero { align-items: stretch; }
+  .hero > .wrap { flex: 1; }
+  .hero-grid { min-height: calc(100svh - 3.6rem - 5rem); padding-top: clamp(0rem, 4vh, 3rem); box-sizing: border-box; }
+  .hero .stage-wrap { align-self: center; }
+}
+.hero > .wrap { flex: 0 1 auto; align-self: stretch; }
+/* Final: text column and terminal share one top edge; the pair is centered in the hero. */
+@media (min-width: 62rem) {
+  .hero { align-items: center; }
+  .hero > .wrap { align-self: center; }
+  .hero-grid { min-height: 0; padding-top: 0; }
+  .hero .stage-wrap { align-self: start; }
+}
