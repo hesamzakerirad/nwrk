@@ -35,3 +35,7 @@ jobs:
           args: release --clean --release-notes=${{ runner.temp }}/release-notes.md
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Make sure the release shows the changelog entry
+        run: gh release edit "${GITHUB_REF_NAME}" --notes-file "${RUNNER_TEMP}/release-notes.md"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
