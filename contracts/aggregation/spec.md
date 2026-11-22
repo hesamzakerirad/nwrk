@@ -142,7 +142,7 @@ The result for the minimum and maximum of a window is not published. Only the ho
 
 ### 6.2 Timelines
 
-A timeline is a list of window results for successive end times, one hour apart, for one series. Point `i` of a timeline with `hours` points ends at `as_of - (hours - 1 - i)` hours and is computed as in section 6.1. The state of a point is the state of that result. A point below the threshold has the state `insufficient_data`. A timeline adds no rule of its own. An implementation must give the same state and submission count for a point as the history of the same series gives for the same end time.
+A timeline is a list of window results for successive end times, one hour apart, for one series. Point `i` of a timeline with `hours` points ends at `as_of - (hours - 1 - i)` hours and is computed as in section 6.1. The state of a point is the state of that result. A point below the threshold has the state `insufficient_data`. A timeline for a chosen day starts at 00:00 UTC of that day and ends at 23:00, or at `as_of` for the current day. A timeline adds no rule of its own. An implementation must give the same state and submission count for a point as the history of the same series gives for the same end time.
 
 ## 7. Country-Wide Numbers
 

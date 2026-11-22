@@ -870,7 +870,7 @@
         "services",
         "networks"
       ],
-      "description": "One window result for each hour, for each network and service, in a compact form. Point i ends at `from` plus i hours and covers the `window` before that end time. The last point ends at `as_of`. A series entry holds, for each point, the index in `states` and the submission count of the window. Every point follows the publication threshold: a point below it has the state `insufficient_data`. See aggregation/spec.md section 6.2.",
+      "description": "One window result for each hour, for each network and service, in a compact form. Point i ends at `from` plus i hours and covers the `window` before that end time. The last point ends at `as_of`, or, for a request with `date`, at 23:00 of that day or at `as_of` for the current day. A series entry holds, for each point, the index in `states` and the submission count of the window. Every point follows the publication threshold: a point below it has the state `insufficient_data`. See aggregation/spec.md section 6.2.",
       "properties": {
         "schema_version": {
           "$ref": "#/$defs/schemaVersion"
@@ -886,7 +886,7 @@
         },
         "hours": {
           "type": "integer",
-          "minimum": 6,
+          "minimum": 1,
           "maximum": 72
         },
         "from": {
