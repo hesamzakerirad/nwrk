@@ -1,0 +1,966 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nwrk.ir/schema/community-public.v1.json",
+  "title": "NWRK Status public statistics, version 1",
+  "$defs": {
+    "schemaVersion": {
+      "const": "community-public.v1"
+    },
+    "time": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:00:00Z$",
+      "description": "An hour boundary in UTC."
+    },
+    "window": {
+      "enum": [
+        "1h",
+        "6h",
+        "24h",
+        "7d",
+        "30d"
+      ]
+    },
+    "state": {
+      "enum": [
+        "insufficient_data",
+        "network_failure_observed",
+        "server_refusal_observed",
+        "degraded_observations",
+        "reachable_response_observed",
+        "http_response_received"
+      ]
+    },
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+      "minLength": 1,
+      "maxLength": 64
+    },
+    "count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "bp": {
+      "oneOf": [
+        {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10000
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "ms": {
+      "oneOf": [
+        {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 60000
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "countMap": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/$defs/count"
+      }
+    },
+    "asn": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 4294967295
+    },
+    "asnKey": {
+      "oneOf": [
+        {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4294967295
+        },
+        {
+          "const": "all"
+        }
+      ]
+    },
+    "familyResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "attempts",
+        "successes",
+        "success_bp"
+      ],
+      "properties": {
+        "attempts": {
+          "$ref": "#/$defs/count"
+        },
+        "successes": {
+          "$ref": "#/$defs/count"
+        },
+        "success_bp": {
+          "$ref": "#/$defs/bp"
+        }
+      }
+    },
+    "layerResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "attempts",
+        "successes",
+        "failures",
+        "success_bp",
+        "p50_ms",
+        "p95_ms",
+        "error_counts",
+        "families"
+      ],
+      "properties": {
+        "attempts": {
+          "$ref": "#/$defs/count"
+        },
+        "successes": {
+          "$ref": "#/$defs/count"
+        },
+        "failures": {
+          "$ref": "#/$defs/count"
+        },
+        "success_bp": {
+          "$ref": "#/$defs/bp"
+        },
+        "p50_ms": {
+          "$ref": "#/$defs/ms"
+        },
+        "p95_ms": {
+          "$ref": "#/$defs/ms"
+        },
+        "error_counts": {
+          "$ref": "#/$defs/countMap"
+        },
+        "families": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "ipv4",
+            "ipv6"
+          ],
+          "properties": {
+            "ipv4": {
+              "$ref": "#/$defs/familyResult"
+            },
+            "ipv6": {
+              "$ref": "#/$defs/familyResult"
+            }
+          }
+        },
+        "status_counts": {
+          "$ref": "#/$defs/countMap"
+        }
+      },
+      "description": "Sum of one layer over the window. Only http has status_counts. For http, a success is any received response."
+    },
+    "layers": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "dns",
+        "tcp",
+        "tls",
+        "http"
+      ],
+      "properties": {
+        "dns": {
+          "$ref": "#/$defs/layerResult"
+        },
+        "tcp": {
+          "$ref": "#/$defs/layerResult"
+        },
+        "tls": {
+          "$ref": "#/$defs/layerResult"
+        },
+        "http": {
+          "$ref": "#/$defs/layerResult"
+        }
+      }
+    },
+    "baseline": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "submissions",
+            "completion_bp",
+            "p95_ms"
+          ],
+          "properties": {
+            "submissions": {
+              "$ref": "#/$defs/count"
+            },
+            "completion_bp": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 10000
+            },
+            "p95_ms": {
+              "$ref": "#/$defs/ms"
+            }
+          }
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "windowResult": {
+      "description": "Result for one target, one network (or all networks) and one window. See aggregation/spec.md section 6.1.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "target",
+        "asn",
+        "window",
+        "from",
+        "to",
+        "submissions",
+        "threshold",
+        "published",
+        "state"
+      ],
+      "properties": {
+        "target": {
+          "$ref": "#/$defs/slug"
+        },
+        "asn": {
+          "$ref": "#/$defs/asnKey"
+        },
+        "window": {
+          "$ref": "#/$defs/window"
+        },
+        "from": {
+          "$ref": "#/$defs/time"
+        },
+        "to": {
+          "$ref": "#/$defs/time"
+        },
+        "submissions": {
+          "$ref": "#/$defs/count"
+        },
+        "threshold": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "published": {
+          "type": "boolean"
+        },
+        "state": {
+          "$ref": "#/$defs/state"
+        },
+        "networks_observed": {
+          "$ref": "#/$defs/count"
+        },
+        "networks_published": {
+          "$ref": "#/$defs/count"
+        },
+        "layers": {
+          "$ref": "#/$defs/layers"
+        },
+        "completion_bp": {
+          "$ref": "#/$defs/bp"
+        },
+        "baseline": {
+          "$ref": "#/$defs/baseline"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "published": {
+                "const": true
+              }
+            },
+            "required": [
+              "published"
+            ]
+          },
+          "then": {
+            "required": [
+              "layers",
+              "completion_bp",
+              "baseline"
+            ],
+            "properties": {
+              "state": {
+                "not": {
+                  "const": "insufficient_data"
+                }
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "state": {
+                "const": "insufficient_data"
+              }
+            },
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "layers"
+                  ]
+                },
+                {
+                  "required": [
+                    "completion_bp"
+                  ]
+                },
+                {
+                  "required": [
+                    "baseline"
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "service": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "slug",
+        "name",
+        "category",
+        "official_url"
+      ],
+      "properties": {
+        "slug": {
+          "$ref": "#/$defs/slug"
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "category": {
+          "type": "string",
+          "maxLength": 40
+        },
+        "official_url": {
+          "type": "string",
+          "format": "uri",
+          "maxLength": 200
+        }
+      }
+    },
+    "page": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "limit",
+        "next_cursor"
+      ],
+      "properties": {
+        "limit": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 200
+        },
+        "next_cursor": {
+          "oneOf": [
+            {
+              "type": "string",
+              "maxLength": 200
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "summaryResponse": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "as_of",
+        "window",
+        "threshold",
+        "services_total",
+        "services_published",
+        "networks_observed",
+        "states",
+        "notice"
+      ],
+      "properties": {
+        "schema_version": {
+          "$ref": "#/$defs/schemaVersion"
+        },
+        "as_of": {
+          "$ref": "#/$defs/time"
+        },
+        "window": {
+          "$ref": "#/$defs/window"
+        },
+        "threshold": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "services_total": {
+          "$ref": "#/$defs/count"
+        },
+        "services_published": {
+          "$ref": "#/$defs/count"
+        },
+        "networks_observed": {
+          "$ref": "#/$defs/count"
+        },
+        "states": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "insufficient_data",
+            "network_failure_observed",
+            "server_refusal_observed",
+            "degraded_observations",
+            "reachable_response_observed",
+            "http_response_received"
+          ],
+          "properties": {
+            "insufficient_data": {
+              "$ref": "#/$defs/count"
+            },
+            "network_failure_observed": {
+              "$ref": "#/$defs/count"
+            },
+            "server_refusal_observed": {
+              "$ref": "#/$defs/count"
+            },
+            "degraded_observations": {
+              "$ref": "#/$defs/count"
+            },
+            "reachable_response_observed": {
+              "$ref": "#/$defs/count"
+            },
+            "http_response_received": {
+              "$ref": "#/$defs/count"
+            }
+          }
+        },
+        "notice": {
+          "type": "string",
+          "maxLength": 400
+        }
+      }
+    },
+    "servicesResponse": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "as_of",
+        "window",
+        "services",
+        "page"
+      ],
+      "properties": {
+        "schema_version": {
+          "$ref": "#/$defs/schemaVersion"
+        },
+        "as_of": {
+          "$ref": "#/$defs/time"
+        },
+        "window": {
+          "$ref": "#/$defs/window"
+        },
+        "services": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "service",
+              "result"
+            ],
+            "properties": {
+              "service": {
+                "$ref": "#/$defs/service"
+              },
+              "result": {
+                "$ref": "#/$defs/windowResult"
+              }
+            }
+          }
+        },
+        "page": {
+          "$ref": "#/$defs/page"
+        }
+      }
+    },
+    "serviceResponse": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "as_of",
+        "window",
+        "service",
+        "country",
+        "networks",
+        "page"
+      ],
+      "properties": {
+        "schema_version": {
+          "$ref": "#/$defs/schemaVersion"
+        },
+        "as_of": {
+          "$ref": "#/$defs/time"
+        },
+        "window": {
+          "$ref": "#/$defs/window"
+        },
+        "service": {
+          "$ref": "#/$defs/service"
+        },
+        "country": {
+          "$ref": "#/$defs/windowResult"
+        },
+        "networks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/windowResult"
+          }
+        },
+        "page": {
+          "$ref": "#/$defs/page"
+        }
+      }
+    },
+    "historyResponse": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "as_of",
+        "window",
+        "service",
+        "asn",
+        "step",
+        "points",
+        "page"
+      ],
+      "properties": {
+        "schema_version": {
+          "$ref": "#/$defs/schemaVersion"
+        },
+        "as_of": {
+          "$ref": "#/$defs/time"
+        },
+        "window": {
+          "$ref": "#/$defs/window"
+        },
+        "service": {
+          "$ref": "#/$defs/service"
+        },
+        "asn": {
+          "$ref": "#/$defs/asnKey"
+        },
+        "step": {
+          "enum": [
+            "1h",
+            "1d"
+          ]
+        },
+        "points": {
+          "type": "array",
+          "maxItems": 168,
+          "items": {
+            "$ref": "#/$defs/windowResult"
+          }
+        },
+        "page": {
+          "$ref": "#/$defs/page"
+        }
+      }
+    },
+    "networksResponse": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "as_of",
+        "window",
+        "networks",
+        "page"
+      ],
+      "properties": {
+        "schema_version": {
+          "$ref": "#/$defs/schemaVersion"
+        },
+        "as_of": {
+          "$ref": "#/$defs/time"
+        },
+        "window": {
+          "$ref": "#/$defs/window"
+        },
+        "networks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "asn",
+              "submissions",
+              "services_observed",
+              "services_published"
+            ],
+            "properties": {
+              "asn": {
+                "$ref": "#/$defs/asn"
+              },
+              "submissions": {
+                "$ref": "#/$defs/count"
+              },
+              "services_observed": {
+                "$ref": "#/$defs/count"
+              },
+              "services_published": {
+                "$ref": "#/$defs/count"
+              }
+            }
+          }
+        },
+        "page": {
+          "$ref": "#/$defs/page"
+        }
+      }
+    },
+    "networkResponse": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "as_of",
+        "window",
+        "asn",
+        "services"
+      ],
+      "properties": {
+        "schema_version": {
+          "$ref": "#/$defs/schemaVersion"
+        },
+        "as_of": {
+          "$ref": "#/$defs/time"
+        },
+        "window": {
+          "$ref": "#/$defs/window"
+        },
+        "asn": {
+          "$ref": "#/$defs/asn"
+        },
+        "services": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "service",
+              "result"
+            ],
+            "properties": {
+              "service": {
+                "$ref": "#/$defs/service"
+              },
+              "result": {
+                "$ref": "#/$defs/windowResult"
+              }
+            }
+          }
+        }
+      }
+    },
+    "statisticsResponse": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "as_of",
+        "window",
+        "result"
+      ],
+      "properties": {
+        "schema_version": {
+          "$ref": "#/$defs/schemaVersion"
+        },
+        "as_of": {
+          "$ref": "#/$defs/time"
+        },
+        "window": {
+          "$ref": "#/$defs/window"
+        },
+        "result": {
+          "$ref": "#/$defs/windowResult"
+        }
+      }
+    },
+    "methodologyResponse": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "aggregation_spec_version",
+        "windows",
+        "histogram_limits_ms",
+        "constants",
+        "states",
+        "definitions",
+        "limitations"
+      ],
+      "properties": {
+        "schema_version": {
+          "$ref": "#/$defs/schemaVersion"
+        },
+        "aggregation_spec_version": {
+          "const": 1
+        },
+        "windows": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/window"
+          }
+        },
+        "histogram_limits_ms": {
+          "type": "array",
+          "minItems": 16,
+          "maxItems": 16,
+          "items": {
+            "type": "integer"
+          }
+        },
+        "constants": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "threshold",
+            "completion_reachable_bp",
+            "completion_failure_bp",
+            "refusal_bp",
+            "degraded_drop_bp",
+            "degraded_p95_factor",
+            "baseline_hours"
+          ],
+          "properties": {
+            "threshold": {
+              "type": "integer"
+            },
+            "completion_reachable_bp": {
+              "type": "integer"
+            },
+            "completion_failure_bp": {
+              "type": "integer"
+            },
+            "refusal_bp": {
+              "type": "integer"
+            },
+            "degraded_drop_bp": {
+              "type": "integer"
+            },
+            "degraded_p95_factor": {
+              "type": "integer"
+            },
+            "baseline_hours": {
+              "type": "integer"
+            }
+          }
+        },
+        "states": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "insufficient_data",
+            "network_failure_observed",
+            "server_refusal_observed",
+            "degraded_observations",
+            "reachable_response_observed",
+            "http_response_received"
+          ],
+          "properties": {
+            "insufficient_data": {
+              "type": "string",
+              "maxLength": 300
+            },
+            "network_failure_observed": {
+              "type": "string",
+              "maxLength": 300
+            },
+            "server_refusal_observed": {
+              "type": "string",
+              "maxLength": 300
+            },
+            "degraded_observations": {
+              "type": "string",
+              "maxLength": 300
+            },
+            "reachable_response_observed": {
+              "type": "string",
+              "maxLength": 300
+            },
+            "http_response_received": {
+              "type": "string",
+              "maxLength": 300
+            }
+          }
+        },
+        "definitions": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "maxLength": 500
+          }
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 400
+          }
+        }
+      }
+    },
+    "privacyResponse": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "statements"
+      ],
+      "properties": {
+        "schema_version": {
+          "$ref": "#/$defs/schemaVersion"
+        },
+        "statements": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 500
+          }
+        }
+      }
+    },
+    "timelineResponse": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "as_of",
+        "window",
+        "step",
+        "hours",
+        "from",
+        "states",
+        "services",
+        "networks"
+      ],
+      "description": "One window result for each hour, for each network and service, in a compact form. Point i ends at `from` plus i hours and covers the `window` before that end time. The last point ends at `as_of`. A series entry holds, for each point, the index in `states` and the submission count of the window. Every point follows the publication threshold: a point below it has the state `insufficient_data`. See aggregation/spec.md section 6.2.",
+      "properties": {
+        "schema_version": {
+          "$ref": "#/$defs/schemaVersion"
+        },
+        "as_of": {
+          "$ref": "#/$defs/time"
+        },
+        "window": {
+          "$ref": "#/$defs/window"
+        },
+        "step": {
+          "const": "1h"
+        },
+        "hours": {
+          "type": "integer",
+          "minimum": 6,
+          "maximum": 72
+        },
+        "from": {
+          "$ref": "#/$defs/time"
+        },
+        "threshold": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "states": {
+          "type": "array",
+          "minItems": 6,
+          "maxItems": 6,
+          "items": {
+            "$ref": "#/$defs/state"
+          },
+          "description": "The legend for the indexes in the series. Always the six states in the order of the schema."
+        },
+        "services": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/service"
+          }
+        },
+        "networks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "asn",
+              "series"
+            ],
+            "properties": {
+              "asn": {
+                "$ref": "#/$defs/asnKey"
+              },
+              "series": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "slug",
+                    "states",
+                    "submissions"
+                  ],
+                  "properties": {
+                    "slug": {
+                      "$ref": "#/$defs/slug"
+                    },
+                    "states": {
+                      "type": "array",
+                      "maxItems": 72,
+                      "items": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 5
+                      }
+                    },
+                    "submissions": {
+                      "type": "array",
+                      "maxItems": 72,
+                      "items": {
+                        "$ref": "#/$defs/count"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,139 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nwrk.ir/schema/community-contribution.v1.json",
+  "title": "NWRK community contribution, version 1",
+  "description": "The sanitized document that nw uploads after explicit consent. It holds approved target IDs and normalized outcomes only. It never holds addresses, hostnames, URLs, headers, certificates or identifiers. Fields may be added only in a new schema version.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "client", "profile", "results"],
+  "properties": {
+    "schema_version": { "const": "community-contribution.v1" },
+    "client": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "version"],
+      "properties": {
+        "name": { "const": "nwrk" },
+        "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(-[0-9A-Za-z.]+)?$", "maxLength": 32 }
+      }
+    },
+    "profile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version"],
+      "properties": {
+        "id": { "$ref": "#/$defs/slug" },
+        "version": { "type": "integer", "minimum": 1, "maximum": 1000 }
+      }
+    },
+    "results": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 20,
+      "items": { "$ref": "#/$defs/result" }
+    }
+  },
+  "$defs": {
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+      "minLength": 1,
+      "maxLength": 64
+    },
+    "result": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["target_id", "measurements"],
+      "properties": {
+        "target_id": { "$ref": "#/$defs/slug" },
+        "measurements": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 8,
+          "items": { "$ref": "#/$defs/measurement" }
+        }
+      }
+    },
+    "layer": { "enum": ["dns", "tcp", "tls", "http"] },
+    "family": { "enum": ["ipv4", "ipv6"] },
+    "dnsRcode": { "enum": ["NOERROR", "FORMERR", "SERVFAIL", "NXDOMAIN", "NOTIMP", "REFUSED", "OTHER"] },
+    "errorCode": {
+      "enum": [
+        "dns.nxdomain", "dns.servfail", "dns.refused", "dns.no_answer", "dns.timeout", "dns.transport", "dns.error",
+        "tcp.refused", "tcp.timeout", "tcp.unreachable", "tcp.reset", "tcp.error",
+        "tls.cert_expired", "tls.cert_untrusted", "tls.hostname_mismatch", "tls.handshake_failure", "tls.reset", "tls.timeout", "tls.error",
+        "http.timeout", "http.redirect_loop", "http.protocol_error", "http.reset", "http.error"
+      ]
+    },
+    "measurement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["layer", "family", "outcome", "duration_ms"],
+      "properties": {
+        "layer": { "$ref": "#/$defs/layer" },
+        "family": { "$ref": "#/$defs/family" },
+        "outcome": { "enum": ["success", "response_received", "failure"] },
+        "duration_ms": { "type": "integer", "minimum": 0, "maximum": 60000 },
+        "error": { "$ref": "#/$defs/errorCode" },
+        "status_code": { "type": "integer", "minimum": 100, "maximum": 599 },
+        "dns_rcode": { "$ref": "#/$defs/dnsRcode" },
+        "answer_count": { "type": "integer", "minimum": 1, "maximum": 64 }
+      },
+      "allOf": [
+        {
+          "description": "A failure names its error. A success or a response never does.",
+          "if": { "properties": { "outcome": { "const": "failure" } }, "required": ["outcome"] },
+          "then": { "required": ["error"] },
+          "else": { "not": { "required": ["error"] } }
+        },
+        {
+          "description": "DNS: success or failure. A success has answers. Only DNS carries rcode and answer count.",
+          "if": { "properties": { "layer": { "const": "dns" } }, "required": ["layer"] },
+          "then": {
+            "properties": {
+              "outcome": { "enum": ["success", "failure"] },
+              "error": { "pattern": "^dns\\." }
+            },
+            "not": { "required": ["status_code"] },
+            "if": { "properties": { "outcome": { "const": "success" } }, "required": ["outcome"] },
+            "then": { "required": ["answer_count"] },
+            "else": { "not": { "required": ["answer_count"] } }
+          },
+          "else": { "not": { "anyOf": [{ "required": ["dns_rcode"] }, { "required": ["answer_count"] }] } }
+        },
+        {
+          "description": "TCP: success or failure, with a TCP error.",
+          "if": { "properties": { "layer": { "const": "tcp" } }, "required": ["layer"] },
+          "then": {
+            "properties": {
+              "outcome": { "enum": ["success", "failure"] },
+              "error": { "pattern": "^tcp\\." }
+            },
+            "not": { "required": ["status_code"] }
+          }
+        },
+        {
+          "description": "TLS: success or failure. The handshake can fail in TCP before TLS starts.",
+          "if": { "properties": { "layer": { "const": "tls" } }, "required": ["layer"] },
+          "then": {
+            "properties": {
+              "outcome": { "enum": ["success", "failure"] },
+              "error": { "pattern": "^(tls|tcp)\\." }
+            },
+            "not": { "required": ["status_code"] }
+          }
+        },
+        {
+          "description": "HTTP: a response has a status code. A failure has none.",
+          "if": { "properties": { "layer": { "const": "http" } }, "required": ["layer"] },
+          "then": {
+            "properties": { "outcome": { "enum": ["response_received", "failure"] } },
+            "if": { "properties": { "outcome": { "const": "response_received" } }, "required": ["outcome"] },
+            "then": { "required": ["status_code"] },
+            "else": { "not": { "required": ["status_code"] } }
+          }
+        }
+      ]
+    }
+  }
+}

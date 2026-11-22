@@ -1,0 +1,254 @@
+{
+  "description": "Every fixture and the stage and API error code that must reject it. stage is size, syntax, schema or semantic. Valid fixtures pass all stages.",
+  "valid": {
+    "valid/core-all-success.json": {},
+    "valid/core-mixed-failures.json": {},
+    "valid/dev-all-success.json": {},
+    "valid/dev-dns-with-rcode.json": {},
+    "valid/dev-host-without-ipv6.json": {},
+    "valid/dev-http-status-codes.json": {},
+    "valid/minimal.json": {}
+  },
+  "invalid": {
+    "invalid/wrong-schema-version.json": {
+      "stage": "schema",
+      "code": "schema_violation",
+      "reason": "schema_version is not community-contribution.v1"
+    },
+    "invalid/missing-client.json": {
+      "stage": "schema",
+      "code": "schema_violation",
+      "reason": "client is required"
+    },
+    "invalid/client-name-other.json": {
+      "stage": "schema",
+      "code": "schema_violation",
+      "reason": "client.name must be nwrk"
+    },
+    "invalid/client-version-bad.json": {
+      "stage": "schema",
+      "code": "schema_violation",
+      "reason": "client.version is not a version number"
+    },
+    "invalid/unknown-top-level-field.json": {
+      "stage": "schema",
+      "code": "schema_violation",
+      "reason": "unknown field country"
+    },
+    "invalid/unknown-top-level-ip.json": {
+      "stage": "schema",
+      "code": "schema_violation",
+      "reason": "unknown field source_ip"
+    },
+    "invalid/unknown-measurement-field-ip.json": {
+      "stage": "schema",
+      "code": "schema_violation",
+      "reason": "unknown field resolved_ip in a measurement"
+    },
+    "invalid/unknown-result-field-url.json": {
+      "stage": "schema",
+      "code": "schema_violation",
+      "reason": "unknown field url in a result"
+    },
+    "invalid/unknown-client-field-hostname.json": {
+      "stage": "schema",
+      "code": "schema_violation",
+      "reason": "unknown field hostname in client"
+    },
+    "invalid/empty-results.json": {
+      "stage": "schema",
+      "code": "schema_violation",
+      "reason": "results needs at least one item"
+    },
+    "invalid/too-many-results.json": {
+      "stage": "schema",
+      "code": "schema_violation",
+      "reason": "results has more than 20 items"
+    },
+    "invalid/empty-measurements.json": {
+      "stage": "schema",
+      "code": "schema_violation",
+      "reason": "measurements needs at least one item"
+    },
+    "invalid/too-many-measurements.json": {
+      "stage": "schema",
+      "code": "schema_violation",
+      "reason": "measurements has more than 8 items"
+    },
+    "invalid/layer-unknown.json": {
+      "stage": "schema",
+      "code": "schema_violation",
+      "reason": "layer icmp is not allowed"
+    },
+    "invalid/family-unknown.json": {
+      "stage": "schema",
+      "code": "schema_violation",
+      "reason": "family ipv5 is not allowed"
+    },
+    "invalid/outcome-unknown.json": {
+      "stage": "schema",
+      "code": "schema_violation",
+      "reason": "outcome blocked is not allowed"
+    },
+    "invalid/duration-negative.json": {
+      "stage": "schema",
+      "code": "schema_violation",
+      "reason": "duration_ms below 0"
+    },
+    "invalid/duration-too-large.json": {
+      "stage": "schema",
+      "code": "schema_violation",
+      "reason": "duration_ms above 60000"
+    },
+    "invalid/duration-not-integer.json": {
+      "stage": "schema",
+      "code": "schema_violation",
+      "reason": "duration_ms is not an integer"
+    },
+    "invalid/duration-missing.json": {
+      "stage": "schema",
+      "code": "schema_violation",
+      "reason": "duration_ms is required"
+    },
+    "invalid/target-id-url.json": {
+      "stage": "schema",
+      "code": "schema_violation",
+      "reason": "target_id is not a slug"
+    },
+    "invalid/target-id-uppercase.json": {
+      "stage": "schema",
+      "code": "schema_violation",
+      "reason": "target_id is not a slug"
+    },
+    "invalid/profile-version-zero.json": {
+      "stage": "schema",
+      "code": "schema_violation",
+      "reason": "profile.version below 1"
+    },
+    "invalid/failure-without-error.json": {
+      "stage": "schema",
+      "code": "schema_violation",
+      "reason": "a failure needs an error"
+    },
+    "invalid/success-with-error.json": {
+      "stage": "schema",
+      "code": "schema_violation",
+      "reason": "a success must not have an error"
+    },
+    "invalid/error-code-unknown.json": {
+      "stage": "schema",
+      "code": "schema_violation",
+      "reason": "error code is not in the list"
+    },
+    "invalid/error-code-local.json": {
+      "stage": "schema",
+      "code": "schema_violation",
+      "reason": "local.* codes are not allowed"
+    },
+    "invalid/error-prefix-mismatch-dns.json": {
+      "stage": "schema",
+      "code": "schema_violation",
+      "reason": "a dns failure needs a dns error"
+    },
+    "invalid/error-prefix-mismatch-tcp.json": {
+      "stage": "schema",
+      "code": "schema_violation",
+      "reason": "a tcp failure needs a tcp error"
+    },
+    "invalid/dns-success-without-answers.json": {
+      "stage": "schema",
+      "code": "schema_violation",
+      "reason": "a dns success needs answer_count"
+    },
+    "invalid/dns-answer-count-zero.json": {
+      "stage": "schema",
+      "code": "schema_violation",
+      "reason": "answer_count below 1"
+    },
+    "invalid/dns-rcode-unknown.json": {
+      "stage": "schema",
+      "code": "schema_violation",
+      "reason": "dns_rcode is not in the list"
+    },
+    "invalid/tcp-with-status-code.json": {
+      "stage": "schema",
+      "code": "schema_violation",
+      "reason": "status_code only belongs to http"
+    },
+    "invalid/tcp-with-rcode.json": {
+      "stage": "schema",
+      "code": "schema_violation",
+      "reason": "dns_rcode only belongs to dns"
+    },
+    "invalid/tls-with-answer-count.json": {
+      "stage": "schema",
+      "code": "schema_violation",
+      "reason": "answer_count only belongs to dns"
+    },
+    "invalid/http-without-status.json": {
+      "stage": "schema",
+      "code": "schema_violation",
+      "reason": "response_received needs status_code"
+    },
+    "invalid/http-status-too-low.json": {
+      "stage": "schema",
+      "code": "schema_violation",
+      "reason": "status_code below 100"
+    },
+    "invalid/http-status-too-high.json": {
+      "stage": "schema",
+      "code": "schema_violation",
+      "reason": "status_code above 599"
+    },
+    "invalid/http-failure-with-status.json": {
+      "stage": "schema",
+      "code": "schema_violation",
+      "reason": "an http failure has no status_code"
+    },
+    "invalid/http-outcome-success.json": {
+      "stage": "schema",
+      "code": "schema_violation",
+      "reason": "http uses response_received, not success"
+    },
+    "invalid/tcp-outcome-response.json": {
+      "stage": "schema",
+      "code": "schema_violation",
+      "reason": "tcp cannot be response_received"
+    },
+    "invalid/unknown-profile-id.json": {
+      "stage": "semantic",
+      "code": "unknown_profile",
+      "reason": "profile ir-secret-v1 is not approved"
+    },
+    "invalid/unknown-profile-version.json": {
+      "stage": "semantic",
+      "code": "unknown_profile",
+      "reason": "profile version 2 is not approved"
+    },
+    "invalid/unknown-target.json": {
+      "stage": "semantic",
+      "code": "unknown_target",
+      "reason": "target example-private is not in the profile"
+    },
+    "invalid/target-from-other-profile.json": {
+      "stage": "semantic",
+      "code": "unknown_target",
+      "reason": "digikala belongs to ir-core-v1"
+    },
+    "invalid/duplicate-target.json": {
+      "stage": "semantic",
+      "code": "invalid_result",
+      "reason": "target appears twice"
+    },
+    "invalid/duplicate-layer-family.json": {
+      "stage": "semantic",
+      "code": "invalid_result",
+      "reason": "duplicate dns/ipv4"
+    },
+    "invalid/family-not-served.json": {
+      "stage": "semantic",
+      "code": "invalid_result",
+      "reason": "github has no native ipv6"
+    }
+  }
+}

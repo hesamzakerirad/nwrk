@@ -1,0 +1,14 @@
+{
+ "description": "Golden fixtures for aggregation spec version 1. Every implementation must give exactly the expected output.",
+ "files": [
+  "hourly-basic.json",
+  "histogram-edges.json",
+  "percentiles.json",
+  "threshold-edges.json",
+  "classification.json",
+  "daily-rollups.json",
+  "window-bounds.json",
+  "family-split.json",
+  "long-windows.json"
+ ]
+}

@@ -1,0 +1,194 @@
+{
+  "schema_version": "community-contribution.v1",
+  "client": {
+    "name": "nwrk",
+    "version": "0.5.0"
+  },
+  "profile": {
+    "id": "ir-dev-v1",
+    "version": 1
+  },
+  "results": [
+    {
+      "target_id": "docker-hub",
+      "measurements": [
+        {
+          "layer": "dns",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 30,
+          "answer_count": 2
+        },
+        {
+          "layer": "tcp",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 48
+        },
+        {
+          "layer": "tls",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 82
+        },
+        {
+          "layer": "http",
+          "family": "ipv4",
+          "outcome": "response_received",
+          "duration_ms": 125,
+          "status_code": 403
+        },
+        {
+          "layer": "dns",
+          "family": "ipv6",
+          "outcome": "success",
+          "duration_ms": 28,
+          "answer_count": 2
+        },
+        {
+          "layer": "tcp",
+          "family": "ipv6",
+          "outcome": "success",
+          "duration_ms": 46
+        },
+        {
+          "layer": "tls",
+          "family": "ipv6",
+          "outcome": "success",
+          "duration_ms": 80
+        },
+        {
+          "layer": "http",
+          "family": "ipv6",
+          "outcome": "response_received",
+          "duration_ms": 123,
+          "status_code": 403
+        }
+      ]
+    },
+    {
+      "target_id": "github",
+      "measurements": [
+        {
+          "layer": "dns",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 30,
+          "answer_count": 2
+        },
+        {
+          "layer": "tcp",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 48
+        },
+        {
+          "layer": "tls",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 82
+        },
+        {
+          "layer": "http",
+          "family": "ipv4",
+          "outcome": "response_received",
+          "duration_ms": 125,
+          "status_code": 451
+        }
+      ]
+    },
+    {
+      "target_id": "npm",
+      "measurements": [
+        {
+          "layer": "dns",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 30,
+          "answer_count": 2
+        },
+        {
+          "layer": "tcp",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 48
+        },
+        {
+          "layer": "tls",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 82
+        },
+        {
+          "layer": "http",
+          "family": "ipv4",
+          "outcome": "response_received",
+          "duration_ms": 125,
+          "status_code": 503
+        }
+      ]
+    },
+    {
+      "target_id": "pypi",
+      "measurements": [
+        {
+          "layer": "dns",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 30,
+          "answer_count": 2
+        },
+        {
+          "layer": "tcp",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 48
+        },
+        {
+          "layer": "tls",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 82
+        },
+        {
+          "layer": "http",
+          "family": "ipv4",
+          "outcome": "response_received",
+          "duration_ms": 125,
+          "status_code": 404
+        }
+      ]
+    },
+    {
+      "target_id": "crates-io",
+      "measurements": [
+        {
+          "layer": "dns",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 30,
+          "answer_count": 2
+        },
+        {
+          "layer": "tcp",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 48
+        },
+        {
+          "layer": "tls",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 82
+        },
+        {
+          "layer": "http",
+          "family": "ipv4",
+          "outcome": "response_received",
+          "duration_ms": 125,
+          "status_code": 301
+        }
+      ]
+    }
+  ]
+}

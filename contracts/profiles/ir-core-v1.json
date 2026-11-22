@@ -1,0 +1,287 @@
+{
+  "schema_version": "community-profile.v1",
+  "id": "ir-core-v1",
+  "version": 1,
+  "description": "A small baseline of international and domestic reachability: connectivity references, Wikipedia and three domestic services.",
+  "limits": {
+    "concurrency": 4,
+    "timeouts_ms": {
+      "dns": 3000,
+      "tcp": 3000,
+      "tls": 5000,
+      "http": 5000
+    },
+    "total_budget_ms": 90000
+  },
+  "services": [
+    {
+      "id": "google",
+      "name": "Google",
+      "category": "international",
+      "official_url": "https://www.google.com/"
+    },
+    {
+      "id": "gstatic",
+      "name": "Google Static",
+      "category": "international",
+      "official_url": "https://www.gstatic.com/"
+    },
+    {
+      "id": "cloudflare",
+      "name": "Cloudflare",
+      "category": "international",
+      "official_url": "https://www.cloudflare.com/"
+    },
+    {
+      "id": "mozilla",
+      "name": "Mozilla",
+      "category": "international",
+      "official_url": "https://www.mozilla.org/"
+    },
+    {
+      "id": "apple",
+      "name": "Apple",
+      "category": "international",
+      "official_url": "https://www.apple.com/"
+    },
+    {
+      "id": "example",
+      "name": "Example Domain",
+      "category": "international",
+      "official_url": "https://example.com/"
+    },
+    {
+      "id": "wikipedia",
+      "name": "Wikipedia",
+      "category": "reference",
+      "official_url": "https://www.wikipedia.org/"
+    },
+    {
+      "id": "digikala",
+      "name": "Digikala",
+      "category": "domestic",
+      "official_url": "https://www.digikala.com/"
+    },
+    {
+      "id": "aparat",
+      "name": "Aparat",
+      "category": "domestic",
+      "official_url": "https://www.aparat.com/"
+    },
+    {
+      "id": "divar",
+      "name": "Divar",
+      "category": "domestic",
+      "official_url": "https://divar.ir/"
+    }
+  ],
+  "endpoints": [
+    {
+      "target_id": "google",
+      "service_id": "google",
+      "hostname": "www.google.com",
+      "port": 443,
+      "scheme": "https",
+      "path": "/generate_204",
+      "method": "HEAD",
+      "families": [
+        "ipv4",
+        "ipv6"
+      ],
+      "measurement_types": [
+        "dns",
+        "tcp",
+        "tls",
+        "http"
+      ],
+      "redirect_policy": "none",
+      "max_response_bytes": 0
+    },
+    {
+      "target_id": "gstatic",
+      "service_id": "gstatic",
+      "hostname": "www.gstatic.com",
+      "port": 443,
+      "scheme": "https",
+      "path": "/generate_204",
+      "method": "HEAD",
+      "families": [
+        "ipv4",
+        "ipv6"
+      ],
+      "measurement_types": [
+        "dns",
+        "tcp",
+        "tls",
+        "http"
+      ],
+      "redirect_policy": "none",
+      "max_response_bytes": 0
+    },
+    {
+      "target_id": "cloudflare",
+      "service_id": "cloudflare",
+      "hostname": "www.cloudflare.com",
+      "port": 443,
+      "scheme": "https",
+      "path": "/robots.txt",
+      "method": "HEAD",
+      "families": [
+        "ipv4",
+        "ipv6"
+      ],
+      "measurement_types": [
+        "dns",
+        "tcp",
+        "tls",
+        "http"
+      ],
+      "redirect_policy": "none",
+      "max_response_bytes": 0
+    },
+    {
+      "target_id": "mozilla",
+      "service_id": "mozilla",
+      "hostname": "detectportal.firefox.com",
+      "port": 443,
+      "scheme": "https",
+      "path": "/success.txt",
+      "method": "HEAD",
+      "families": [
+        "ipv4",
+        "ipv6"
+      ],
+      "measurement_types": [
+        "dns",
+        "tcp",
+        "tls",
+        "http"
+      ],
+      "redirect_policy": "none",
+      "max_response_bytes": 0
+    },
+    {
+      "target_id": "apple",
+      "service_id": "apple",
+      "hostname": "www.apple.com",
+      "port": 443,
+      "scheme": "https",
+      "path": "/library/test/success.html",
+      "method": "HEAD",
+      "families": [
+        "ipv4",
+        "ipv6"
+      ],
+      "measurement_types": [
+        "dns",
+        "tcp",
+        "tls",
+        "http"
+      ],
+      "redirect_policy": "none",
+      "max_response_bytes": 0
+    },
+    {
+      "target_id": "example",
+      "service_id": "example",
+      "hostname": "example.com",
+      "port": 443,
+      "scheme": "https",
+      "path": "/",
+      "method": "HEAD",
+      "families": [
+        "ipv4",
+        "ipv6"
+      ],
+      "measurement_types": [
+        "dns",
+        "tcp",
+        "tls",
+        "http"
+      ],
+      "redirect_policy": "none",
+      "max_response_bytes": 0
+    },
+    {
+      "target_id": "wikipedia",
+      "service_id": "wikipedia",
+      "hostname": "www.wikipedia.org",
+      "port": 443,
+      "scheme": "https",
+      "path": "/",
+      "method": "HEAD",
+      "families": [
+        "ipv4",
+        "ipv6"
+      ],
+      "measurement_types": [
+        "dns",
+        "tcp",
+        "tls",
+        "http"
+      ],
+      "redirect_policy": "none",
+      "max_response_bytes": 0
+    },
+    {
+      "target_id": "digikala",
+      "service_id": "digikala",
+      "hostname": "www.digikala.com",
+      "port": 443,
+      "scheme": "https",
+      "path": "/robots.txt",
+      "method": "HEAD",
+      "families": [
+        "ipv4"
+      ],
+      "measurement_types": [
+        "dns",
+        "tcp",
+        "tls",
+        "http"
+      ],
+      "redirect_policy": "none",
+      "max_response_bytes": 0
+    },
+    {
+      "target_id": "aparat",
+      "service_id": "aparat",
+      "hostname": "www.aparat.com",
+      "port": 443,
+      "scheme": "https",
+      "path": "/robots.txt",
+      "method": "HEAD",
+      "families": [
+        "ipv4"
+      ],
+      "measurement_types": [
+        "dns",
+        "tcp",
+        "tls",
+        "http"
+      ],
+      "redirect_policy": "none",
+      "max_response_bytes": 0
+    },
+    {
+      "target_id": "divar",
+      "service_id": "divar",
+      "hostname": "divar.ir",
+      "port": 443,
+      "scheme": "https",
+      "path": "/robots.txt",
+      "method": "HEAD",
+      "families": [
+        "ipv4"
+      ],
+      "measurement_types": [
+        "dns",
+        "tcp",
+        "tls",
+        "http"
+      ],
+      "redirect_policy": "none",
+      "max_response_bytes": 0
+    }
+  ]
+}

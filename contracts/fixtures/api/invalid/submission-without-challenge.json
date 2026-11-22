@@ -1,0 +1,27 @@
+{
+  "contribution": {
+    "schema_version": "community-contribution.v1",
+    "client": {
+      "name": "nwrk",
+      "version": "0.5.0"
+    },
+    "profile": {
+      "id": "ir-dev-v1",
+      "version": 1
+    },
+    "results": [
+      {
+        "target_id": "github",
+        "measurements": [
+          {
+            "layer": "dns",
+            "family": "ipv4",
+            "outcome": "success",
+            "duration_ms": 0,
+            "answer_count": 1
+          }
+        ]
+      }
+    ]
+  }
+}

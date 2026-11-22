@@ -1,0 +1,26 @@
+{
+  "description": "Input is the ASCII text <challenge_id>:<token>:<nonce>. Each nonce is the smallest one that solves the challenge.",
+  "vectors": [
+    {
+      "challenge_id": "01JD5X8Q4M7R2N6T9V3W5Y0ZAB",
+      "token": "q8mZ3kT1vXb7LwR2nYc5HdJf0sGpA4uE9iOe6BxNzUg",
+      "difficulty_bits": 12,
+      "nonce": "457",
+      "leading_zero_bits": 14
+    },
+    {
+      "challenge_id": "01JD5X8Q4M7R2N6T9V3W5Y0ZAC",
+      "token": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "difficulty_bits": 16,
+      "nonce": "19025",
+      "leading_zero_bits": 16
+    },
+    {
+      "challenge_id": "01JD5X8Q4M7R2N6T9V3W5Y0ZAD",
+      "token": "_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-x",
+      "difficulty_bits": 0,
+      "nonce": "0",
+      "leading_zero_bits": 0
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "challenge": {
+    "id": "01JD5X8Q4M7R2N6T9V3W5Y0ZAB",
+    "token": "q8mZ3kT1vXb7LwR2nYc5HdJf0sGpA4uE9iOe6BxNzUg",
+    "pow_nonce": "483921"
+  },
+  "contribution": {
+    "schema_version": "community-contribution.v1",
+    "client": {
+      "name": "nwrk",
+      "version": "0.5.0"
+    },
+    "profile": {
+      "id": "ir-dev-v1",
+      "version": 1
+    },
+    "results": [
+      {
+        "target_id": "github",
+        "measurements": [
+          {
+            "layer": "dns",
+            "family": "ipv4",
+            "outcome": "success",
+            "duration_ms": 0,
+            "answer_count": 1
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "description": "Every histogram bucket edge. A failure with a long duration is not counted in the histogram, the sum, the minimum or the maximum.",
+  "rows": [
+    {"submission": "S0009", "hour": "2026-11-22T08:00:00Z", "target": "github", "asn": 1, "layer": "tcp", "family": "ipv4", "outcome": "success", "duration_ms": 0},
+    {"submission": "S0010", "hour": "2026-11-22T08:00:00Z", "target": "github", "asn": 1, "layer": "tcp", "family": "ipv4", "outcome": "success", "duration_ms": 10},
+    {"submission": "S0011", "hour": "2026-11-22T08:00:00Z", "target": "github", "asn": 1, "layer": "tcp", "family": "ipv4", "outcome": "success", "duration_ms": 11},
+    {"submission": "S0012", "hour": "2026-11-22T08:00:00Z", "target": "github", "asn": 1, "layer": "tcp", "family": "ipv4", "outcome": "success", "duration_ms": 25},
+    {"submission": "S0013", "hour": "2026-11-22T08:00:00Z", "target": "github", "asn": 1, "layer": "tcp", "family": "ipv4", "outcome": "success", "duration_ms": 26},
+    {"submission": "S0014", "hour": "2026-11-22T08:00:00Z", "target": "github", "asn": 1, "layer": "tcp", "family": "ipv4", "outcome": "success", "duration_ms": 50},
+    {"submission": "S0015", "hour": "2026-11-22T08:00:00Z", "target": "github", "asn": 1, "layer": "tcp", "family": "ipv4", "outcome": "success", "duration_ms": 51},
+    {"submission": "S0016", "hour": "2026-11-22T08:00:00Z", "target": "github", "asn": 1, "layer": "tcp", "family": "ipv4", "outcome": "success", "duration_ms": 100},
+    {"submission": "S0017", "hour": "2026-11-22T08:00:00Z", "target": "github", "asn": 1, "layer": "tcp", "family": "ipv4", "outcome": "success", "duration_ms": 101},
+    {"submission": "S0018", "hour": "2026-11-22T08:00:00Z", "target": "github", "asn": 1, "layer": "tcp", "family": "ipv4", "outcome": "success", "duration_ms": 200},
+    {"submission": "S0019", "hour": "2026-11-22T08:00:00Z", "target": "github", "asn": 1, "layer": "tcp", "family": "ipv4", "outcome": "success", "duration_ms": 201},
+    {"submission": "S0020", "hour": "2026-11-22T08:00:00Z", "target": "github", "asn": 1, "layer": "tcp", "family": "ipv4", "outcome": "success", "duration_ms": 300},
+    {"submission": "S0021", "hour": "2026-11-22T08:00:00Z", "target": "github", "asn": 1, "layer": "tcp", "family": "ipv4", "outcome": "success", "duration_ms": 301},
+    {"submission": "S0022", "hour": "2026-11-22T08:00:00Z", "target": "github", "asn": 1, "layer": "tcp", "family": "ipv4", "outcome": "success", "duration_ms": 500},
+    {"submission": "S0023", "hour": "2026-11-22T08:00:00Z", "target": "github", "asn": 1, "layer": "tcp", "family": "ipv4", "outcome": "success", "duration_ms": 501},
+    {"submission": "S0024", "hour": "2026-11-22T08:00:00Z", "target": "github", "asn": 1, "layer": "tcp", "family": "ipv4", "outcome": "success", "duration_ms": 750},
+    {"submission": "S0025", "hour": "2026-11-22T08:00:00Z", "target": "github", "asn": 1, "layer": "tcp", "family": "ipv4", "outcome": "success", "duration_ms": 751},
+    {"submission": "S0026", "hour": "2026-11-22T08:00:00Z", "target": "github", "asn": 1, "layer": "tcp", "family": "ipv4", "outcome": "success", "duration_ms": 1000},
+    {"submission": "S0027", "hour": "2026-11-22T08:00:00Z", "target": "github", "asn": 1, "layer": "tcp", "family": "ipv4", "outcome": "success", "duration_ms": 1001},
+    {"submission": "S0028", "hour": "2026-11-22T08:00:00Z", "target": "github", "asn": 1, "layer": "tcp", "family": "ipv4", "outcome": "success", "duration_ms": 1500},
+    {"submission": "S0029", "hour": "2026-11-22T08:00:00Z", "target": "github", "asn": 1, "layer": "tcp", "family": "ipv4", "outcome": "success", "duration_ms": 1501},
+    {"submission": "S0030", "hour": "2026-11-22T08:00:00Z", "target": "github", "asn": 1, "layer": "tcp", "family": "ipv4", "outcome": "success", "duration_ms": 2000},
+    {"submission": "S0031", "hour": "2026-11-22T08:00:00Z", "target": "github", "asn": 1, "layer": "tcp", "family": "ipv4", "outcome": "success", "duration_ms": 2001},
+    {"submission": "S0032", "hour": "2026-11-22T08:00:00Z", "target": "github", "asn": 1, "layer": "tcp", "family": "ipv4", "outcome": "success", "duration_ms": 3000},
+    {"submission": "S0033", "hour": "2026-11-22T08:00:00Z", "target": "github", "asn": 1, "layer": "tcp", "family": "ipv4", "outcome": "success", "duration_ms": 3001},
+    {"submission": "S0034", "hour": "2026-11-22T08:00:00Z", "target": "github", "asn": 1, "layer": "tcp", "family": "ipv4", "outcome": "success", "duration_ms": 5000},
+    {"submission": "S0035", "hour": "2026-11-22T08:00:00Z", "target": "github", "asn": 1, "layer": "tcp", "family": "ipv4", "outcome": "success", "duration_ms": 5001},
+    {"submission": "S0036", "hour": "2026-11-22T08:00:00Z", "target": "github", "asn": 1, "layer": "tcp", "family": "ipv4", "outcome": "success", "duration_ms": 10000},
+    {"submission": "S0037", "hour": "2026-11-22T08:00:00Z", "target": "github", "asn": 1, "layer": "tcp", "family": "ipv4", "outcome": "success", "duration_ms": 10001},
+    {"submission": "S0038", "hour": "2026-11-22T08:00:00Z", "target": "github", "asn": 1, "layer": "tcp", "family": "ipv4", "outcome": "success", "duration_ms": 30000},
+    {"submission": "S0039", "hour": "2026-11-22T08:00:00Z", "target": "github", "asn": 1, "layer": "tcp", "family": "ipv4", "outcome": "success", "duration_ms": 30001},
+    {"submission": "S0040", "hour": "2026-11-22T08:00:00Z", "target": "github", "asn": 1, "layer": "tcp", "family": "ipv4", "outcome": "success", "duration_ms": 60000},
+    {"submission": "S0041", "hour": "2026-11-22T08:00:00Z", "target": "github", "asn": 1, "layer": "tcp", "family": "ipv4", "outcome": "failure", "duration_ms": 60000, "error": "tcp.timeout"}
+  ],
+  "expect": {
+    "hourly": [
+      {"hour": "2026-11-22T08:00:00Z", "target": "github", "asn": 1, "layer": "tcp", "family": "ipv4", "attempts": 33, "successes": 32, "failures": 1, "status_counts": {}, "error_counts": {"tcp.timeout": 1}, "duration_count": 32, "duration_sum_ms": 168885, "duration_min_ms": 0, "duration_max_ms": 60000, "histogram": [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2]}
+    ],
+    "samples": [
+      {"hour": "2026-11-22T08:00:00Z", "target": "github", "asn": 1, "submissions": 33}
+    ]
+  }
+}

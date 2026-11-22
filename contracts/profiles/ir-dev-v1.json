@@ -1,0 +1,262 @@
+{
+  "schema_version": "community-profile.v1",
+  "id": "ir-dev-v1",
+  "version": 1,
+  "description": "Common developer services: source hosting, package registries, container registry and system package mirrors.",
+  "limits": {
+    "concurrency": 4,
+    "timeouts_ms": {
+      "dns": 3000,
+      "tcp": 3000,
+      "tls": 5000,
+      "http": 5000
+    },
+    "total_budget_ms": 90000
+  },
+  "services": [
+    {
+      "id": "github",
+      "name": "GitHub",
+      "category": "developer",
+      "official_url": "https://github.com/"
+    },
+    {
+      "id": "go-proxy",
+      "name": "Go Module Proxy",
+      "category": "developer",
+      "official_url": "https://proxy.golang.org/"
+    },
+    {
+      "id": "npm",
+      "name": "npm",
+      "category": "developer",
+      "official_url": "https://www.npmjs.com/"
+    },
+    {
+      "id": "pypi",
+      "name": "PyPI",
+      "category": "developer",
+      "official_url": "https://pypi.org/"
+    },
+    {
+      "id": "docker-hub",
+      "name": "Docker Hub",
+      "category": "developer",
+      "official_url": "https://hub.docker.com/"
+    },
+    {
+      "id": "crates-io",
+      "name": "crates.io",
+      "category": "developer",
+      "official_url": "https://crates.io/"
+    },
+    {
+      "id": "debian",
+      "name": "Debian Mirrors",
+      "category": "developer",
+      "official_url": "https://deb.debian.org/"
+    },
+    {
+      "id": "ubuntu",
+      "name": "Ubuntu Mirrors",
+      "category": "developer",
+      "official_url": "https://archive.ubuntu.com/"
+    },
+    {
+      "id": "homebrew",
+      "name": "Homebrew",
+      "category": "developer",
+      "official_url": "https://formulae.brew.sh/"
+    }
+  ],
+  "endpoints": [
+    {
+      "target_id": "github",
+      "service_id": "github",
+      "hostname": "github.com",
+      "port": 443,
+      "scheme": "https",
+      "path": "/robots.txt",
+      "method": "HEAD",
+      "families": [
+        "ipv4"
+      ],
+      "measurement_types": [
+        "dns",
+        "tcp",
+        "tls",
+        "http"
+      ],
+      "redirect_policy": "none",
+      "max_response_bytes": 0
+    },
+    {
+      "target_id": "go-proxy",
+      "service_id": "go-proxy",
+      "hostname": "proxy.golang.org",
+      "port": 443,
+      "scheme": "https",
+      "path": "/github.com/spf13/cobra/@v/v1.10.2.info",
+      "method": "HEAD",
+      "families": [
+        "ipv4",
+        "ipv6"
+      ],
+      "measurement_types": [
+        "dns",
+        "tcp",
+        "tls",
+        "http"
+      ],
+      "redirect_policy": "none",
+      "max_response_bytes": 0
+    },
+    {
+      "target_id": "npm",
+      "service_id": "npm",
+      "hostname": "registry.npmjs.org",
+      "port": 443,
+      "scheme": "https",
+      "path": "/-/ping",
+      "method": "HEAD",
+      "families": [
+        "ipv4",
+        "ipv6"
+      ],
+      "measurement_types": [
+        "dns",
+        "tcp",
+        "tls",
+        "http"
+      ],
+      "redirect_policy": "none",
+      "max_response_bytes": 0
+    },
+    {
+      "target_id": "pypi",
+      "service_id": "pypi",
+      "hostname": "pypi.org",
+      "port": 443,
+      "scheme": "https",
+      "path": "/simple/pip/",
+      "method": "HEAD",
+      "families": [
+        "ipv4",
+        "ipv6"
+      ],
+      "measurement_types": [
+        "dns",
+        "tcp",
+        "tls",
+        "http"
+      ],
+      "redirect_policy": "none",
+      "max_response_bytes": 0
+    },
+    {
+      "target_id": "docker-hub",
+      "service_id": "docker-hub",
+      "hostname": "registry-1.docker.io",
+      "port": 443,
+      "scheme": "https",
+      "path": "/v2/",
+      "method": "HEAD",
+      "families": [
+        "ipv4",
+        "ipv6"
+      ],
+      "measurement_types": [
+        "dns",
+        "tcp",
+        "tls",
+        "http"
+      ],
+      "redirect_policy": "none",
+      "max_response_bytes": 0
+    },
+    {
+      "target_id": "crates-io",
+      "service_id": "crates-io",
+      "hostname": "index.crates.io",
+      "port": 443,
+      "scheme": "https",
+      "path": "/config.json",
+      "method": "HEAD",
+      "families": [
+        "ipv4",
+        "ipv6"
+      ],
+      "measurement_types": [
+        "dns",
+        "tcp",
+        "tls",
+        "http"
+      ],
+      "redirect_policy": "none",
+      "max_response_bytes": 0
+    },
+    {
+      "target_id": "debian",
+      "service_id": "debian",
+      "hostname": "deb.debian.org",
+      "port": 443,
+      "scheme": "https",
+      "path": "/debian/dists/stable/InRelease",
+      "method": "HEAD",
+      "families": [
+        "ipv4",
+        "ipv6"
+      ],
+      "measurement_types": [
+        "dns",
+        "tcp",
+        "tls",
+        "http"
+      ],
+      "redirect_policy": "none",
+      "max_response_bytes": 0
+    },
+    {
+      "target_id": "ubuntu",
+      "service_id": "ubuntu",
+      "hostname": "archive.ubuntu.com",
+      "port": 443,
+      "scheme": "https",
+      "path": "/ubuntu/dists/noble/InRelease",
+      "method": "HEAD",
+      "families": [
+        "ipv4",
+        "ipv6"
+      ],
+      "measurement_types": [
+        "dns",
+        "tcp",
+        "tls",
+        "http"
+      ],
+      "redirect_policy": "none",
+      "max_response_bytes": 0
+    },
+    {
+      "target_id": "homebrew",
+      "service_id": "homebrew",
+      "hostname": "formulae.brew.sh",
+      "port": 443,
+      "scheme": "https",
+      "path": "/api/formula/wget.json",
+      "method": "HEAD",
+      "families": [
+        "ipv4",
+        "ipv6"
+      ],
+      "measurement_types": [
+        "dns",
+        "tcp",
+        "tls",
+        "http"
+      ],
+      "redirect_policy": "none",
+      "max_response_bytes": 0
+    }
+  ]
+}

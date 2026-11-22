@@ -1,0 +1,368 @@
+openapi: 3.1.0
+info:
+  title: NWRK Status API
+  version: 1.0.0
+  description: |
+    Contribution endpoints and public read endpoints of the NWRK Status API.
+
+    Message bodies are defined by the JSON Schema files in `schemas/`.
+    A challenge stops simple replay. It does not prove that the measurements are genuine.
+servers:
+  - url: https://api.nwrk.ir
+    description: Production
+  - url: http://localhost:8080
+    description: Local development
+paths:
+  /api/v1/catalog:
+    get:
+      operationId: getCatalog
+      summary: Read the approved profiles
+      description: Returns every profile version that the server accepts, with its services and endpoints.
+      responses:
+        "200":
+          description: The approved profiles.
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/community-api.v1.schema.json#/$defs/catalogResponse
+  /api/v1/contributions/challenge:
+    post:
+      operationId: createChallenge
+      summary: Request a one-time contribution challenge
+      description: |
+        The challenge lives for five minutes and works for one submission.
+        Solve the proof of work and send the answer with the contribution.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ./schemas/community-api.v1.schema.json#/$defs/challengeRequest
+      responses:
+        "201":
+          description: Challenge created.
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/community-api.v1.schema.json#/$defs/challengeResponse
+        "400": { $ref: "#/components/responses/Error" }
+        "429": { $ref: "#/components/responses/Error" }
+  /api/v1/contributions:
+    post:
+      operationId: submitContribution
+      summary: Submit a sanitized contribution
+      description: |
+        The body must not exceed 65536 bytes.
+        The server checks the challenge, the proof of work, the schema, the profile and the targets.
+        It finds the observed country and network from the connection address and does not store the address.
+        An accepted contribution is aggregated later.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ./schemas/community-api.v1.schema.json#/$defs/submission
+      responses:
+        "202":
+          description: Accepted for aggregation.
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/community-api.v1.schema.json#/$defs/acceptedResponse
+        "200":
+          description: Valid, but outside the scope of the Iranian statistics. Nothing is stored.
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/community-api.v1.schema.json#/$defs/excludedResponse
+        "400": { $ref: "#/components/responses/Error" }
+        "410": { $ref: "#/components/responses/Error" }
+        "409": { $ref: "#/components/responses/Error" }
+        "413": { $ref: "#/components/responses/Error" }
+        "422": { $ref: "#/components/responses/Error" }
+        "429": { $ref: "#/components/responses/Error" }
+  /api/v1/summary:
+    get:
+      operationId: getSummary
+      summary: Read the public overview
+      description: |
+        Counts of services by state for the country-wide series, and the number of observed networks.
+        Every result holds its window, its submission count and the publication threshold that was used.
+        A submission is one accepted contribution, not a person. A series with fewer submissions than the threshold has the state
+        `insufficient_data` and no rates, latencies or status counts. See `aggregation/spec.md`.
+      parameters:
+        - { $ref: '#/components/parameters/window' }
+      responses:
+        "200":
+          description: OK.
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/community-public.v1.schema.json#/$defs/summaryResponse
+        "400": { $ref: "#/components/responses/Error" }
+        "404": { $ref: "#/components/responses/Error" }
+        "429": { $ref: "#/components/responses/Error" }
+  /api/v1/services:
+    get:
+      operationId: listServices
+      summary: List services with their latest country-wide result
+      description: |
+        One country-wide window result for each service. A country-wide result adds all networks. It is weighted by submissions. It is not a survey of all Iranian internet users.
+        Every result holds its window, its submission count and the publication threshold that was used.
+        A submission is one accepted contribution, not a person. A series with fewer submissions than the threshold has the state
+        `insufficient_data` and no rates, latencies or status counts. See `aggregation/spec.md`.
+      parameters:
+        - { $ref: '#/components/parameters/window' }
+        - { $ref: '#/components/parameters/limit' }
+        - { $ref: '#/components/parameters/cursor' }
+      responses:
+        "200":
+          description: OK.
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/community-public.v1.schema.json#/$defs/servicesResponse
+        "400": { $ref: "#/components/responses/Error" }
+        "404": { $ref: "#/components/responses/Error" }
+        "429": { $ref: "#/components/responses/Error" }
+  /api/v1/services/{slug}:
+    get:
+      operationId: getService
+      summary: Read one service
+      description: |
+        The country-wide result and the result of each observed network.
+        Every result holds its window, its submission count and the publication threshold that was used.
+        A submission is one accepted contribution, not a person. A series with fewer submissions than the threshold has the state
+        `insufficient_data` and no rates, latencies or status counts. See `aggregation/spec.md`.
+      parameters:
+        - { $ref: '#/components/parameters/slug' }
+        - { $ref: '#/components/parameters/window' }
+        - { $ref: '#/components/parameters/limit' }
+        - { $ref: '#/components/parameters/cursor' }
+      responses:
+        "200":
+          description: OK.
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/community-public.v1.schema.json#/$defs/serviceResponse
+        "400": { $ref: "#/components/responses/Error" }
+        "404": { $ref: "#/components/responses/Error" }
+        "429": { $ref: "#/components/responses/Error" }
+  /api/v1/services/{slug}/history:
+    get:
+      operationId: getServiceHistory
+      summary: Read the history of one service
+      description: |
+        A list of window results for successive end times. `step` is 1h or 1d. Every point follows the publication threshold.
+        Every result holds its window, its submission count and the publication threshold that was used.
+        A submission is one accepted contribution, not a person. A series with fewer submissions than the threshold has the state
+        `insufficient_data` and no rates, latencies or status counts. See `aggregation/spec.md`.
+      parameters:
+        - { $ref: '#/components/parameters/slug' }
+        - { $ref: '#/components/parameters/window' }
+        - { $ref: '#/components/parameters/asn' }
+        - { $ref: '#/components/parameters/step' }
+        - { $ref: '#/components/parameters/limit' }
+        - { $ref: '#/components/parameters/cursor' }
+      responses:
+        "200":
+          description: OK.
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/community-public.v1.schema.json#/$defs/historyResponse
+        "400": { $ref: "#/components/responses/Error" }
+        "404": { $ref: "#/components/responses/Error" }
+        "429": { $ref: "#/components/responses/Error" }
+  /api/v1/timeline:
+    get:
+      operationId: getTimeline
+      summary: Read the state of every service on every network, hour by hour
+      description: |
+        One window result for each hour, for the country-wide series and for each network, for each service, in a compact form.
+        Point i ends at `from` plus i hours and covers the `window` before its end time. The last point ends at `as_of`.
+        Every point follows the publication threshold: a point with fewer submissions than the threshold has the state `insufficient_data`.
+        A submission is one accepted contribution, not a person. See `aggregation/spec.md`.
+      parameters:
+        - { $ref: '#/components/parameters/window' }
+        - { $ref: '#/components/parameters/hours' }
+      responses:
+        "200":
+          description: OK.
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/community-public.v1.schema.json#/$defs/timelineResponse
+        "400": { $ref: "#/components/responses/Error" }
+        "429": { $ref: "#/components/responses/Error" }
+  /api/v1/networks:
+    get:
+      operationId: listNetworks
+      summary: List observed networks
+      description: |
+        Networks (ASN) that have at least one submission in the window. A network is listed with its counts. Its results are published only when it has enough submissions.
+        Every result holds its window, its submission count and the publication threshold that was used.
+        A submission is one accepted contribution, not a person. A series with fewer submissions than the threshold has the state
+        `insufficient_data` and no rates, latencies or status counts. See `aggregation/spec.md`.
+      parameters:
+        - { $ref: '#/components/parameters/window' }
+        - { $ref: '#/components/parameters/limit' }
+        - { $ref: '#/components/parameters/cursor' }
+      responses:
+        "200":
+          description: OK.
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/community-public.v1.schema.json#/$defs/networksResponse
+        "400": { $ref: "#/components/responses/Error" }
+        "404": { $ref: "#/components/responses/Error" }
+        "429": { $ref: "#/components/responses/Error" }
+  /api/v1/networks/{asn}:
+    get:
+      operationId: getNetwork
+      summary: Read one network
+      description: |
+        The result of each service for one network.
+        Every result holds its window, its submission count and the publication threshold that was used.
+        A submission is one accepted contribution, not a person. A series with fewer submissions than the threshold has the state
+        `insufficient_data` and no rates, latencies or status counts. See `aggregation/spec.md`.
+      parameters:
+        - { $ref: '#/components/parameters/asnPath' }
+        - { $ref: '#/components/parameters/window' }
+      responses:
+        "200":
+          description: OK.
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/community-public.v1.schema.json#/$defs/networkResponse
+        "400": { $ref: "#/components/responses/Error" }
+        "404": { $ref: "#/components/responses/Error" }
+        "429": { $ref: "#/components/responses/Error" }
+  /api/v1/statistics:
+    get:
+      operationId: getStatistics
+      summary: Read one window result
+      description: |
+        The result for one service and one network, or for all networks.
+        Every result holds its window, its submission count and the publication threshold that was used.
+        A submission is one accepted contribution, not a person. A series with fewer submissions than the threshold has the state
+        `insufficient_data` and no rates, latencies or status counts. See `aggregation/spec.md`.
+      parameters:
+        - { $ref: '#/components/parameters/window' }
+        - { $ref: '#/components/parameters/target' }
+        - { $ref: '#/components/parameters/asn' }
+      responses:
+        "200":
+          description: OK.
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/community-public.v1.schema.json#/$defs/statisticsResponse
+        "400": { $ref: "#/components/responses/Error" }
+        "404": { $ref: "#/components/responses/Error" }
+        "429": { $ref: "#/components/responses/Error" }
+  /api/v1/methodology:
+    get:
+      operationId: getMethodology
+      summary: Read the methodology
+      description: |
+        The windows, the histogram, the constants, the meaning of each state and the known limits.
+      parameters:
+      responses:
+        "200":
+          description: OK.
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/community-public.v1.schema.json#/$defs/methodologyResponse
+        "400": { $ref: "#/components/responses/Error" }
+        "404": { $ref: "#/components/responses/Error" }
+        "429": { $ref: "#/components/responses/Error" }
+  /api/v1/privacy:
+    get:
+      operationId: getPrivacy
+      summary: Read the privacy statements
+      description: |
+        What the server stores, for how long, and what it never stores.
+      parameters:
+      responses:
+        "200":
+          description: OK.
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/community-public.v1.schema.json#/$defs/privacyResponse
+        "400": { $ref: "#/components/responses/Error" }
+        "404": { $ref: "#/components/responses/Error" }
+        "429": { $ref: "#/components/responses/Error" }
+  /api/v1/health:
+    get:
+      operationId: getHealth
+      summary: Check the database and the cache
+      responses:
+        "200":
+          description: Everything works.
+          content:
+            application/json:
+              schema: { type: object, required: [status, checks], properties: { status: { const: ok }, checks: { type: object } } }
+        "503":
+          description: A dependency fails.
+components:
+  parameters:
+    window:
+      name: window
+      in: query
+      description: Length of the window. The default is 6h.
+      schema: { enum: [1h, 6h, 24h, 7d, 30d], default: 6h }
+    limit:
+      name: limit
+      in: query
+      schema: { type: integer, minimum: 1, maximum: 200, default: 50 }
+    cursor:
+      name: cursor
+      in: query
+      description: The `next_cursor` value of the previous page.
+      schema: { type: string, maxLength: 200 }
+    asn:
+      name: asn
+      in: query
+      description: A network number, or `all` (the default).
+      schema: { oneOf: [{ type: integer, minimum: 1 }, { const: all }], default: all }
+    hours:
+      name: hours
+      in: query
+      description: Number of points of a timeline, one for each hour.
+      schema: { type: integer, minimum: 6, maximum: 72, default: 24 }
+    step:
+      name: step
+      in: query
+      description: Distance between the end times of two points of a history.
+      schema: { enum: [1h, 1d], default: 1h }
+    target:
+      name: target
+      in: query
+      required: true
+      schema: { type: string, pattern: "^[a-z0-9]+(-[a-z0-9]+)*$" }
+    slug:
+      name: slug
+      in: path
+      required: true
+      schema: { type: string, pattern: "^[a-z0-9]+(-[a-z0-9]+)*$" }
+    asnPath:
+      name: asn
+      in: path
+      required: true
+      schema: { type: integer, minimum: 1 }
+  responses:
+    Error:
+      description: |
+        The request failed. Status mapping: 400 invalid_json, schema_violation, unsupported_schema_version, unknown_profile;
+        404 not_found; 400 invalid_parameter; 410 challenge_expired; 409 challenge_replayed; 413 payload_too_large; 422 unknown_target, invalid_result,
+        invalid_challenge, invalid_pow; 429 rate_limited; 500 server_error.
+      content:
+        application/json:
+          schema:
+            $ref: ./schemas/community-api.v1.schema.json#/$defs/errorResponse
