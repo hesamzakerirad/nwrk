@@ -194,6 +194,23 @@ Listing the routers of a trace needs ICMP privileges (root or `CAP_NET_RAW` on L
 
 Exit status: `ping` and `trace` exit `0` when the destination answered and `1` when it did not; `mtu` exits `0` when the connection was made and `1` when it was not; all exit `2` for a usage error or when the method you asked for is not permitted. With `--output json` they print a document with a `schema_version`.
 
+## nw community
+
+Measures a fixed list of public services and, if you agree, shares the result with [NWRK Status](../community/). It is the only command that can send data, and it asks first.
+
+```sh
+nw community info
+nw community contribute [--profile <id>] [--dry-run] [--payload-file <path>] [--api <url>]
+```
+
+| Command | What it does |
+|---|---|
+| `nw community info` | Shows the profile, its services and the disclosure. Sends nothing. |
+| `nw community contribute` | Asks, measures, shows the result, asks again, then uploads. |
+| `nw community contribute --dry-run` | Measures and shows the result. Never contacts the server. |
+
+`--payload-file` writes the exact message to a file and works only with `--dry-run`. `--output json` also works only with `--dry-run`. `--timeout` does not apply: the profile sets the time limits. See [Community Measurements](../community/) and [Privacy](../privacy/).
+
 ## nw completion
 
 Generates a completion script for `bash`, `zsh`, `fish` or `powershell`. It makes no network requests.

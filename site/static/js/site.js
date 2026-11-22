@@ -58,7 +58,11 @@
     addCopy(row, function () { return row.getAttribute("data-copy"); });
   });
   d.querySelectorAll(".prose pre, .docs-main pre").forEach(function (pre) {
-    addCopy(pre, function () {
+    var wrap = d.createElement("div");
+    wrap.className = "code-wrap";
+    pre.parentNode.insertBefore(wrap, pre);
+    wrap.appendChild(pre);
+    addCopy(wrap, function () {
       var c = pre.querySelector("code");
       return (c ? c.textContent : pre.textContent).replace(/^[$>] /gm, "");
     });
