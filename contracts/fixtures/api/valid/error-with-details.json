@@ -1,0 +1,12 @@
+{
+  "error": {
+    "code": "schema_violation",
+    "message": "The contribution is not valid.",
+    "details": [
+      {
+        "path": "results[0].measurements[1].duration_ms",
+        "reason": "must be at least 0"
+      }
+    ]
+  }
+}

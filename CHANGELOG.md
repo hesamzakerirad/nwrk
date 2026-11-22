@@ -6,6 +6,23 @@ Every release has a hand-written entry. The release workflow publishes the match
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-11-22
+
+Community measurements. `nw community` shares anonymous reachability results with NWRK Status, only after you agree.
+
+### Added
+
+- `nw community info`, which shows what is measured, sent and stored and sends nothing.
+- `nw community contribute`, which measures a fixed list of public services, shows the exact result, and uploads it only if you agree at two prompts. `--dry-run` never contacts the server, and `--payload-file` saves the exact message.
+- The public contract for contributions in `contracts/`: message schema, measurement profiles, API, aggregation rules and test fixtures.
+- A community page in the docs, and a contribution section in the privacy page.
+- A status link in the website header and footer, and a community section on the home page.
+
+### Changed
+
+- The copy button on code blocks stays in place when the block scrolls sideways.
+- The website no longer says that nothing is ever uploaded. It says nothing is uploaded unless you choose to share.
+
 ## [0.4.0] - 2026-11-18
 
 Developer reachability. The question this release answers: is it a server-side restriction or network interference?

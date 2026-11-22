@@ -93,7 +93,7 @@ The product may eventually support non-technical users through guided interactiv
 These principles should guide product design and code review.
 
 1. **Local-first:** Core diagnostics must work without an account, backend, or network connection to a vendor service, except when testing an external destination.
-2. **Privacy-first:** Do not upload measurement data automatically. Any external submission or third-party measurement must be explicit and clearly disclosed.
+2. **Privacy-first:** Do not upload measurement data automatically. Any external submission or third-party measurement must be explicit and clearly disclosed. The only submission path is `nw community contribute`, which asks before it measures and before it uploads.
 3. **Evidence before conclusions:** Findings must reference the measurements that support them.
 4. **Honest uncertainty:** Distinguish observed facts from inferred causes. A timeout is not proof of a firewall; a TLS failure is not proof of censorship.
 5. **Cross-platform:** Linux, macOS, and Windows are first-class targets. Platform-specific limitations must be reported rather than hidden.

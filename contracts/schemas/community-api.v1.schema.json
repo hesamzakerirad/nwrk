@@ -1,0 +1,316 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nwrk.ir/schema/community-api.v1.json",
+  "title": "NWRK community API messages, version 1",
+  "description": "Request and response bodies of the contribution endpoints. The contribution document itself is defined in community-contribution.v1.schema.json.",
+  "$defs": {
+    "ulid": {
+      "type": "string",
+      "pattern": "^[0-7][0-9A-HJKMNP-TV-Z]{25}$"
+    },
+    "token": {
+      "description": "32 random bytes, base64url without padding.",
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{43}$"
+    },
+    "client": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "version"
+      ],
+      "properties": {
+        "name": {
+          "const": "nwrk"
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(-[0-9A-Za-z.]+)?$",
+          "maxLength": 32
+        }
+      }
+    },
+    "profileRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "version"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+          "maxLength": 64
+        },
+        "version": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1000
+        }
+      }
+    },
+    "challengeRequest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "client",
+        "profile"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "community-contribution.v1"
+        },
+        "client": {
+          "$ref": "#/$defs/client"
+        },
+        "profile": {
+          "$ref": "#/$defs/profileRef"
+        }
+      }
+    },
+    "challengeResponse": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "challenge_id",
+        "token",
+        "expires_at",
+        "pow",
+        "accepted"
+      ],
+      "properties": {
+        "challenge_id": {
+          "$ref": "#/$defs/ulid"
+        },
+        "token": {
+          "$ref": "#/$defs/token"
+        },
+        "expires_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "pow": {
+          "description": "Find a decimal nonce so that SHA-256 of the ASCII text \"<challenge_id>:<token>:<nonce>\" has at least difficulty_bits leading zero bits.",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "algorithm",
+            "difficulty_bits"
+          ],
+          "properties": {
+            "algorithm": {
+              "const": "sha256-leading-zero-bits"
+            },
+            "difficulty_bits": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 28
+            }
+          }
+        },
+        "accepted": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "schema_versions",
+            "profiles"
+          ],
+          "properties": {
+            "schema_versions": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "const": "community-contribution.v1"
+              }
+            },
+            "profiles": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "$ref": "#/$defs/profileRef"
+              }
+            }
+          }
+        }
+      }
+    },
+    "submission": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "challenge",
+        "contribution"
+      ],
+      "properties": {
+        "challenge": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id",
+            "token",
+            "pow_nonce"
+          ],
+          "properties": {
+            "id": {
+              "$ref": "#/$defs/ulid"
+            },
+            "token": {
+              "$ref": "#/$defs/token"
+            },
+            "pow_nonce": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]{0,19})$"
+            }
+          }
+        },
+        "contribution": {
+          "$ref": "https://nwrk.ir/schema/community-contribution.v1.json"
+        }
+      }
+    },
+    "acceptedResponse": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "submission_id",
+        "received_at"
+      ],
+      "properties": {
+        "status": {
+          "const": "accepted"
+        },
+        "submission_id": {
+          "$ref": "#/$defs/ulid"
+        },
+        "received_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "observed_country": {
+          "type": "string",
+          "pattern": "^[A-Z]{2}$"
+        },
+        "observed_asn": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4294967295
+        }
+      }
+    },
+    "excludedResponse": {
+      "description": "The contribution was valid but is outside the scope of the Iranian statistics. Nothing is stored.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "reason"
+      ],
+      "properties": {
+        "status": {
+          "const": "excluded"
+        },
+        "reason": {
+          "enum": [
+            "outside_scope",
+            "unknown_country"
+          ]
+        },
+        "observed_country": {
+          "type": "string",
+          "pattern": "^[A-Z]{2}$"
+        }
+      }
+    },
+    "errorCode": {
+      "enum": [
+        "invalid_json",
+        "schema_violation",
+        "unsupported_schema_version",
+        "unknown_profile",
+        "unknown_target",
+        "invalid_result",
+        "invalid_challenge",
+        "challenge_expired",
+        "challenge_replayed",
+        "invalid_pow",
+        "payload_too_large",
+        "rate_limited",
+        "server_error",
+        "not_found",
+        "invalid_parameter"
+      ]
+    },
+    "errorResponse": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "error"
+      ],
+      "properties": {
+        "error": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "code",
+            "message"
+          ],
+          "properties": {
+            "code": {
+              "$ref": "#/$defs/errorCode"
+            },
+            "message": {
+              "type": "string",
+              "maxLength": 300
+            },
+            "details": {
+              "type": "array",
+              "maxItems": 20,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "path",
+                  "reason"
+                ],
+                "properties": {
+                  "path": {
+                    "type": "string",
+                    "maxLength": 200
+                  },
+                  "reason": {
+                    "type": "string",
+                    "maxLength": 200
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "catalogResponse": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "profiles"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "community-catalog.v1"
+        },
+        "profiles": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "https://nwrk.ir/schema/community-profile.v1.json"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,664 @@
+{
+  "schema_version": "community-contribution.v1",
+  "client": {
+    "name": "nwrk",
+    "version": "0.5.0"
+  },
+  "profile": {
+    "id": "ir-dev-v1",
+    "version": 1
+  },
+  "results": [
+    {
+      "target_id": "github",
+      "measurements": [
+        {
+          "layer": "dns",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 15,
+          "answer_count": 2
+        },
+        {
+          "layer": "tcp",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 33
+        },
+        {
+          "layer": "tls",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 67
+        },
+        {
+          "layer": "http",
+          "family": "ipv4",
+          "outcome": "response_received",
+          "duration_ms": 110,
+          "status_code": 200
+        }
+      ]
+    },
+    {
+      "target_id": "github",
+      "measurements": [
+        {
+          "layer": "dns",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 15,
+          "answer_count": 2
+        },
+        {
+          "layer": "tcp",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 33
+        },
+        {
+          "layer": "tls",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 67
+        },
+        {
+          "layer": "http",
+          "family": "ipv4",
+          "outcome": "response_received",
+          "duration_ms": 110,
+          "status_code": 200
+        }
+      ]
+    },
+    {
+      "target_id": "github",
+      "measurements": [
+        {
+          "layer": "dns",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 15,
+          "answer_count": 2
+        },
+        {
+          "layer": "tcp",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 33
+        },
+        {
+          "layer": "tls",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 67
+        },
+        {
+          "layer": "http",
+          "family": "ipv4",
+          "outcome": "response_received",
+          "duration_ms": 110,
+          "status_code": 200
+        }
+      ]
+    },
+    {
+      "target_id": "github",
+      "measurements": [
+        {
+          "layer": "dns",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 15,
+          "answer_count": 2
+        },
+        {
+          "layer": "tcp",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 33
+        },
+        {
+          "layer": "tls",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 67
+        },
+        {
+          "layer": "http",
+          "family": "ipv4",
+          "outcome": "response_received",
+          "duration_ms": 110,
+          "status_code": 200
+        }
+      ]
+    },
+    {
+      "target_id": "github",
+      "measurements": [
+        {
+          "layer": "dns",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 15,
+          "answer_count": 2
+        },
+        {
+          "layer": "tcp",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 33
+        },
+        {
+          "layer": "tls",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 67
+        },
+        {
+          "layer": "http",
+          "family": "ipv4",
+          "outcome": "response_received",
+          "duration_ms": 110,
+          "status_code": 200
+        }
+      ]
+    },
+    {
+      "target_id": "github",
+      "measurements": [
+        {
+          "layer": "dns",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 15,
+          "answer_count": 2
+        },
+        {
+          "layer": "tcp",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 33
+        },
+        {
+          "layer": "tls",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 67
+        },
+        {
+          "layer": "http",
+          "family": "ipv4",
+          "outcome": "response_received",
+          "duration_ms": 110,
+          "status_code": 200
+        }
+      ]
+    },
+    {
+      "target_id": "github",
+      "measurements": [
+        {
+          "layer": "dns",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 15,
+          "answer_count": 2
+        },
+        {
+          "layer": "tcp",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 33
+        },
+        {
+          "layer": "tls",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 67
+        },
+        {
+          "layer": "http",
+          "family": "ipv4",
+          "outcome": "response_received",
+          "duration_ms": 110,
+          "status_code": 200
+        }
+      ]
+    },
+    {
+      "target_id": "github",
+      "measurements": [
+        {
+          "layer": "dns",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 15,
+          "answer_count": 2
+        },
+        {
+          "layer": "tcp",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 33
+        },
+        {
+          "layer": "tls",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 67
+        },
+        {
+          "layer": "http",
+          "family": "ipv4",
+          "outcome": "response_received",
+          "duration_ms": 110,
+          "status_code": 200
+        }
+      ]
+    },
+    {
+      "target_id": "github",
+      "measurements": [
+        {
+          "layer": "dns",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 15,
+          "answer_count": 2
+        },
+        {
+          "layer": "tcp",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 33
+        },
+        {
+          "layer": "tls",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 67
+        },
+        {
+          "layer": "http",
+          "family": "ipv4",
+          "outcome": "response_received",
+          "duration_ms": 110,
+          "status_code": 200
+        }
+      ]
+    },
+    {
+      "target_id": "github",
+      "measurements": [
+        {
+          "layer": "dns",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 15,
+          "answer_count": 2
+        },
+        {
+          "layer": "tcp",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 33
+        },
+        {
+          "layer": "tls",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 67
+        },
+        {
+          "layer": "http",
+          "family": "ipv4",
+          "outcome": "response_received",
+          "duration_ms": 110,
+          "status_code": 200
+        }
+      ]
+    },
+    {
+      "target_id": "github",
+      "measurements": [
+        {
+          "layer": "dns",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 15,
+          "answer_count": 2
+        },
+        {
+          "layer": "tcp",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 33
+        },
+        {
+          "layer": "tls",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 67
+        },
+        {
+          "layer": "http",
+          "family": "ipv4",
+          "outcome": "response_received",
+          "duration_ms": 110,
+          "status_code": 200
+        }
+      ]
+    },
+    {
+      "target_id": "github",
+      "measurements": [
+        {
+          "layer": "dns",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 15,
+          "answer_count": 2
+        },
+        {
+          "layer": "tcp",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 33
+        },
+        {
+          "layer": "tls",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 67
+        },
+        {
+          "layer": "http",
+          "family": "ipv4",
+          "outcome": "response_received",
+          "duration_ms": 110,
+          "status_code": 200
+        }
+      ]
+    },
+    {
+      "target_id": "github",
+      "measurements": [
+        {
+          "layer": "dns",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 15,
+          "answer_count": 2
+        },
+        {
+          "layer": "tcp",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 33
+        },
+        {
+          "layer": "tls",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 67
+        },
+        {
+          "layer": "http",
+          "family": "ipv4",
+          "outcome": "response_received",
+          "duration_ms": 110,
+          "status_code": 200
+        }
+      ]
+    },
+    {
+      "target_id": "github",
+      "measurements": [
+        {
+          "layer": "dns",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 15,
+          "answer_count": 2
+        },
+        {
+          "layer": "tcp",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 33
+        },
+        {
+          "layer": "tls",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 67
+        },
+        {
+          "layer": "http",
+          "family": "ipv4",
+          "outcome": "response_received",
+          "duration_ms": 110,
+          "status_code": 200
+        }
+      ]
+    },
+    {
+      "target_id": "github",
+      "measurements": [
+        {
+          "layer": "dns",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 15,
+          "answer_count": 2
+        },
+        {
+          "layer": "tcp",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 33
+        },
+        {
+          "layer": "tls",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 67
+        },
+        {
+          "layer": "http",
+          "family": "ipv4",
+          "outcome": "response_received",
+          "duration_ms": 110,
+          "status_code": 200
+        }
+      ]
+    },
+    {
+      "target_id": "github",
+      "measurements": [
+        {
+          "layer": "dns",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 15,
+          "answer_count": 2
+        },
+        {
+          "layer": "tcp",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 33
+        },
+        {
+          "layer": "tls",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 67
+        },
+        {
+          "layer": "http",
+          "family": "ipv4",
+          "outcome": "response_received",
+          "duration_ms": 110,
+          "status_code": 200
+        }
+      ]
+    },
+    {
+      "target_id": "github",
+      "measurements": [
+        {
+          "layer": "dns",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 15,
+          "answer_count": 2
+        },
+        {
+          "layer": "tcp",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 33
+        },
+        {
+          "layer": "tls",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 67
+        },
+        {
+          "layer": "http",
+          "family": "ipv4",
+          "outcome": "response_received",
+          "duration_ms": 110,
+          "status_code": 200
+        }
+      ]
+    },
+    {
+      "target_id": "github",
+      "measurements": [
+        {
+          "layer": "dns",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 15,
+          "answer_count": 2
+        },
+        {
+          "layer": "tcp",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 33
+        },
+        {
+          "layer": "tls",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 67
+        },
+        {
+          "layer": "http",
+          "family": "ipv4",
+          "outcome": "response_received",
+          "duration_ms": 110,
+          "status_code": 200
+        }
+      ]
+    },
+    {
+      "target_id": "github",
+      "measurements": [
+        {
+          "layer": "dns",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 15,
+          "answer_count": 2
+        },
+        {
+          "layer": "tcp",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 33
+        },
+        {
+          "layer": "tls",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 67
+        },
+        {
+          "layer": "http",
+          "family": "ipv4",
+          "outcome": "response_received",
+          "duration_ms": 110,
+          "status_code": 200
+        }
+      ]
+    },
+    {
+      "target_id": "github",
+      "measurements": [
+        {
+          "layer": "dns",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 15,
+          "answer_count": 2
+        },
+        {
+          "layer": "tcp",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 33
+        },
+        {
+          "layer": "tls",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 67
+        },
+        {
+          "layer": "http",
+          "family": "ipv4",
+          "outcome": "response_received",
+          "duration_ms": 110,
+          "status_code": 200
+        }
+      ]
+    },
+    {
+      "target_id": "github",
+      "measurements": [
+        {
+          "layer": "dns",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 15,
+          "answer_count": 2
+        },
+        {
+          "layer": "tcp",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 33
+        },
+        {
+          "layer": "tls",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 67
+        },
+        {
+          "layer": "http",
+          "family": "ipv4",
+          "outcome": "response_received",
+          "duration_ms": 110,
+          "status_code": 200
+        }
+      ]
+    }
+  ]
+}

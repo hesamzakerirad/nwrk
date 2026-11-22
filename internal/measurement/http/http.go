@@ -107,6 +107,11 @@ type Options struct {
 	Method string
 	// MaxRedirects bounds the redirects followed; zero means the default.
 	MaxRedirects int
+	// NoRedirect returns the first response and follows no redirect. The
+	// status code is then the one of the first response.
+	NoRedirect bool
+	// MaxBody bounds how many body bytes are read; zero means MaxBody.
+	MaxBody int64
 	// DialContext opens connections. Nil means a default dialer.
 	DialContext func(ctx context.Context, network, address string) (net.Conn, error)
 	// RootCAs replaces the system trust store. Tests use it.
@@ -124,8 +129,12 @@ func Get(ctx context.Context, u *url.URL, opts Options) *domain.Measurement {
 	if maxRedirects <= 0 {
 		maxRedirects = DefaultMaxRedirects
 	}
+	maxBody := opts.MaxBody
+	if maxBody <= 0 {
+		maxBody = MaxBody
+	}
 	m := domain.Begin(domain.TypeHTTP, Version, domain.Target{Host: u.Hostname(), URL: u.String()})
-	m.Params = map[string]any{"method": method, "max_redirects": maxRedirects, "max_body_bytes": MaxBody}
+	m.Params = map[string]any{"method": method, "max_redirects": maxRedirects, "max_body_bytes": maxBody, "no_redirect": opts.NoRedirect}
 	m.Redacted = []string{"request.cookies", "request.authorization", "response.set-cookie", "response.body"}
 
 	res := &Result{Method: method, Hops: []Hop{}, Headers: map[string]string{}}
@@ -144,10 +153,13 @@ func Get(ctx context.Context, u *url.URL, opts Options) *domain.Measurement {
 		}
 		res.Hops = append(res.Hops, *hop)
 
-		loc := redirectTarget(resp, cur)
+		var loc *redirect
+		if !opts.NoRedirect {
+			loc = redirectTarget(resp, cur)
+		}
 		if loc == nil {
 			finalize(res, hop, resp, cur)
-			if err := drain(ctx, resp, res); err != nil {
+			if err := drain(ctx, resp, res, maxBody); err != nil {
 				return m.Fail(readCode(err), "reading the response body failed: "+err.Error(), res)
 			}
 			resp.Body.Close()
@@ -363,14 +375,14 @@ func finalize(res *Result, hop *Hop, resp *http.Response, u *url.URL) {
 	}
 }
 
-// drain reads and discards up to MaxBody bytes, so total time includes the
+// drain reads and discards up to limit bytes, so total time includes the
 // body transfer. The body itself is never kept.
-func drain(ctx context.Context, resp *http.Response, res *Result) error {
+func drain(ctx context.Context, resp *http.Response, res *Result, limit int64) error {
 	stop := context.AfterFunc(ctx, func() { resp.Body.Close() })
 	defer stop()
-	n, err := io.Copy(io.Discard, io.LimitReader(resp.Body, MaxBody+1))
-	if n > MaxBody {
-		n = MaxBody
+	n, err := io.Copy(io.Discard, io.LimitReader(resp.Body, limit+1))
+	if n > limit {
+		n = limit
 		res.BodyTruncated = true
 	}
 	res.BodyBytes = n

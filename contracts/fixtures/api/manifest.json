@@ -1,0 +1,77 @@
+{
+  "description": "API message fixtures. def names the definition in community-api.v1.schema.json.",
+  "fixtures": {
+    "valid/challenge-request.json": {
+      "def": "challengeRequest",
+      "valid": true
+    },
+    "valid/challenge-response.json": {
+      "def": "challengeResponse",
+      "valid": true
+    },
+    "valid/submission.json": {
+      "def": "submission",
+      "valid": true
+    },
+    "valid/accepted.json": {
+      "def": "acceptedResponse",
+      "valid": true
+    },
+    "valid/accepted-unknown-network.json": {
+      "def": "acceptedResponse",
+      "valid": true
+    },
+    "valid/excluded.json": {
+      "def": "excludedResponse",
+      "valid": true
+    },
+    "valid/error.json": {
+      "def": "errorResponse",
+      "valid": true
+    },
+    "valid/error-with-details.json": {
+      "def": "errorResponse",
+      "valid": true
+    },
+    "invalid/challenge-request-extra-field.json": {
+      "def": "challengeRequest",
+      "valid": false
+    },
+    "invalid/challenge-token-short.json": {
+      "def": "challengeResponse",
+      "valid": false
+    },
+    "invalid/challenge-difficulty-too-high.json": {
+      "def": "challengeResponse",
+      "valid": false
+    },
+    "invalid/challenge-id-not-ulid.json": {
+      "def": "challengeResponse",
+      "valid": false
+    },
+    "invalid/submission-without-challenge.json": {
+      "def": "submission",
+      "valid": false
+    },
+    "invalid/submission-nonce-not-decimal.json": {
+      "def": "submission",
+      "valid": false
+    },
+    "invalid/submission-nonce-leading-zero.json": {
+      "def": "submission",
+      "valid": false
+    },
+    "invalid/submission-with-ip-in-contribution.json": {
+      "def": "submission",
+      "valid": false
+    },
+    "invalid/accepted-with-ip.json": {
+      "def": "acceptedResponse",
+      "valid": false
+    },
+    "invalid/error-code-unknown.json": {
+      "def": "errorResponse",
+      "valid": false
+    }
+  }
+}

@@ -1,0 +1,505 @@
+{
+  "schema_version": "community-contribution.v1",
+  "client": {
+    "name": "nwrk",
+    "version": "0.5.0"
+  },
+  "profile": {
+    "id": "ir-core-v1",
+    "version": 1
+  },
+  "results": [
+    {
+      "target_id": "google",
+      "measurements": [
+        {
+          "layer": "dns",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 15,
+          "answer_count": 2
+        },
+        {
+          "layer": "tcp",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 33
+        },
+        {
+          "layer": "tls",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 67
+        },
+        {
+          "layer": "http",
+          "family": "ipv4",
+          "outcome": "response_received",
+          "duration_ms": 110,
+          "status_code": 200
+        },
+        {
+          "layer": "dns",
+          "family": "ipv6",
+          "outcome": "success",
+          "duration_ms": 15,
+          "answer_count": 2
+        },
+        {
+          "layer": "tcp",
+          "family": "ipv6",
+          "outcome": "success",
+          "duration_ms": 33
+        },
+        {
+          "layer": "tls",
+          "family": "ipv6",
+          "outcome": "success",
+          "duration_ms": 67
+        },
+        {
+          "layer": "http",
+          "family": "ipv6",
+          "outcome": "response_received",
+          "duration_ms": 110,
+          "status_code": 200
+        }
+      ]
+    },
+    {
+      "target_id": "gstatic",
+      "measurements": [
+        {
+          "layer": "dns",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 22,
+          "answer_count": 2
+        },
+        {
+          "layer": "tcp",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 40
+        },
+        {
+          "layer": "tls",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 74
+        },
+        {
+          "layer": "http",
+          "family": "ipv4",
+          "outcome": "response_received",
+          "duration_ms": 117,
+          "status_code": 200
+        },
+        {
+          "layer": "dns",
+          "family": "ipv6",
+          "outcome": "success",
+          "duration_ms": 22,
+          "answer_count": 2
+        },
+        {
+          "layer": "tcp",
+          "family": "ipv6",
+          "outcome": "success",
+          "duration_ms": 40
+        },
+        {
+          "layer": "tls",
+          "family": "ipv6",
+          "outcome": "success",
+          "duration_ms": 74
+        },
+        {
+          "layer": "http",
+          "family": "ipv6",
+          "outcome": "response_received",
+          "duration_ms": 117,
+          "status_code": 200
+        }
+      ]
+    },
+    {
+      "target_id": "cloudflare",
+      "measurements": [
+        {
+          "layer": "dns",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 29,
+          "answer_count": 2
+        },
+        {
+          "layer": "tcp",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 47
+        },
+        {
+          "layer": "tls",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 81
+        },
+        {
+          "layer": "http",
+          "family": "ipv4",
+          "outcome": "response_received",
+          "duration_ms": 124,
+          "status_code": 200
+        },
+        {
+          "layer": "dns",
+          "family": "ipv6",
+          "outcome": "success",
+          "duration_ms": 29,
+          "answer_count": 2
+        },
+        {
+          "layer": "tcp",
+          "family": "ipv6",
+          "outcome": "success",
+          "duration_ms": 47
+        },
+        {
+          "layer": "tls",
+          "family": "ipv6",
+          "outcome": "success",
+          "duration_ms": 81
+        },
+        {
+          "layer": "http",
+          "family": "ipv6",
+          "outcome": "response_received",
+          "duration_ms": 124,
+          "status_code": 200
+        }
+      ]
+    },
+    {
+      "target_id": "mozilla",
+      "measurements": [
+        {
+          "layer": "dns",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 36,
+          "answer_count": 2
+        },
+        {
+          "layer": "tcp",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 54
+        },
+        {
+          "layer": "tls",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 88
+        },
+        {
+          "layer": "http",
+          "family": "ipv4",
+          "outcome": "response_received",
+          "duration_ms": 131,
+          "status_code": 200
+        },
+        {
+          "layer": "dns",
+          "family": "ipv6",
+          "outcome": "success",
+          "duration_ms": 36,
+          "answer_count": 2
+        },
+        {
+          "layer": "tcp",
+          "family": "ipv6",
+          "outcome": "success",
+          "duration_ms": 54
+        },
+        {
+          "layer": "tls",
+          "family": "ipv6",
+          "outcome": "success",
+          "duration_ms": 88
+        },
+        {
+          "layer": "http",
+          "family": "ipv6",
+          "outcome": "response_received",
+          "duration_ms": 131,
+          "status_code": 200
+        }
+      ]
+    },
+    {
+      "target_id": "apple",
+      "measurements": [
+        {
+          "layer": "dns",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 43,
+          "answer_count": 2
+        },
+        {
+          "layer": "tcp",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 61
+        },
+        {
+          "layer": "tls",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 95
+        },
+        {
+          "layer": "http",
+          "family": "ipv4",
+          "outcome": "response_received",
+          "duration_ms": 138,
+          "status_code": 200
+        },
+        {
+          "layer": "dns",
+          "family": "ipv6",
+          "outcome": "success",
+          "duration_ms": 43,
+          "answer_count": 2
+        },
+        {
+          "layer": "tcp",
+          "family": "ipv6",
+          "outcome": "success",
+          "duration_ms": 61
+        },
+        {
+          "layer": "tls",
+          "family": "ipv6",
+          "outcome": "success",
+          "duration_ms": 95
+        },
+        {
+          "layer": "http",
+          "family": "ipv6",
+          "outcome": "response_received",
+          "duration_ms": 138,
+          "status_code": 200
+        }
+      ]
+    },
+    {
+      "target_id": "example",
+      "measurements": [
+        {
+          "layer": "dns",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 50,
+          "answer_count": 2
+        },
+        {
+          "layer": "tcp",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 68
+        },
+        {
+          "layer": "tls",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 102
+        },
+        {
+          "layer": "http",
+          "family": "ipv4",
+          "outcome": "response_received",
+          "duration_ms": 145,
+          "status_code": 200
+        },
+        {
+          "layer": "dns",
+          "family": "ipv6",
+          "outcome": "success",
+          "duration_ms": 50,
+          "answer_count": 2
+        },
+        {
+          "layer": "tcp",
+          "family": "ipv6",
+          "outcome": "success",
+          "duration_ms": 68
+        },
+        {
+          "layer": "tls",
+          "family": "ipv6",
+          "outcome": "success",
+          "duration_ms": 102
+        },
+        {
+          "layer": "http",
+          "family": "ipv6",
+          "outcome": "response_received",
+          "duration_ms": 145,
+          "status_code": 200
+        }
+      ]
+    },
+    {
+      "target_id": "wikipedia",
+      "measurements": [
+        {
+          "layer": "dns",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 57,
+          "answer_count": 2
+        },
+        {
+          "layer": "tcp",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 75
+        },
+        {
+          "layer": "tls",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 109
+        },
+        {
+          "layer": "http",
+          "family": "ipv4",
+          "outcome": "response_received",
+          "duration_ms": 152,
+          "status_code": 200
+        },
+        {
+          "layer": "dns",
+          "family": "ipv6",
+          "outcome": "success",
+          "duration_ms": 57,
+          "answer_count": 2
+        },
+        {
+          "layer": "tcp",
+          "family": "ipv6",
+          "outcome": "success",
+          "duration_ms": 75
+        },
+        {
+          "layer": "tls",
+          "family": "ipv6",
+          "outcome": "success",
+          "duration_ms": 109
+        },
+        {
+          "layer": "http",
+          "family": "ipv6",
+          "outcome": "response_received",
+          "duration_ms": 152,
+          "status_code": 200
+        }
+      ]
+    },
+    {
+      "target_id": "digikala",
+      "measurements": [
+        {
+          "layer": "dns",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 64,
+          "answer_count": 2
+        },
+        {
+          "layer": "tcp",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 82
+        },
+        {
+          "layer": "tls",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 116
+        },
+        {
+          "layer": "http",
+          "family": "ipv4",
+          "outcome": "response_received",
+          "duration_ms": 159,
+          "status_code": 200
+        }
+      ]
+    },
+    {
+      "target_id": "aparat",
+      "measurements": [
+        {
+          "layer": "dns",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 71,
+          "answer_count": 2
+        },
+        {
+          "layer": "tcp",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 89
+        },
+        {
+          "layer": "tls",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 123
+        },
+        {
+          "layer": "http",
+          "family": "ipv4",
+          "outcome": "response_received",
+          "duration_ms": 166,
+          "status_code": 200
+        }
+      ]
+    },
+    {
+      "target_id": "divar",
+      "measurements": [
+        {
+          "layer": "dns",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 78,
+          "answer_count": 2
+        },
+        {
+          "layer": "tcp",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 96
+        },
+        {
+          "layer": "tls",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 130
+        },
+        {
+          "layer": "http",
+          "family": "ipv4",
+          "outcome": "response_received",
+          "duration_ms": 173,
+          "status_code": 200
+        }
+      ]
+    }
+  ]
+}

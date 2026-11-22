@@ -1,0 +1,34 @@
+{
+  "schema_version": "community-contribution.v1",
+  "client": {
+    "name": "nwrk",
+    "version": "0.5.0"
+  },
+  "profile": {
+    "id": "ir-dev-v1",
+    "version": 1
+  },
+  "results": [
+    {
+      "target_id": "go-proxy",
+      "measurements": [
+        {
+          "layer": "dns",
+          "family": "ipv4",
+          "outcome": "success",
+          "duration_ms": 19,
+          "answer_count": 3,
+          "dns_rcode": "NOERROR"
+        },
+        {
+          "layer": "dns",
+          "family": "ipv6",
+          "outcome": "failure",
+          "duration_ms": 22,
+          "error": "dns.nxdomain",
+          "dns_rcode": "NXDOMAIN"
+        }
+      ]
+    }
+  ]
+}

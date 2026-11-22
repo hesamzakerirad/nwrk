@@ -276,6 +276,19 @@ This is the phase-by-phase build plan for `nw`. The product specification is in 
 
 ---
 
+## Community measurements (NWRK Status)
+
+Runs alongside the phases above. It is not tied to one release.
+
+- [x] `nw community info` and `nw community contribute` with `--dry-run` and `--payload-file`, two consent prompts, and a proof-of-work upload
+- [x] Public contracts in `contracts/`: message schema, profiles, API, aggregation spec and fixtures
+- [ ] Public API and dashboard at `api.nwrk.ir` and `status.nwrk.ir` (closed pilot first)
+- [ ] Privacy page items marked `[TBD]` filled in after the pilot
+
+Nothing is uploaded unless the user runs `nw community contribute` and agrees twice.
+
+---
+
 ## After v1.0 (unscheduled)
 
 - Optional external measurement networks (Globalping, RIPE Atlas)
