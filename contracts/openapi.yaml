@@ -182,11 +182,13 @@ paths:
       description: |
         One window result for each hour, for the country-wide series and for each network, for each service, in a compact form.
         Point i ends at `from` plus i hours and covers the `window` before its end time. The last point ends at `as_of`.
+        With `date`, the timeline is that whole day in UTC, from 00:00. The last point ends at 23:00, or at `as_of` for the current day. `date` and `hours` cannot be used together.
         Every point follows the publication threshold: a point with fewer submissions than the threshold has the state `insufficient_data`.
         A submission is one accepted contribution, not a person. See `aggregation/spec.md`.
       parameters:
         - { $ref: '#/components/parameters/window' }
         - { $ref: '#/components/parameters/hours' }
+        - { $ref: '#/components/parameters/date' }
       responses:
         "200":
           description: OK.
@@ -336,6 +338,11 @@ components:
       in: query
       description: Number of points of a timeline, one for each hour.
       schema: { type: integer, minimum: 6, maximum: 72, default: 24 }
+    date:
+      name: date
+      in: query
+      description: A day in UTC, in the form YYYY-MM-DD, from the year 2000 up to the current day. The timeline has one point for each hour of that day.
+      schema: { type: string, format: date }
     step:
       name: step
       in: query
