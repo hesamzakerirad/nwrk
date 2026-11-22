@@ -13,8 +13,9 @@ unsafe = false
 
 [params]
 repo = "https://github.com/hesamzakerirad/nwrk"
+status = "https://status.nwrk.ir"
 # Shown on the home page until the GitHub release lookup replaces it.
-version = "v0.4.0"
+version = "v0.5.0"
 
 [languages.en]
 label = "English"
