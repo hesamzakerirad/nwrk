@@ -9,6 +9,7 @@ import (
 	"net/netip"
 	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"sync/atomic"
 	"testing"
@@ -144,7 +145,8 @@ func TestDryRunNeverCallsTheServer(t *testing.T) {
 	if _, err := contracts.ValidateContribution(raw, mustProfiles()); err != nil {
 		t.Fatalf("payload file is not valid: %v", err)
 	}
-	if st, _ := os.Stat(file); st.Mode().Perm() != 0o600 {
+	// Windows has no Unix permission bits, so the mode cannot be checked there.
+	if st, _ := os.Stat(file); runtime.GOOS != "windows" && st.Mode().Perm() != 0o600 {
 		t.Fatalf("payload file mode %v", st.Mode())
 	}
 }
