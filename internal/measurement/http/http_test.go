@@ -230,3 +230,21 @@ func dialLoop(ctx context.Context, network string, srv *httptest.Server) (net.Co
 	var d net.Dialer
 	return d.DialContext(ctx, network, srv.Listener.Addr().String())
 }
+
+func TestNoRedirectReturnsTheFirstResponse(t *testing.T) {
+	srv := fixtures.HTTPServer(t, nil)
+	m := get(t, srv.URL+"/chain", Options{NoRedirect: true}, 3*time.Second)
+	res := m.Result.(*Result)
+	if m.Status != domain.StatusSuccess || res.StatusCode != 302 || len(res.Hops) != 1 {
+		t.Fatalf("%+v %v", res, m.Error)
+	}
+}
+
+func TestMaxBodyOptionBoundsTheRead(t *testing.T) {
+	srv := fixtures.HTTPServer(t, nil)
+	m := get(t, srv.URL+"/big", Options{MaxBody: 1000}, 5*time.Second)
+	res := m.Result.(*Result)
+	if m.Status != domain.StatusSuccess || !res.BodyTruncated || res.BodyBytes != 1000 {
+		t.Fatalf("%+v %v", res, m.Error)
+	}
+}
