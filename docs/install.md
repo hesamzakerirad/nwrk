@@ -74,7 +74,7 @@ cosign verify-blob checksums.txt \
 
 **The download is slow or fails.** GitHub can be slow or unreliable on some networks. The install scripts retry three times. If they still fail, they print the release page, where you can download the files by any means and follow the manual steps above.
 
-**`nw: command not found`.** The install directory is not on your `PATH`. The installer tells you which directory to add. If you installed with Go, add the Go bin directory. For zsh, run this once and open a new terminal:
+**`nw: command not found`.** The install directory is not on your `PATH`. Some systems, for example Ubuntu, then suggest an unrelated package such as `netrw`. Do not install it. The installer prints the directory to add and a command to do it. For the default directory in bash, the command is `echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc`. Open a new terminal afterwards. If you installed with Go, add the Go bin directory. For zsh, run this once and open a new terminal:
 
 ```sh
 echo 'export PATH="$PATH:$(go env GOPATH)/bin"' >> ~/.zshrc

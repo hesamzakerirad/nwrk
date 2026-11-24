@@ -88,6 +88,14 @@ make test
 make lint
 ```
 
+Without a local Go install, use Docker instead. The commands run in a `golang` container and keep module and build caches in named volumes:
+
+```sh
+make docker-test    # go test -race ./...
+make docker-lint    # gofmt, go vet and staticcheck
+make docker-build   # native binaries for Linux, macOS and Windows in bin/
+```
+
 ## License
 
 [MIT](LICENSE)

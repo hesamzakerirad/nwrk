@@ -115,7 +115,20 @@ say "Installed $dir/nw"
 
 case ":$PATH:" in
   *":$dir:"*) ;;
-  *) say "Add $dir to your PATH to run nw from anywhere." ;;
+  *)
+    say ""
+    say "$dir is not on your PATH, so the shell cannot find nw yet."
+    say "Until then it can say \"Command 'nw' not found\" and suggest an unrelated package."
+    say "To fix this, run the command below, then open a new terminal:"
+    case "${SHELL:-}" in
+      */zsh) rc='~/.zshrc' ;;
+      *) rc='~/.bashrc' ;;
+    esac
+    say ""
+    say "  echo 'export PATH=\"$dir:\$PATH\"' >> $rc"
+    say ""
+    say "To run nw now, use its full path: $dir/nw"
+    ;;
 esac
 other=$(command -v nw 2>/dev/null || true)
 if [ -n "$other" ] && [ "$other" != "$dir/nw" ]; then
