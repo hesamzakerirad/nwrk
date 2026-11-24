@@ -6,6 +6,20 @@ Every release has a hand-written entry. The release workflow publishes the match
 
 ## [Unreleased]
 
+## [0.6.0] - 2026-11-24
+
+The project moved to a new GitHub account. The repository is now `github.com/radestsam/nwrk`.
+
+### Changed
+
+- The Go module path is now `github.com/radestsam/nwrk`. Install with `go install github.com/radestsam/nwrk/cmd/nw@latest`. The old path works only for versions up to 0.5.0.
+- Release downloads, the install scripts, the Homebrew tap and signature checks use the new repository. Releases up to 0.5.0 are signed with the old repository identity.
+- The timeline contract accepts a date parameter.
+
+### Fixed
+
+- The website favicon shows the letter W.
+
 ## [0.5.0] - 2026-11-22
 
 Community measurements. `nw community` shares anonymous reachability results with NWRK Status, only after you agree.
