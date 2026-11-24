@@ -9,8 +9,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/hesamzakerirad/nwrk/internal/diagnostics/engine"
-	"github.com/hesamzakerirad/nwrk/internal/domain"
+	"github.com/radestsam/nwrk/internal/diagnostics/engine"
+	"github.com/radestsam/nwrk/internal/domain"
 )
 
 // All returns the rules in the order they are evaluated.

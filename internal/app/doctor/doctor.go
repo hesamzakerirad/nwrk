@@ -13,15 +13,15 @@ import (
 	"net/url"
 	"sync"
 
-	apptest "github.com/hesamzakerirad/nwrk/internal/app/test"
-	"github.com/hesamzakerirad/nwrk/internal/diagnostics/engine"
-	"github.com/hesamzakerirad/nwrk/internal/diagnostics/rules"
-	"github.com/hesamzakerirad/nwrk/internal/domain"
-	"github.com/hesamzakerirad/nwrk/internal/measurement/dns"
-	mhttp "github.com/hesamzakerirad/nwrk/internal/measurement/http"
-	"github.com/hesamzakerirad/nwrk/internal/measurement/local"
-	"github.com/hesamzakerirad/nwrk/internal/regions"
-	"github.com/hesamzakerirad/nwrk/internal/target"
+	apptest "github.com/radestsam/nwrk/internal/app/test"
+	"github.com/radestsam/nwrk/internal/diagnostics/engine"
+	"github.com/radestsam/nwrk/internal/diagnostics/rules"
+	"github.com/radestsam/nwrk/internal/domain"
+	"github.com/radestsam/nwrk/internal/measurement/dns"
+	mhttp "github.com/radestsam/nwrk/internal/measurement/http"
+	"github.com/radestsam/nwrk/internal/measurement/local"
+	"github.com/radestsam/nwrk/internal/regions"
+	"github.com/radestsam/nwrk/internal/target"
 )
 
 const (

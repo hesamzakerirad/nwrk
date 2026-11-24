@@ -1,6 +1,6 @@
 package test
 
-import "github.com/hesamzakerirad/nwrk/internal/measurement/dns"
+import "github.com/radestsam/nwrk/internal/measurement/dns"
 
 func fakeResult(a ...string) *dns.Result {
 	return &dns.Result{

@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"net/netip"
 
-	"github.com/hesamzakerirad/nwrk/internal/diagnostics/engine"
-	"github.com/hesamzakerirad/nwrk/internal/domain"
-	"github.com/hesamzakerirad/nwrk/internal/measurement/dns"
+	"github.com/radestsam/nwrk/internal/diagnostics/engine"
+	"github.com/radestsam/nwrk/internal/domain"
+	"github.com/radestsam/nwrk/internal/measurement/dns"
 )
 
 // DNSResolutionFailure fires when a resolver could not give an address.

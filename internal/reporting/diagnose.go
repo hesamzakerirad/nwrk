@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/hesamzakerirad/nwrk/internal/domain"
-	"github.com/hesamzakerirad/nwrk/internal/output"
+	"github.com/radestsam/nwrk/internal/domain"
+	"github.com/radestsam/nwrk/internal/output"
 )
 
 // Diagnosis writes the full diagnosis report: summary, measurements,

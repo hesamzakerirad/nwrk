@@ -14,9 +14,9 @@ builds:
       - -trimpath
     ldflags:
       - -s -w
-      - -X github.com/hesamzakerirad/nwrk/internal/buildinfo.Version={{ .Version }}
-      - -X github.com/hesamzakerirad/nwrk/internal/buildinfo.Commit={{ .ShortCommit }}
-      - -X github.com/hesamzakerirad/nwrk/internal/buildinfo.Date={{ .Date }}
+      - -X github.com/radestsam/nwrk/internal/buildinfo.Version={{ .Version }}
+      - -X github.com/radestsam/nwrk/internal/buildinfo.Commit={{ .ShortCommit }}
+      - -X github.com/radestsam/nwrk/internal/buildinfo.Date={{ .Date }}
 
 archives:
   - id: nw
@@ -53,6 +53,6 @@ changelog:
 
 release:
   github:
-    owner: hesamzakerirad
+    owner: radestsam
     name: nwrk
   prerelease: auto

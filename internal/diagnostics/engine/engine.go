@@ -11,7 +11,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/hesamzakerirad/nwrk/internal/domain"
+	"github.com/radestsam/nwrk/internal/domain"
 )
 
 // Layers a rule can belong to, in the order reports list them.

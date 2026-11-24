@@ -13,14 +13,14 @@ import (
 	"sync"
 	"time"
 
-	"github.com/hesamzakerirad/nwrk/contracts"
-	"github.com/hesamzakerirad/nwrk/internal/buildinfo"
-	"github.com/hesamzakerirad/nwrk/internal/domain"
-	"github.com/hesamzakerirad/nwrk/internal/measurement/dns"
-	nwhttp "github.com/hesamzakerirad/nwrk/internal/measurement/http"
-	"github.com/hesamzakerirad/nwrk/internal/measurement/local"
-	"github.com/hesamzakerirad/nwrk/internal/measurement/tcp"
-	nwtls "github.com/hesamzakerirad/nwrk/internal/measurement/tls"
+	"github.com/radestsam/nwrk/contracts"
+	"github.com/radestsam/nwrk/internal/buildinfo"
+	"github.com/radestsam/nwrk/internal/domain"
+	"github.com/radestsam/nwrk/internal/measurement/dns"
+	nwhttp "github.com/radestsam/nwrk/internal/measurement/http"
+	"github.com/radestsam/nwrk/internal/measurement/local"
+	"github.com/radestsam/nwrk/internal/measurement/tcp"
+	nwtls "github.com/radestsam/nwrk/internal/measurement/tls"
 )
 
 // ClientName is the client name in every contribution.

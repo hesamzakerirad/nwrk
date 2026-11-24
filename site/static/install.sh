@@ -12,7 +12,7 @@
 #   NW_DOWNLOAD_BASE  release download base URL (default: GitHub Releases)
 set -eu
 
-REPO="hesamzakerirad/nwrk"
+REPO="radestsam/nwrk"
 RELEASES="https://github.com/$REPO/releases"
 BASE="${NW_DOWNLOAD_BASE:-$RELEASES/download}"
 

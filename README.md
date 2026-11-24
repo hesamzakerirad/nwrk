@@ -23,10 +23,10 @@ irm https://nwrk.ir/install.ps1 | iex
 With Go:
 
 ```sh
-go install github.com/hesamzakerirad/nwrk/cmd/nw@latest
+go install github.com/radestsam/nwrk/cmd/nw@latest
 ```
 
-Or download an archive from the [releases page](https://github.com/hesamzakerirad/nwrk/releases). Changes for each version are listed in the [changelog](CHANGELOG.md). Every release has `checksums.txt` and a cosign signature; see the [install guide](docs/install.md) for how to verify them.
+Or download an archive from the [releases page](https://github.com/radestsam/nwrk/releases). Changes for each version are listed in the [changelog](CHANGELOG.md). Every release has `checksums.txt` and a cosign signature; see the [install guide](docs/install.md) for how to verify them.
 
 ## Use
 

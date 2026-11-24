@@ -64,4 +64,4 @@ The [privacy page](../privacy/) lists where the server is hosted and how long re
 
 ## Check It Yourself
 
-Run `nw community contribute --dry-run --payload-file message.json`. The file holds the exact message that an upload would send. The message format and the checks that the server applies are in [`contracts/`](https://github.com/hesamzakerirad/nwrk/tree/main/contracts).
+Run `nw community contribute --dry-run --payload-file message.json`. The file holds the exact message that an upload would send. The message format and the checks that the server applies are in [`contracts/`](https://github.com/radestsam/nwrk/tree/main/contracts).

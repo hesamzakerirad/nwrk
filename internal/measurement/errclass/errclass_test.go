@@ -11,7 +11,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/hesamzakerirad/nwrk/internal/domain"
+	"github.com/radestsam/nwrk/internal/domain"
 )
 
 func TestTCP(t *testing.T) {

@@ -11,10 +11,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/hesamzakerirad/nwrk/internal/domain"
-	"github.com/hesamzakerirad/nwrk/internal/exit"
-	"github.com/hesamzakerirad/nwrk/internal/fixtures"
-	"github.com/hesamzakerirad/nwrk/schema"
+	"github.com/radestsam/nwrk/internal/domain"
+	"github.com/radestsam/nwrk/internal/exit"
+	"github.com/radestsam/nwrk/internal/fixtures"
+	"github.com/radestsam/nwrk/schema"
 )
 
 // offline keeps the system resolver and trust store out of the test.

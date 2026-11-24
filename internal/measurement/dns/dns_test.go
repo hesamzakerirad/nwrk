@@ -10,9 +10,9 @@ import (
 
 	"go.uber.org/goleak"
 
-	"github.com/hesamzakerirad/nwrk/internal/domain"
-	"github.com/hesamzakerirad/nwrk/internal/fixtures"
-	"github.com/hesamzakerirad/nwrk/internal/target"
+	"github.com/radestsam/nwrk/internal/domain"
+	"github.com/radestsam/nwrk/internal/fixtures"
+	"github.com/radestsam/nwrk/internal/target"
 )
 
 func TestMain(m *testing.M) { goleak.VerifyTestMain(m) }

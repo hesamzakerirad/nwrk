@@ -6,13 +6,13 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/hesamzakerirad/nwrk/internal/diagnostics/engine"
-	"github.com/hesamzakerirad/nwrk/internal/domain"
-	"github.com/hesamzakerirad/nwrk/internal/fixtures"
-	"github.com/hesamzakerirad/nwrk/internal/measurement/dns"
-	mhttp "github.com/hesamzakerirad/nwrk/internal/measurement/http"
-	"github.com/hesamzakerirad/nwrk/internal/measurement/local"
-	"github.com/hesamzakerirad/nwrk/internal/platform"
+	"github.com/radestsam/nwrk/internal/diagnostics/engine"
+	"github.com/radestsam/nwrk/internal/domain"
+	"github.com/radestsam/nwrk/internal/fixtures"
+	"github.com/radestsam/nwrk/internal/measurement/dns"
+	mhttp "github.com/radestsam/nwrk/internal/measurement/http"
+	"github.com/radestsam/nwrk/internal/measurement/local"
+	"github.com/radestsam/nwrk/internal/platform"
 )
 
 type osFake struct {

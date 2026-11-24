@@ -1,4 +1,4 @@
-module github.com/hesamzakerirad/nwrk
+module github.com/radestsam/nwrk
 
 go 1.26.11
 

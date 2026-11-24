@@ -11,10 +11,10 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/hesamzakerirad/nwrk/internal/exit"
-	"github.com/hesamzakerirad/nwrk/internal/output"
-	"github.com/hesamzakerirad/nwrk/internal/path"
-	"github.com/hesamzakerirad/nwrk/internal/target"
+	"github.com/radestsam/nwrk/internal/exit"
+	"github.com/radestsam/nwrk/internal/output"
+	"github.com/radestsam/nwrk/internal/path"
+	"github.com/radestsam/nwrk/internal/target"
 )
 
 func newPathCmd(a *app) *cobra.Command {

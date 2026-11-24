@@ -14,7 +14,7 @@ import (
 
 	"github.com/BurntSushi/toml"
 
-	"github.com/hesamzakerirad/nwrk/internal/endpoints"
+	"github.com/radestsam/nwrk/internal/endpoints"
 )
 
 // EnvPath names the environment variable that overrides the file location.

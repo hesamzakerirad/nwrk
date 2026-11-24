@@ -6,9 +6,9 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/hesamzakerirad/nwrk/internal/exit"
-	"github.com/hesamzakerirad/nwrk/internal/output"
-	"github.com/hesamzakerirad/nwrk/internal/settings"
+	"github.com/radestsam/nwrk/internal/exit"
+	"github.com/radestsam/nwrk/internal/output"
+	"github.com/radestsam/nwrk/internal/settings"
 )
 
 func newConfigCmd(a *app) *cobra.Command {

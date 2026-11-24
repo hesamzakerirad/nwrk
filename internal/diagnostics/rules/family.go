@@ -3,8 +3,8 @@ package rules
 import (
 	"fmt"
 
-	"github.com/hesamzakerirad/nwrk/internal/diagnostics/engine"
-	"github.com/hesamzakerirad/nwrk/internal/domain"
+	"github.com/radestsam/nwrk/internal/diagnostics/engine"
+	"github.com/radestsam/nwrk/internal/domain"
 )
 
 // IPFamilyBehaviorDifference fires when IPv4 and IPv6 behave differently.

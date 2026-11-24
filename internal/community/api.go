@@ -14,8 +14,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/hesamzakerirad/nwrk/contracts"
-	"github.com/hesamzakerirad/nwrk/internal/buildinfo"
+	"github.com/radestsam/nwrk/contracts"
+	"github.com/radestsam/nwrk/internal/buildinfo"
 )
 
 // DefaultAPI is the address of the NWRK Status API.

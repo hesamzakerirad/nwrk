@@ -7,9 +7,9 @@ import (
 	"math"
 	"strings"
 
-	"github.com/hesamzakerirad/nwrk/contracts"
-	"github.com/hesamzakerirad/nwrk/internal/domain"
-	"github.com/hesamzakerirad/nwrk/internal/measurement/dns"
+	"github.com/radestsam/nwrk/contracts"
+	"github.com/radestsam/nwrk/internal/domain"
+	"github.com/radestsam/nwrk/internal/measurement/dns"
 )
 
 // Contribution values. They match the contract schema.

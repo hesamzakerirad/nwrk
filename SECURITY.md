@@ -3,7 +3,7 @@
 ## Reporting a vulnerability
 
 Please report vulnerabilities privately through GitHub: open the repository's **Security** tab and choose **Report a vulnerability**
-(https://github.com/hesamzakerirad/nwrk/security/advisories/new). Do not open a public issue or pull request for a security problem.
+(https://github.com/radestsam/nwrk/security/advisories/new). Do not open a public issue or pull request for a security problem.
 
 Include what you found, how to reproduce it, the version (`nw version`) and your platform. We will acknowledge a report within a few days, keep you informed, and credit you in the release notes if you wish.
 

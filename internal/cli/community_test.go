@@ -14,14 +14,14 @@ import (
 	"sync/atomic"
 	"testing"
 
-	"github.com/hesamzakerirad/nwrk/contracts"
-	"github.com/hesamzakerirad/nwrk/internal/community"
-	"github.com/hesamzakerirad/nwrk/internal/domain"
-	"github.com/hesamzakerirad/nwrk/internal/exit"
-	"github.com/hesamzakerirad/nwrk/internal/measurement/dns"
-	nwhttp "github.com/hesamzakerirad/nwrk/internal/measurement/http"
-	"github.com/hesamzakerirad/nwrk/internal/measurement/tcp"
-	nwtls "github.com/hesamzakerirad/nwrk/internal/measurement/tls"
+	"github.com/radestsam/nwrk/contracts"
+	"github.com/radestsam/nwrk/internal/community"
+	"github.com/radestsam/nwrk/internal/domain"
+	"github.com/radestsam/nwrk/internal/exit"
+	"github.com/radestsam/nwrk/internal/measurement/dns"
+	nwhttp "github.com/radestsam/nwrk/internal/measurement/http"
+	"github.com/radestsam/nwrk/internal/measurement/tcp"
+	nwtls "github.com/radestsam/nwrk/internal/measurement/tls"
 )
 
 const (

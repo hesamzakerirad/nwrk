@@ -5,10 +5,10 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/hesamzakerirad/nwrk/internal/app/reach"
-	"github.com/hesamzakerirad/nwrk/internal/endpoints"
-	"github.com/hesamzakerirad/nwrk/internal/exit"
-	"github.com/hesamzakerirad/nwrk/internal/target"
+	"github.com/radestsam/nwrk/internal/app/reach"
+	"github.com/radestsam/nwrk/internal/endpoints"
+	"github.com/radestsam/nwrk/internal/exit"
+	"github.com/radestsam/nwrk/internal/target"
 )
 
 func newReachCmd(a *app) *cobra.Command {

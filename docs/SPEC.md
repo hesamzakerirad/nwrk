@@ -5,7 +5,7 @@
 **Product name:** nwrk  
 **Executable name:** `nw`  
 **Website:** https://nwrk.ir  
-**Repository:** https://github.com/hesamzakerirad/nwrk  
+**Repository:** https://github.com/radestsam/nwrk  
 **License:** MIT  
 **Primary language:** Go  
 **Product format:** Local-first, cross-platform command-line application  
@@ -1055,7 +1055,7 @@ irm https://nwrk.ir/install.ps1 | iex
 ```
 
 ```bash
-go install github.com/hesamzakerirad/nwrk/cmd/nw@latest
+go install github.com/radestsam/nwrk/cmd/nw@latest
 ```
 
 The install scripts detect OS and architecture, download the archive from GitHub Releases, verify it against `checksums.txt`, and install `nw` into a user-writable directory without requiring root. Users who have cosign can also verify the signature; the docs show how.
@@ -1127,8 +1127,8 @@ The differentiator remains local evidence correlation and practical diagnosis.
 | Product name | nwrk |
 | Executable | `nw` |
 | Website | https://nwrk.ir |
-| Repository | https://github.com/hesamzakerirad/nwrk |
-| Go module | `github.com/hesamzakerirad/nwrk` |
+| Repository | https://github.com/radestsam/nwrk |
+| Go module | `github.com/radestsam/nwrk` |
 | State and config directory name | `nwrk` |
 | License | MIT; inbound = outbound, no CLA |
 | Maintainer | Single maintainer; pull requests accepted from v0.1.0 |
@@ -1205,7 +1205,7 @@ These resources are useful references, not mandatory dependencies or endorsement
 | Product name | nwrk |
 | Executable name | `nw` |
 | Website | nwrk.ir on GitHub Pages, English |
-| Repository | github.com/hesamzakerirad/nwrk |
+| Repository | github.com/radestsam/nwrk |
 | License | MIT, no CLA |
 | Hosting | GitHub only (Pages, Releases, Actions); no servers, no binary mirror |
 | Product direction | Diagnostics + interference investigation + observability |

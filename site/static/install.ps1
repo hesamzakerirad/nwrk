@@ -15,7 +15,7 @@ $ErrorActionPreference = 'Stop'
 $ProgressPreference = 'SilentlyContinue'
 [Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls12
 
-$Repo = 'hesamzakerirad/nwrk'
+$Repo = 'radestsam/nwrk'
 $Releases = "https://github.com/$Repo/releases"
 $Base = if ($env:NW_DOWNLOAD_BASE) { $env:NW_DOWNLOAD_BASE } else { "$Releases/download" }
 

@@ -8,11 +8,11 @@ import (
 	"testing"
 	"time"
 
-	apptest "github.com/hesamzakerirad/nwrk/internal/app/test"
-	"github.com/hesamzakerirad/nwrk/internal/domain"
-	"github.com/hesamzakerirad/nwrk/internal/endpoints"
-	"github.com/hesamzakerirad/nwrk/internal/fixtures"
-	"github.com/hesamzakerirad/nwrk/schema"
+	apptest "github.com/radestsam/nwrk/internal/app/test"
+	"github.com/radestsam/nwrk/internal/domain"
+	"github.com/radestsam/nwrk/internal/endpoints"
+	"github.com/radestsam/nwrk/internal/fixtures"
+	"github.com/radestsam/nwrk/schema"
 )
 
 func run(t *testing.T, o Options) *domain.Report {

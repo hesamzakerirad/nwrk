@@ -13,16 +13,16 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/hesamzakerirad/nwrk/internal/app/probes"
-	apptest "github.com/hesamzakerirad/nwrk/internal/app/test"
-	"github.com/hesamzakerirad/nwrk/internal/diagnostics/engine"
-	"github.com/hesamzakerirad/nwrk/internal/diagnostics/rules"
-	"github.com/hesamzakerirad/nwrk/internal/domain"
-	"github.com/hesamzakerirad/nwrk/internal/measurement/dns"
-	mhttp "github.com/hesamzakerirad/nwrk/internal/measurement/http"
-	"github.com/hesamzakerirad/nwrk/internal/measurement/tcp"
-	mtls "github.com/hesamzakerirad/nwrk/internal/measurement/tls"
-	"github.com/hesamzakerirad/nwrk/internal/target"
+	"github.com/radestsam/nwrk/internal/app/probes"
+	apptest "github.com/radestsam/nwrk/internal/app/test"
+	"github.com/radestsam/nwrk/internal/diagnostics/engine"
+	"github.com/radestsam/nwrk/internal/diagnostics/rules"
+	"github.com/radestsam/nwrk/internal/domain"
+	"github.com/radestsam/nwrk/internal/measurement/dns"
+	mhttp "github.com/radestsam/nwrk/internal/measurement/http"
+	"github.com/radestsam/nwrk/internal/measurement/tcp"
+	mtls "github.com/radestsam/nwrk/internal/measurement/tls"
+	"github.com/radestsam/nwrk/internal/target"
 )
 
 // Profile selects how much to measure.

@@ -5,9 +5,9 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/hesamzakerirad/nwrk/internal/diagnostics/engine"
-	"github.com/hesamzakerirad/nwrk/internal/domain"
-	mhttp "github.com/hesamzakerirad/nwrk/internal/measurement/http"
+	"github.com/radestsam/nwrk/internal/diagnostics/engine"
+	"github.com/radestsam/nwrk/internal/domain"
+	mhttp "github.com/radestsam/nwrk/internal/measurement/http"
 )
 
 func reachHTTP(host, fam string) *domain.Measurement {

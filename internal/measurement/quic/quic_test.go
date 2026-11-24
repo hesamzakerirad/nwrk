@@ -12,9 +12,9 @@ import (
 
 	"github.com/quic-go/quic-go/http3"
 
-	"github.com/hesamzakerirad/nwrk/internal/domain"
-	"github.com/hesamzakerirad/nwrk/internal/fixtures"
-	mhttp "github.com/hesamzakerirad/nwrk/internal/measurement/http"
+	"github.com/radestsam/nwrk/internal/domain"
+	"github.com/radestsam/nwrk/internal/fixtures"
+	mhttp "github.com/radestsam/nwrk/internal/measurement/http"
 )
 
 // h3Server serves HTTP/3 on 127.0.0.1 with a random UDP port and returns

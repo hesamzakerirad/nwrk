@@ -10,8 +10,8 @@ import (
 
 	mdns "github.com/miekg/dns"
 
-	"github.com/hesamzakerirad/nwrk/internal/buildinfo"
-	"github.com/hesamzakerirad/nwrk/internal/target"
+	"github.com/radestsam/nwrk/internal/buildinfo"
+	"github.com/radestsam/nwrk/internal/target"
 )
 
 // maxDoHResponse bounds how much of a DoH reply is read.

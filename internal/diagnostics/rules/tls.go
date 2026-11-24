@@ -5,9 +5,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/hesamzakerirad/nwrk/internal/diagnostics/engine"
-	"github.com/hesamzakerirad/nwrk/internal/domain"
-	mtls "github.com/hesamzakerirad/nwrk/internal/measurement/tls"
+	"github.com/radestsam/nwrk/internal/diagnostics/engine"
+	"github.com/radestsam/nwrk/internal/domain"
+	mtls "github.com/radestsam/nwrk/internal/measurement/tls"
 )
 
 // TLSCertificateInvalid fires when the certificate fails verification.

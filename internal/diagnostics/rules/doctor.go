@@ -6,10 +6,10 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/hesamzakerirad/nwrk/internal/diagnostics/engine"
-	"github.com/hesamzakerirad/nwrk/internal/domain"
-	"github.com/hesamzakerirad/nwrk/internal/measurement/dns"
-	"github.com/hesamzakerirad/nwrk/internal/measurement/local"
+	"github.com/radestsam/nwrk/internal/diagnostics/engine"
+	"github.com/radestsam/nwrk/internal/domain"
+	"github.com/radestsam/nwrk/internal/measurement/dns"
+	"github.com/radestsam/nwrk/internal/measurement/local"
 )
 
 // Doctor returns the rules of nw doctor, in the order they are evaluated.

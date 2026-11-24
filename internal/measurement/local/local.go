@@ -14,9 +14,9 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/hesamzakerirad/nwrk/internal/domain"
-	"github.com/hesamzakerirad/nwrk/internal/measurement/errclass"
-	"github.com/hesamzakerirad/nwrk/internal/platform"
+	"github.com/radestsam/nwrk/internal/domain"
+	"github.com/radestsam/nwrk/internal/measurement/errclass"
+	"github.com/radestsam/nwrk/internal/platform"
 )
 
 // Version is the implementation version recorded in every measurement.

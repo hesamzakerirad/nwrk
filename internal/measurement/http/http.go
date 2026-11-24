@@ -17,9 +17,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/hesamzakerirad/nwrk/internal/buildinfo"
-	"github.com/hesamzakerirad/nwrk/internal/domain"
-	"github.com/hesamzakerirad/nwrk/internal/measurement/errclass"
+	"github.com/radestsam/nwrk/internal/buildinfo"
+	"github.com/radestsam/nwrk/internal/domain"
+	"github.com/radestsam/nwrk/internal/measurement/errclass"
 )
 
 // Version is the implementation version recorded in every measurement.

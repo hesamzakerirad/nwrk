@@ -5,8 +5,8 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/hesamzakerirad/nwrk/internal/buildinfo"
-	"github.com/hesamzakerirad/nwrk/internal/output"
+	"github.com/radestsam/nwrk/internal/buildinfo"
+	"github.com/radestsam/nwrk/internal/output"
 )
 
 type versionDoc struct {

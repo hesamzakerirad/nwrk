@@ -9,9 +9,9 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/hesamzakerirad/nwrk/internal/exit"
-	"github.com/hesamzakerirad/nwrk/internal/output"
-	"github.com/hesamzakerirad/nwrk/internal/platform"
+	"github.com/radestsam/nwrk/internal/exit"
+	"github.com/radestsam/nwrk/internal/output"
+	"github.com/radestsam/nwrk/internal/platform"
 )
 
 // inspection is the platform data the network commands print. Tests replace

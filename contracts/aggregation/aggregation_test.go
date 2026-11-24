@@ -10,7 +10,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/hesamzakerirad/nwrk/contracts"
+	"github.com/radestsam/nwrk/contracts"
 )
 
 type fixture struct {

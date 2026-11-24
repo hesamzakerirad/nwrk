@@ -13,7 +13,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/hesamzakerirad/nwrk/internal/domain"
+	"github.com/radestsam/nwrk/internal/domain"
 )
 
 // Timeout reports whether err means a deadline passed.

@@ -15,12 +15,12 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/hesamzakerirad/nwrk/internal/buildinfo"
-	"github.com/hesamzakerirad/nwrk/internal/config"
-	"github.com/hesamzakerirad/nwrk/internal/exit"
-	"github.com/hesamzakerirad/nwrk/internal/output"
-	"github.com/hesamzakerirad/nwrk/internal/regions"
-	"github.com/hesamzakerirad/nwrk/internal/settings"
+	"github.com/radestsam/nwrk/internal/buildinfo"
+	"github.com/radestsam/nwrk/internal/config"
+	"github.com/radestsam/nwrk/internal/exit"
+	"github.com/radestsam/nwrk/internal/output"
+	"github.com/radestsam/nwrk/internal/regions"
+	"github.com/radestsam/nwrk/internal/settings"
 )
 
 // SchemaVersion is the version of every JSON document nw prints.

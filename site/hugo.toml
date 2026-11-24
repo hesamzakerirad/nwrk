@@ -12,7 +12,7 @@ codeFences = false
 unsafe = false
 
 [params]
-repo = "https://github.com/hesamzakerirad/nwrk"
+repo = "https://github.com/radestsam/nwrk"
 status = "https://status.nwrk.ir"
 # Shown on the home page until the GitHub release lookup replaces it.
 version = "v0.5.0"

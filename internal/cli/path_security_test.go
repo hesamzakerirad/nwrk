@@ -11,9 +11,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/hesamzakerirad/nwrk/internal/exit"
-	"github.com/hesamzakerirad/nwrk/internal/fixtures"
-	"github.com/hesamzakerirad/nwrk/internal/path"
+	"github.com/radestsam/nwrk/internal/exit"
+	"github.com/radestsam/nwrk/internal/fixtures"
+	"github.com/radestsam/nwrk/internal/path"
 )
 
 func listener(t *testing.T) (string, int) {

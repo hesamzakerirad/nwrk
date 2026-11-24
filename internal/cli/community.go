@@ -15,10 +15,10 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/hesamzakerirad/nwrk/contracts"
-	"github.com/hesamzakerirad/nwrk/internal/community"
-	"github.com/hesamzakerirad/nwrk/internal/exit"
-	"github.com/hesamzakerirad/nwrk/internal/output"
+	"github.com/radestsam/nwrk/contracts"
+	"github.com/radestsam/nwrk/internal/community"
+	"github.com/radestsam/nwrk/internal/exit"
+	"github.com/radestsam/nwrk/internal/output"
 )
 
 // EnvCommunityAPI sets the address of the NWRK Status API.

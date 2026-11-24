@@ -34,7 +34,7 @@ The script verifies the checksum, installs `nw.exe` into `%LOCALAPPDATA%\nwrk\bi
 ## With Go
 
 ```sh
-go install github.com/hesamzakerirad/nwrk/cmd/nw@latest
+go install github.com/radestsam/nwrk/cmd/nw@latest
 ```
 
 This builds from source and puts `nw` in your Go bin directory. That directory is `$(go env GOBIN)`, or `$(go env GOPATH)/bin` when `GOBIN` is not set. For most users it is `~/go/bin`.
@@ -43,7 +43,7 @@ Go prints only `go: downloading ...` when it succeeds. If your shell then says `
 
 ## Manual download
 
-Download the archive for your system and `checksums.txt` from the [releases page](https://github.com/hesamzakerirad/nwrk/releases). Archives are named `nw_<version>_<os>_<arch>.tar.gz` (`.zip` on Windows), for Linux, macOS and Windows on `amd64` and `arm64`. Unpack the archive and put `nw` somewhere on your `PATH`.
+Download the archive for your system and `checksums.txt` from the [releases page](https://github.com/radestsam/nwrk/releases). Archives are named `nw_<version>_<os>_<arch>.tar.gz` (`.zip` on Windows), for Linux, macOS and Windows on `amd64` and `arm64`. Unpack the archive and put `nw` somewhere on your `PATH`.
 
 ## Check that it works
 
@@ -66,7 +66,7 @@ On macOS use `shasum -a 256 --check --ignore-missing checksums.txt`.
 ```sh
 cosign verify-blob checksums.txt \
   --bundle checksums.txt.sigstore.json \
-  --certificate-identity-regexp '^https://github.com/hesamzakerirad/nwrk/\.github/workflows/release\.yml@refs/tags/v' \
+  --certificate-identity-regexp '^https://github.com/radestsam/nwrk/\.github/workflows/release\.yml@refs/tags/v' \
   --certificate-oidc-issuer https://token.actions.githubusercontent.com
 ```
 

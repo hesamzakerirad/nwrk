@@ -7,11 +7,11 @@ package security
 import (
 	"context"
 
-	"github.com/hesamzakerirad/nwrk/internal/app/diagnose"
-	"github.com/hesamzakerirad/nwrk/internal/app/probes"
-	apptest "github.com/hesamzakerirad/nwrk/internal/app/test"
-	"github.com/hesamzakerirad/nwrk/internal/diagnostics/rules"
-	"github.com/hesamzakerirad/nwrk/internal/domain"
+	"github.com/radestsam/nwrk/internal/app/diagnose"
+	"github.com/radestsam/nwrk/internal/app/probes"
+	apptest "github.com/radestsam/nwrk/internal/app/test"
+	"github.com/radestsam/nwrk/internal/diagnostics/rules"
+	"github.com/radestsam/nwrk/internal/domain"
 )
 
 // Options configure a run.

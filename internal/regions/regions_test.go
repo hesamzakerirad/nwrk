@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/hesamzakerirad/nwrk/internal/domain"
+	"github.com/radestsam/nwrk/internal/domain"
 )
 
 func TestShippedPresetsAreValid(t *testing.T) {

@@ -9,7 +9,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/hesamzakerirad/nwrk/internal/exit"
+	"github.com/radestsam/nwrk/internal/exit"
 )
 
 func run(t *testing.T, args ...string) (code int, stdout, stderr string) {

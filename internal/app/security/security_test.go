@@ -14,13 +14,13 @@ import (
 
 	"go.uber.org/goleak"
 
-	"github.com/hesamzakerirad/nwrk/internal/app/diagnose"
-	apptest "github.com/hesamzakerirad/nwrk/internal/app/test"
-	"github.com/hesamzakerirad/nwrk/internal/domain"
-	"github.com/hesamzakerirad/nwrk/internal/fixtures"
-	"github.com/hesamzakerirad/nwrk/internal/measurement/dns"
-	"github.com/hesamzakerirad/nwrk/internal/target"
-	"github.com/hesamzakerirad/nwrk/schema"
+	"github.com/radestsam/nwrk/internal/app/diagnose"
+	apptest "github.com/radestsam/nwrk/internal/app/test"
+	"github.com/radestsam/nwrk/internal/domain"
+	"github.com/radestsam/nwrk/internal/fixtures"
+	"github.com/radestsam/nwrk/internal/measurement/dns"
+	"github.com/radestsam/nwrk/internal/target"
+	"github.com/radestsam/nwrk/schema"
 )
 
 func TestMain(m *testing.M) { goleak.VerifyTestMain(m) }

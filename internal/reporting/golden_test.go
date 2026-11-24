@@ -9,13 +9,13 @@ import (
 	"testing"
 	"time"
 
-	"github.com/hesamzakerirad/nwrk/internal/domain"
-	"github.com/hesamzakerirad/nwrk/internal/measurement/dns"
-	mhttp "github.com/hesamzakerirad/nwrk/internal/measurement/http"
-	"github.com/hesamzakerirad/nwrk/internal/measurement/tcp"
-	mtls "github.com/hesamzakerirad/nwrk/internal/measurement/tls"
-	"github.com/hesamzakerirad/nwrk/internal/output"
-	"github.com/hesamzakerirad/nwrk/schema"
+	"github.com/radestsam/nwrk/internal/domain"
+	"github.com/radestsam/nwrk/internal/measurement/dns"
+	mhttp "github.com/radestsam/nwrk/internal/measurement/http"
+	"github.com/radestsam/nwrk/internal/measurement/tcp"
+	mtls "github.com/radestsam/nwrk/internal/measurement/tls"
+	"github.com/radestsam/nwrk/internal/output"
+	"github.com/radestsam/nwrk/schema"
 )
 
 var update = flag.Bool("update", false, "rewrite the golden files")

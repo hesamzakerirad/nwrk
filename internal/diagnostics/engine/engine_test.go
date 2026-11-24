@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/hesamzakerirad/nwrk/internal/domain"
-	mhttp "github.com/hesamzakerirad/nwrk/internal/measurement/http"
+	"github.com/radestsam/nwrk/internal/domain"
+	mhttp "github.com/radestsam/nwrk/internal/measurement/http"
 )
 
 func TestResultOfWorksForMemoryAndJSON(t *testing.T) {

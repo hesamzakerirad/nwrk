@@ -14,7 +14,7 @@ archive="nw_${version}_${os}_${arch}.tar.gz"
 rel="$tmp/rel/v$version"
 mkdir -p "$rel" "$tmp/stage"
 
-go build -ldflags "-X github.com/hesamzakerirad/nwrk/internal/buildinfo.Version=$version" \
+go build -ldflags "-X github.com/radestsam/nwrk/internal/buildinfo.Version=$version" \
   -o "$tmp/stage/nw" ./cmd/nw
 cp LICENSE README.md "$tmp/stage/"
 tar -czf "$rel/$archive" -C "$tmp/stage" nw LICENSE README.md

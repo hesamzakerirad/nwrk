@@ -20,10 +20,10 @@ import (
 	quicgo "github.com/quic-go/quic-go"
 	"github.com/quic-go/quic-go/http3"
 
-	"github.com/hesamzakerirad/nwrk/internal/buildinfo"
-	"github.com/hesamzakerirad/nwrk/internal/domain"
-	"github.com/hesamzakerirad/nwrk/internal/measurement/errclass"
-	mhttp "github.com/hesamzakerirad/nwrk/internal/measurement/http"
+	"github.com/radestsam/nwrk/internal/buildinfo"
+	"github.com/radestsam/nwrk/internal/domain"
+	"github.com/radestsam/nwrk/internal/measurement/errclass"
+	mhttp "github.com/radestsam/nwrk/internal/measurement/http"
 )
 
 // Version is the implementation version recorded in the measurement.

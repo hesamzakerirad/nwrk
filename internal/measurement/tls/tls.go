@@ -11,9 +11,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/hesamzakerirad/nwrk/internal/domain"
-	"github.com/hesamzakerirad/nwrk/internal/measurement/errclass"
-	"github.com/hesamzakerirad/nwrk/internal/measurement/tcp"
+	"github.com/radestsam/nwrk/internal/domain"
+	"github.com/radestsam/nwrk/internal/measurement/errclass"
+	"github.com/radestsam/nwrk/internal/measurement/tcp"
 )
 
 // Version is the implementation version recorded in every measurement.

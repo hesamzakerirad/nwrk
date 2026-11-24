@@ -5,13 +5,13 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/hesamzakerirad/nwrk/internal/app/doctor"
-	"github.com/hesamzakerirad/nwrk/internal/domain"
-	"github.com/hesamzakerirad/nwrk/internal/exit"
-	"github.com/hesamzakerirad/nwrk/internal/output"
-	"github.com/hesamzakerirad/nwrk/internal/regions"
-	"github.com/hesamzakerirad/nwrk/internal/reporting"
-	"github.com/hesamzakerirad/nwrk/internal/settings"
+	"github.com/radestsam/nwrk/internal/app/doctor"
+	"github.com/radestsam/nwrk/internal/domain"
+	"github.com/radestsam/nwrk/internal/exit"
+	"github.com/radestsam/nwrk/internal/output"
+	"github.com/radestsam/nwrk/internal/regions"
+	"github.com/radestsam/nwrk/internal/reporting"
+	"github.com/radestsam/nwrk/internal/settings"
 )
 
 func newDoctorCmd(a *app) *cobra.Command {

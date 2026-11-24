@@ -5,10 +5,10 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/hesamzakerirad/nwrk/internal/diagnostics/engine"
-	"github.com/hesamzakerirad/nwrk/internal/domain"
-	"github.com/hesamzakerirad/nwrk/internal/measurement/dns"
-	mhttp "github.com/hesamzakerirad/nwrk/internal/measurement/http"
+	"github.com/radestsam/nwrk/internal/diagnostics/engine"
+	"github.com/radestsam/nwrk/internal/domain"
+	"github.com/radestsam/nwrk/internal/measurement/dns"
+	mhttp "github.com/radestsam/nwrk/internal/measurement/http"
 )
 
 // Reach returns the rules of nw reach. They sort a failing endpoint into

@@ -6,7 +6,7 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/hesamzakerirad/nwrk/internal/cli"
+	"github.com/radestsam/nwrk/internal/cli"
 )
 
 func main() {

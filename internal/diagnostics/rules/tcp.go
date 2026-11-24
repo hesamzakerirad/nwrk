@@ -3,8 +3,8 @@ package rules
 import (
 	"fmt"
 
-	"github.com/hesamzakerirad/nwrk/internal/diagnostics/engine"
-	"github.com/hesamzakerirad/nwrk/internal/domain"
+	"github.com/radestsam/nwrk/internal/diagnostics/engine"
+	"github.com/radestsam/nwrk/internal/domain"
 )
 
 func portOf(ms []domain.Measurement) int {

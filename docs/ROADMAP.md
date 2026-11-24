@@ -33,7 +33,7 @@ This is the phase-by-phase build plan for `nw`. The product specification is in 
 
 ### Repository
 
-- [x] `go.mod` with module `github.com/hesamzakerirad/nwrk`; entry point `cmd/nw/main.go`
+- [x] `go.mod` with module `github.com/radestsam/nwrk`; entry point `cmd/nw/main.go`
 - [x] `LICENSE` (MIT), `README.md`, `PRINCIPLES.md`
 - [x] `Makefile` targets: `build`, `test`, `lint`, `fmt`
 
@@ -242,7 +242,7 @@ This is the phase-by-phase build plan for `nw`. The product specification is in 
 
 ## P7: Distribution → v0.6.0
 
-- [ ] Homebrew tap (`hesamzakerirad/homebrew-tap`), Scoop bucket, WinGet manifest, AUR `nwrk-bin`, all published by GoReleaser
+- [ ] Homebrew tap (`radestsam/homebrew-tap`), Scoop bucket, WinGet manifest, AUR `nwrk-bin`, all published by GoReleaser
 - [ ] Install docs updated
 
 ### Exit criteria

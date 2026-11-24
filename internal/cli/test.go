@@ -9,15 +9,15 @@ import (
 
 	"github.com/spf13/cobra"
 
-	apptest "github.com/hesamzakerirad/nwrk/internal/app/test"
-	"github.com/hesamzakerirad/nwrk/internal/buildinfo"
-	"github.com/hesamzakerirad/nwrk/internal/domain"
-	"github.com/hesamzakerirad/nwrk/internal/exit"
-	"github.com/hesamzakerirad/nwrk/internal/measurement/local"
-	"github.com/hesamzakerirad/nwrk/internal/output"
-	"github.com/hesamzakerirad/nwrk/internal/path"
-	"github.com/hesamzakerirad/nwrk/internal/reporting"
-	"github.com/hesamzakerirad/nwrk/internal/target"
+	apptest "github.com/radestsam/nwrk/internal/app/test"
+	"github.com/radestsam/nwrk/internal/buildinfo"
+	"github.com/radestsam/nwrk/internal/domain"
+	"github.com/radestsam/nwrk/internal/exit"
+	"github.com/radestsam/nwrk/internal/measurement/local"
+	"github.com/radestsam/nwrk/internal/output"
+	"github.com/radestsam/nwrk/internal/path"
+	"github.com/radestsam/nwrk/internal/reporting"
+	"github.com/radestsam/nwrk/internal/target"
 )
 
 func newTestCmd(a *app) *cobra.Command {

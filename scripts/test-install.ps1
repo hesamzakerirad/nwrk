@@ -11,7 +11,7 @@ $rel = Join-Path $tmp "rel\v$version"
 $stage = Join-Path $tmp 'stage'
 New-Item -ItemType Directory -Path $rel, $stage | Out-Null
 
-go build -ldflags "-X github.com/hesamzakerirad/nwrk/internal/buildinfo.Version=$version" -o (Join-Path $stage 'nw.exe') ./cmd/nw
+go build -ldflags "-X github.com/radestsam/nwrk/internal/buildinfo.Version=$version" -o (Join-Path $stage 'nw.exe') ./cmd/nw
 if ($LASTEXITCODE -ne 0) { throw 'go build failed' }
 Copy-Item LICENSE, README.md $stage
 Compress-Archive -Path (Join-Path $stage '*') -DestinationPath (Join-Path $rel $archive)

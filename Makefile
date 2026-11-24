@@ -1,4 +1,4 @@
-PKG     := github.com/hesamzakerirad/nwrk
+PKG     := github.com/radestsam/nwrk
 VERSION ?= $(shell git describe --tags --always --dirty 2>/dev/null | sed 's/^v//')
 COMMIT  ?= $(shell git rev-parse --short HEAD 2>/dev/null)
 DATE    ?= $(shell date -u +%Y-%m-%dT%H:%M:%SZ)

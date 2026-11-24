@@ -3,10 +3,10 @@ package cli
 import (
 	"github.com/spf13/cobra"
 
-	"github.com/hesamzakerirad/nwrk/internal/app/diagnose"
-	"github.com/hesamzakerirad/nwrk/internal/exit"
-	"github.com/hesamzakerirad/nwrk/internal/output"
-	"github.com/hesamzakerirad/nwrk/internal/reporting"
+	"github.com/radestsam/nwrk/internal/app/diagnose"
+	"github.com/radestsam/nwrk/internal/exit"
+	"github.com/radestsam/nwrk/internal/output"
+	"github.com/radestsam/nwrk/internal/reporting"
 )
 
 func newDiagnoseCmd(a *app) *cobra.Command {

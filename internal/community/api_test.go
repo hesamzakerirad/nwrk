@@ -12,7 +12,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/hesamzakerirad/nwrk/contracts"
+	"github.com/radestsam/nwrk/contracts"
 )
 
 const (

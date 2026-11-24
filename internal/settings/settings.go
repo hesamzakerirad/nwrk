@@ -9,10 +9,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/hesamzakerirad/nwrk/internal/config"
-	"github.com/hesamzakerirad/nwrk/internal/endpoints"
-	"github.com/hesamzakerirad/nwrk/internal/regions"
-	"github.com/hesamzakerirad/nwrk/internal/target"
+	"github.com/radestsam/nwrk/internal/config"
+	"github.com/radestsam/nwrk/internal/endpoints"
+	"github.com/radestsam/nwrk/internal/regions"
+	"github.com/radestsam/nwrk/internal/target"
 )
 
 // Sources of a value.

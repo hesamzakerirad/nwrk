@@ -3,10 +3,10 @@ package cli
 import (
 	"github.com/spf13/cobra"
 
-	"github.com/hesamzakerirad/nwrk/internal/app/diagnose"
-	"github.com/hesamzakerirad/nwrk/internal/app/probes"
-	"github.com/hesamzakerirad/nwrk/internal/app/security"
-	"github.com/hesamzakerirad/nwrk/internal/exit"
+	"github.com/radestsam/nwrk/internal/app/diagnose"
+	"github.com/radestsam/nwrk/internal/app/probes"
+	"github.com/radestsam/nwrk/internal/app/security"
+	"github.com/radestsam/nwrk/internal/exit"
 )
 
 func newSecurityCmd(a *app) *cobra.Command {

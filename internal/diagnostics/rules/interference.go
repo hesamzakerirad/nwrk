@@ -10,12 +10,12 @@ import (
 
 	"golang.org/x/net/publicsuffix"
 
-	"github.com/hesamzakerirad/nwrk/internal/diagnostics/engine"
-	"github.com/hesamzakerirad/nwrk/internal/domain"
-	"github.com/hesamzakerirad/nwrk/internal/measurement/dns"
-	mhttp "github.com/hesamzakerirad/nwrk/internal/measurement/http"
-	mtls "github.com/hesamzakerirad/nwrk/internal/measurement/tls"
-	"github.com/hesamzakerirad/nwrk/internal/platform"
+	"github.com/radestsam/nwrk/internal/diagnostics/engine"
+	"github.com/radestsam/nwrk/internal/domain"
+	"github.com/radestsam/nwrk/internal/measurement/dns"
+	mhttp "github.com/radestsam/nwrk/internal/measurement/http"
+	mtls "github.com/radestsam/nwrk/internal/measurement/tls"
+	"github.com/radestsam/nwrk/internal/platform"
 )
 
 // Interference returns the rules that look for signs of interference with

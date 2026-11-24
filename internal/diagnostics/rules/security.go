@@ -5,11 +5,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/hesamzakerirad/nwrk/internal/diagnostics/engine"
-	"github.com/hesamzakerirad/nwrk/internal/domain"
-	"github.com/hesamzakerirad/nwrk/internal/measurement/dns"
-	mhttp "github.com/hesamzakerirad/nwrk/internal/measurement/http"
-	mtls "github.com/hesamzakerirad/nwrk/internal/measurement/tls"
+	"github.com/radestsam/nwrk/internal/diagnostics/engine"
+	"github.com/radestsam/nwrk/internal/domain"
+	"github.com/radestsam/nwrk/internal/measurement/dns"
+	mhttp "github.com/radestsam/nwrk/internal/measurement/http"
+	mtls "github.com/radestsam/nwrk/internal/measurement/tls"
 )
 
 // Security returns the rules of nw security inspect: security-oriented
